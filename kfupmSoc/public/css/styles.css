@@ -1,0 +1,77 @@
+body {
+    /* background: linear-gradient(#d78c8c, #aab0ed); */
+    background-color: #c0c0c0;
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.image {
+    position: relative;
+    width: 300px;
+    height: 300px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s;
+    backdrop-filter: blur(5px);
+}
+
+.overlay:hover {
+    opacity: 1;
+}
+
+.edit {
+    position: relative;
+    font-size: 1.25em;
+    color: #fff;
+    text-align: center;
+}
+
+.edit:hover {
+    cursor: pointer;
+    color: #dfc51e;
+    text-decoration: underline;
+}
+
+
+.remove {
+    position: relative;
+    font-size: 1.25em;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+}
+
+.remove:hover {
+    cursor: pointer;
+    color: #c42828;
+    text-decoration: underline;
+}
+
+.profile-icon {
+    display: block;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+}
+
+#icon-file {
+    visibility: hidden;
+}
