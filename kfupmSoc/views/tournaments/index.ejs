@@ -1,0 +1,31 @@
+<% layout("layouts/boilerplate") %>
+    <h1>All Tournaments</h1>
+    <% if(tournaments){ %>
+        <% for(let tournament of tournaments){ %>
+
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= tournament.tr_name %>
+                            </h5>
+                            <p class="card-text">
+                               From <%= tournament.start_date %> <br>
+                                To <%= tournament.end_date %>
+                            </p>
+                            <p>
+                                <a href="/tournaments/<%= tournament.tr_id%>">View <%= tournament.tr_name%></a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
+        <% } else {%>
+            <h2>No Tournaments initiatied yet</h2>
+            <% } %>

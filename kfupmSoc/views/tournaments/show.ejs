@@ -1,0 +1,53 @@
+<% layout("layouts/boilerplate") %>
+
+    <h1>All Tournaments</h1>
+    <% if(played){ %>
+        <% for(let play of played){ %>
+
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                               Match Number = <%= play.match_no %> <br>
+                               On <%= play.play_date%> <br> 
+                               Ended with score <%= play.results %>
+                            </h5>
+                            <% for(let ref of refereeData){ %>
+                            <% if(play.referee_id == ref.referee_id){ %>
+                            <p class="card-text">
+                                Referee = <%= ref.referee_name %>
+                            </p>
+                            <% } %>
+                            <% } %>
+                            <% for(let player of playersData){ %>
+                            <% if(play.player_of_match == player.player_uuid){ %>
+                            <p class="card-text">
+                                Player of the match = <%= player.name %> <br>
+                                Of Team <%= player.team_tr %>
+                            </p>
+                                <% } %>
+                            <% } %>
+                            <% for(let venue of venueData){ %>
+                            <% if(play.venue_id == venue.venue_id){ %>
+                            <p class="card-text">
+                                Venue = <%= venue.venue_name %> <br>
+                                Audience = <%= play.audience%> / <%= venue.aud_capacity %>
+                            </p>
+                                <% } %>
+                            <% } %>
+                            <p>
+                                <a href="/tournaments/<%= tournamentID %>/match<%= play.match_no %>">View Statstics</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
+        <% } else {%>
+            <h2>No Tournaments initiatied yet</h2>
+            <% } %>

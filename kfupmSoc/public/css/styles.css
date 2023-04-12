@@ -75,3 +75,19 @@ body {
 #icon-file {
     visibility: hidden;
 }
+
+.x {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #c42828;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s;
+}

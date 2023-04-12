@@ -1,0 +1,37 @@
+<% layout("layouts/boilerplate") %>
+    <div class="container d-flex justify-content-center align-items-center mt-3">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card shadow mb-5">
+                    <img crossorigin="anonymous" src="/images/football.jpeg"
+                    alt="" class="card-img-top">
+                    <h5 class="card-title mt-3 ms-3">Register</h5>
+                    <div class="card-body">
+                        <form action="/register" method="POST" class="validated-form" novalidate>
+                            <div class="mb-3"> <label for="username" class="form-label">First Name</label>
+                                <input class="form-control" type="text" name="fname" id="fname"
+                                    placeholder="First Name" required autofocus>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            <div class="my-3"> <label for="username" class="form-label">Last Name</label>
+                                <input class="form-control" type="text" name="lname" id="lname"
+                                    placeholder="First Name" required autofocus>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="my-3"> <label for="username" class="form-label">Phone Number</label>
+                                    <input class="form-control" type="tel" name="phonenumber" id="phonnumber"
+                                        placeholder="Phone Number" autofocus required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3 d-grid gap-2"> <button class="btn btn-success">Register</button></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
