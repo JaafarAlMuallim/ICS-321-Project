@@ -1,0 +1,37 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="row">
+        <h1 class="text-center">New Tournament</h1>
+        <div class="col-md-6 offset-md-3">
+            <form action="/tournaments" method="Post" novalidate class="validated-form" enctype="multipart/form-data">
+                <div class="mb-3"> <label for="name" class="form-label">Name</label>
+                    <input class="form-control" type="text" name="tournament[name]"" id="name"
+                        placeholder="Tournament Name" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="location" class="form-label">Start Date</label>
+                    <input class="form-control" type="date" name="tournament[start_date]" id="startDate"
+                        placeholder="Start Date" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label">End Date</label>
+                    <input class="form-control" type="date" name="tournament[end_date]" id="endDate"
+                        placeholder="End Date" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3"> <button class="btn btn-success">Create Tournament</button></div>
+
+            </form>
+
+            <a href="/tournaments">Cancel</a>
+        </div>
+    </div>

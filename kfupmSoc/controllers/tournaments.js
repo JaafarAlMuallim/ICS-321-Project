@@ -1,13 +1,13 @@
 // const Campground = require("../models/campground");
-
+const Tournament = require("../models/tournaments");
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
 const client = require('@supabase/supabase-js');
 
 
-const supabase = client.createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-
+module.exports.clients = client.createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+supabase = client.createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 
 
@@ -24,18 +24,15 @@ module.exports.new = (req, res) => {
 }
 
 module.exports.createTournament = async (req, res, next) => {
-
-    // const geoData = await geocoder.forwardGeocode({
-    //     query: req.body.campground.location,
-    //     limit: 1
-    // }).send();
-    // const camp = new Campground(req.body.campground);
-    // camp.geometry = geoData.body.features[0].geometry;
-    // camp.images = req.files.map(file => ({ url: file.path, filename: file.filename }));
-    // camp.author = req.user._id;
-    // await camp.save();
-    // req.flash("success", "Successfully Added The Camp");
-    // res.redirect(`campgrounds/${camp._id}`);
+    const data = req.body.tournaemnt;
+    const admin = req.user._id;
+    const { data: tournament, error } = await supabase
+        .from('tournament')
+        .insert([
+            { tr_name: data.name, start_date: data.startDate, end_date: data.endDate, adminstrator: admin },
+        ]);
+    req.flash("success", "Successfully Created The Tournament")
+    res.redirect(`/tournaments/${tournament[0].tr_id}`);
 }
 module.exports.showTournament = async (req, res, next) => {
     const teams = await supabase.from('team').select('team_uuid').eq('tr_id', req.params.id);

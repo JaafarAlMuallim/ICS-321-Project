@@ -1,0 +1,25 @@
+<% layout("layouts/boilerplate") %>
+    <div class="container d-flex justify-content-center align-items-center mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card shadow mb-5">
+                    <img crossorigin="anonymous" src="/images/phoneBS.jpg"
+                        alt="" class="card-img-top">
+                    <h5 class="card-title mt-3 ms-3">Login</h5>
+                    <div class="card-body">
+                        <form action="/login" method="POST" class="validated-form" novalidate>
+                                <div class="my-3"> <label for="otp" class="form-label">OTP</label>
+                                    <input class="form-control" type="text" name="otp" id="otp"
+                                        placeholder="OTP" autofocus required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                            <div class="my-3 d-grid gap-2"> <button id="submit" type="submit" class="btn btn-success" >Login</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
