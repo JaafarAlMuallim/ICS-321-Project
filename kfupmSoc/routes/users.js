@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
 // const User = require("../models/user");
 const user = require("../controllers/users");
 
@@ -18,10 +17,6 @@ router.route("/login")
 
 router.get('/logout', user.logout);
 
-router.route("/log-auth")
-    .get(user.renderLogAuth)
-    .post(wrapAsync(user.verifyLogPhone));
-router.route("/reg-auth")
-    .get(user.renderRegAuth)
-    .post(wrapAsync(user.verifyRegPhone));
+router.route("/auth")
+    .post(wrapAsync(user.verifyPhone));
 module.exports = router;

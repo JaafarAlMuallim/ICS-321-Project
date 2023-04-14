@@ -7,7 +7,7 @@
                     alt="" class="card-img-top">
                     <h5 class="card-title mt-3 ms-3">Register</h5>
                     <div class="card-body">
-                        <form action="/reg-auth" method="POST" class="validated-form" novalidate>
+                        <form action="/register" method="POST" class="validated-form" novalidate>
                             <div class="my-3"> <label for="fname" class="form-label">First Name</label>
                                 <input class="form-control" type="text" name="fname" id="fname"
                                     placeholder="First Name" required autofocus>
@@ -16,7 +16,7 @@
                                 </div>
                             <div class="my-3"> <label for="lname" class="form-label">Last Name</label>
                                 <input class="form-control" type="text" name="lname" id="lname"
-                                    placeholder="First Name" required autofocus>
+                                    placeholder="Last Name" required autofocus>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
@@ -27,8 +27,18 @@
                                         Looks good!
                                     </div>
                                 </div>
+                                <div id="otpDiv" hidden>
+                                <div class="my-3"> <label for="otp" class="form-label">OTP</label>
+                                    <input class="form-control" type="text" name="otp" id="otp"
+                                        placeholder="OTP" autofocus required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
                             </div>
-                            <div class="my-3 d-grid gap-2"> <button id="submit" type="submit" class="btn btn-success">Verify Phone</button></div>
+                            </div>
+                            <div class="my-3 d-grid gap-2"> <button id="verify" type="button" class="btn btn-success">Verify Phone</button></div>
+                            <div class="my-3 d-grid gap-2"> <button id="submit" type="submit" class="btn btn-success" disabled>Register</button></div>
                         </form>
                     </div>
                 </div>

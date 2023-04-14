@@ -45,8 +45,8 @@ const config = {
 app.use(session(config));
 app.use(flash());
 
-const passport = require("passport");
-const localStrategy = require("passport-local");
+// const passport = require("passport");
+// const localStrategy = require("passport-local");
 
 app.engine("ejs", ejsMate);
 app.set("views", path.join(__dirname, "views"));
@@ -105,8 +105,8 @@ app.use(helmet());
 // );
 
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 // passport.use(new localStrategy(User.authenticate()));
 
 // passport.serializeUser(User.serializeUser());
@@ -120,25 +120,12 @@ app.use((req, res, next) => {
     res.locals.error = req.flash("error");
     next();
 })
-// const mongoose = require('mongoose');
-// main().then(() => {
-//     console.log("MONGOO CONNECTED");
-// })
-//     .catch(err => console.log("ERROR!"));
 
-// async function main() {
-//     await mongoose.connect(dbUrl);
-// }
 
 // deployment
 
 // mongoose.connect(dbURL);
 // const db = mongoose.connection;
-
-// db.on("error", console.error.bind(console, "connection error!"));
-// db.once("open", () => {
-//     console.log("Database connected");
-// });
 
 
 
