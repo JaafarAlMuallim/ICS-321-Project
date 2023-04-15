@@ -7,41 +7,48 @@
                     alt="" class="card-img-top">
                     <h5 class="card-title mt-3 ms-3">Register</h5>
                     <div class="card-body">
-                        <form action="/register" method="POST" class="validated-form" novalidate>
+                        <form id="first" action="/register" method="POST" class="validated-form" novalidate>
                             <div class="my-3"> <label for="fname" class="form-label">First Name</label>
                                 <input class="form-control" type="text" name="fname" id="fname"
                                     placeholder="First Name" required autofocus>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
-                            <div class="my-3"> <label for="lname" class="form-label">Last Name</label>
-                                <input class="form-control" type="text" name="lname" id="lname"
-                                    placeholder="Last Name" required autofocus>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-                                <div class="my-3"> <label for="phonenumber" class="form-label">Phone Number</label>
-                                    <input class="form-control" type="tel" name="phonenumber" id="phonenumber"
-                                        placeholder="Phone Number" autofocus required>
+                                <div class="my-3"> <label for="lname" class="form-label">Last Name</label>
+                                    <input class="form-control" type="text" name="lname" id="lname"
+                                        placeholder="Last Name" required autofocus>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
+                                    <div class="my-3"> <label for="phonenumber" class="form-label">Phone Number</label>
+                                        <input class="form-control" type="tel" name="phonenumber" id="phonenumber"
+                                            placeholder="+966540000000" autofocus required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                    </div>
                                 </div>
-                                <div id="otpDiv" hidden>
+                            </div>
+                            <div class="my-3 d-grid gap-2"> 
+                                <button id="verifyReg" type="button" class="btn btn-success">Verify Phone</button> 
+                            </div>
+                            <div id="otpDiv" hidden>
                                 <div class="my-3"> <label for="otp" class="form-label">OTP</label>
                                     <input class="form-control" type="text" name="otp" id="otp"
-                                        placeholder="OTP" autofocus required>
+                                    placeholder="OTP" autofocus required maxlength="6">
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
                                 </div>
-                            </div>
-                            </div>
-                            <div class="my-3 d-grid gap-2"> <button id="verify" type="button" class="btn btn-success">Verify Phone</button></div>
-                            <div class="my-3 d-grid gap-2"> <button id="submit" type="submit" class="btn btn-success" disabled>Register</button></div>
+                                <div class= "my-3 d-grid gap-2" id="recaptcha-container"></div>
+                                <div class="my-3 d-grid gap-2">
+                                        <button id="regSubmit" type="button" class="btn btn-success">Register</button> 
+                                    </div>
+                                </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+<script src="https://www.google.com/recaptcha/api.js"></script>

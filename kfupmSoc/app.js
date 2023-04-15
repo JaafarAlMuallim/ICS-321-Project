@@ -6,29 +6,14 @@ const path = require("path");
 const bodyParser = require('body-parser');
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-
 const flash = require("connect-flash");
 const session = require("express-session");
-
-// const MongoStore = require("connect-mongo");
-
 const helmet = require("helmet");
-
 const app = express();
-
-const User = null;
-
-// const mongoSanitize = require("express-mongo-sanitize");
-
 const tournaments = require("./routes/tournaments");
-// const reviews = require("./routes/reviews");
 const users = require("./routes/users");
-
 const AppError = require("./utils/error");
-
-// const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelpCamp';
 const secret = process.env.SECRET || "thisshouldbebettersecreet";
-
 
 const config = {
     secret,
@@ -40,13 +25,20 @@ const config = {
         maxAge: (1000 * 60 * 60 * 24 * 7)
     }
 }
-
-
+var currentUser;
 app.use(session(config));
 app.use(flash());
 
-// const passport = require("passport");
-// const localStrategy = require("passport-local");
+
+app.use((req, res, next) => {
+    res.locals.session = req.session;
+    res.locals.currentUser = req.session.currentUser;
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+})
+
+
 
 app.engine("ejs", ejsMate);
 app.set("views", path.join(__dirname, "views"));
@@ -58,76 +50,70 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(helmet());
 
-// const scriptSrcUrls = [
-//     "https://stackpath.bootstrapcdn.com/",
-//     "https://api.tiles.mapbox.com/",
-//     "https://api.mapbox.com/",
-//     "https://kit.fontawesome.com/",
-//     "https://cdnjs.cloudflare.com/",
-//     "https://cdn.jsdelivr.net",
-// ];
-// const styleSrcUrls = [
-//     "https://kit-free.fontawesome.com/",
-//     "https://stackpath.bootstrapcdn.com/",
-//     "https://api.mapbox.com/",
-//     "https://api.tiles.mapbox.com/",
-//     "https://fonts.googleapis.com/",
-//     "https://use.fontawesome.com/",
-//     "https://cdn.jsdelivr.net",
-// ];
-// const connectSrcUrls = [
-//     "https://api.mapbox.com/",
-//     "https://a.tiles.mapbox.com/",
-//     "https://b.tiles.mapbox.com/",
-//     "https://events.mapbox.com/",
-// ];
-// const fontSrcUrls = [];
-// app.use(
-//     helmet.contentSecurityPolicy({
-//         directives: {
-//             defaultSrc: [],
-//             connectSrc: ["'self'", ...connectSrcUrls],
-//             scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
-//             styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-//             workerSrc: ["'self'", "blob:"],
-//             objectSrc: [],
-//             imgSrc: [
-//                 "'self'",
-//                 "blob:",
-//                 "data:",
-//                 "https://res.cloudinary.com/dhwlc77xr/",
-//                 "https://images.unsplash.com/",
+const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://kit.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net",
+    "https://www.gstatic.com/",
+    "https://www.google.com/",
+    "https://identitytoolkit.googleapis.com/",
+];
+const styleSrcUrls = [
+    "https://kit-free.fontawesome.com/",
+    "https://stackpath.bootstrapcdn.com/",
+    "https://fonts.googleapis.com/",
+    "https://use.fontawesome.com/",
+    "https://cdn.jsdelivr.net",
+    "https://www.google.com/",
+    "https://identitytoolkit.googleapis.com/"
+    
+];
+const connectSrcUrls = [
+    "https://www.google.com/",
+    'https://identitytoolkit.googleapis.com/',
+    'https://securetoken.googleapis.com/'
+];
+const fontSrcUrls = [];
+const frameSrcUrls = [
+    "https://www.google.com/",
+]
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'", ...connectSrcUrls],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            objectSrc: [],
+            imgSrc: [
+                "'self'",
+                "blob:",
+                "data:",
+                "https://res.cloudinary.com/dhwlc77xr/",
+                "https://images.unsplash.com/",
 
-//             ],
-//             fontSrc: ["'self'", ...fontSrcUrls],
-//         },
-//     })
-// );
-
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-// passport.use(new localStrategy(User.authenticate()));
-
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
+            ],
+            fontSrc: ["'self'", ...fontSrcUrls],
+            frameSrc: [...frameSrcUrls]
+        },
+    })
+);
 
 
+const { getAuth, onAuthStateChanged } = require("firebase/auth");
 
-app.use((req, res, next) => {
-    res.locals.currentUser = req.user;
-    res.locals.success = req.flash("success");
-    res.locals.error = req.flash("error");
-    next();
-})
-
-
-// deployment
-
-// mongoose.connect(dbURL);
-// const db = mongoose.connection;
-
-
+const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    console.log(uid);
+    currentUser = auth.currentUser;
+  } else {
+    console.log('OUT');
+  }
+});
 
 app.use("/", users);
 app.use("/tournaments", tournaments);

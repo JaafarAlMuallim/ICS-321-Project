@@ -1,42 +1,40 @@
 <% layout("layouts/boilerplate") %>
-    <div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="container d-flex justify-content-center align-items-center mt-3">
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <div class="card shadow mb-5">
                     <img crossorigin="anonymous" src="/images/football.jpeg"
-                        alt="" class="card-img-top">
+                    alt="" class="card-img-top">
                     <h5 class="card-title mt-3 ms-3">Login</h5>
                     <div class="card-body">
-                        <form action="/login" method="POST" class="validated-form" novalidate>
-                            <div class="my-3"> <label for="username" class="form-label">Phone Number</label>
-                                <input class="form-control" type="tel" name="phonenumber" id="phonenumber"
-                                    placeholder="Phone Number" autofocus required>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-                            </div>
+                        <form id="second" action="/login" method="POST" class="validated-form" novalidate>
                             <div class="my-3"> <label for="phonenumber" class="form-label">Phone Number</label>
                                 <input class="form-control" type="tel" name="phonenumber" id="phonenumber"
-                                    placeholder="Phone Number" autofocus required>
+                                    placeholder="+966540000000" autofocus required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
                             </div>
-                            <div class="otpDiv" hidden>
-                            <div class="my-3"> <label for="otp" class="otp form-label" hidden>OTP</label>
-                                <input class="form-control" type="text" name="otp" id="otp"
-                                    placeholder="OTP" autofocus required>
-                                <div class="valid-feedback">
-                                    Looks good!
+                            <div class="my-3 d-grid gap-2"> 
+                                <button id="verifyLog" type="button" class="btn btn-success">Verify Phone</button> 
+                            </div>
+                            <div id="otpDiv" hidden>
+                                <div class="my-3"> <label for="otp" class="form-label">OTP</label>
+                                    <input class="form-control" type="text" name="otp" id="otp"
+                                    placeholder="OTP" autofocus required maxlength="6">
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
                                 </div>
-                            </div>
-                            </div>
-                            <div class="my-3 d-grid gap-2"> <button id="verify" type="button" class="btn btn-success" >Verify Phone</button>
-                            <div class="my-3 d-grid gap-2"> <button id="submit" type="submit" class="btn btn-success" disabled>Login</button>
-                            </div>
+                                <div class= "my-3 d-grid gap-2" id="recaptcha-container"></div>
+                                <div class="my-3 d-grid gap-2">
+                                        <button id="logSubmit" type="button" class="btn btn-success">Login</button> 
+                                    </div>
+                                </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+<script src="https://www.google.com/recaptcha/api.js"></script>
