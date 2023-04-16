@@ -33,15 +33,15 @@ dart_code_metrics:
         - newline-before-return
         - no-boolean-literal-compare
         - no-empty-block
-        - prefer-trailing-comma
+        # - prefer-trailing-comma
         - prefer-conditional-expressions
         - no-equal-then-else
         - prefer-extracting-callbacks: false
         - prefer-immediate-return: false
         - no-magic-number: false
         - prefer-static-class: false
-        - arguments-ordering:
-              child-last: true
+        # - arguments-ordering:
+            #   child-last: true
         - prefer-correct-identifier-length:
               exceptions: ['a']
               max-identifier-length: 30
