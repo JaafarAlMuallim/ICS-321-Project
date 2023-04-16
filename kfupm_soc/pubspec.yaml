@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  animated_text_kit: ^4.2.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -41,6 +41,10 @@ dependencies:
   flutter_svg: ^2.0.4
   flutter_emoji: ^2.4.0
   dart_code_metrics: ^5.7.0
+  simple_animations: 4.2.0
+  supercharged: ^2.1.1
+  flutter_dotenv: ^5.0.2
+  firebase_auth: ^4.4.1
 
 dev_dependencies:
   flutter_test:
@@ -63,7 +67,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  assets:
+    - assets/images/
+    - images/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
