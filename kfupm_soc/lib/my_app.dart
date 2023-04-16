@@ -1,16 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:kfupm_soc/my_home_page.dart';
+import 'package:kfupm_soc/constants/styles.dart';
+import 'package:kfupm_soc/screens/Login_screen.dart';
+import 'package:kfupm_soc/screens/register_screen.dart';
+import 'package:kfupm_soc/screens/welcome_screen.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      routes: {
+        WelcomeScreen.id: (context) => const WelcomeScreen(),
+        RegisterScreen.id: (context) => const RegisterScreen(),
+        LoginScreen.id: (context) => const LoginScreen(),
+      },
+      initialRoute: WelcomeScreen.id,
+      title: 'KFUPMSOC',
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color.fromARGB(255, 39, 128, 176),
+        ),
+        canvasColor: const Color.fromARGB(255, 39, 128, 176),
+        colorScheme: const ColorScheme(
+          brightness: Brightness.dark,
+          primary: Style.kActiveButton,
+          onPrimary: Style.kBottomBar,
+          secondary: Style.kNameContainer,
+          onSecondary: Style.kButtonText,
+          error: Colors.red,
+          onError: Style.kPressedCard,
+          background: Color.fromARGB(255, 39, 128, 176),
+          onBackground: Style.kBackgroundBlurred,
+          surface: Style.kIconColor,
+          onSurface: Style.kInActivated,
+        ),
+      ),
     );
   }
 }

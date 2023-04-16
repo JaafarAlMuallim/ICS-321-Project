@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:badges/badges.dart' as badges;
 
 class Style {
   static const kScaffoldColor = Color(0XFF1C1D22);
@@ -23,6 +22,9 @@ class Style {
   static const kResetBackground = Color.fromRGBO(223, 105, 106, 0.3);
   static const kUnoveredColor = Color(0XFF0077B6);
   static const khoveredColor = Color(0XFF00B4D8);
+  static const kActivated = Color.fromARGB(255, 97, 17, 141);
+  static const kInActivated = Color(0xFF636365);
+  static const kAppBarColor = Colors.white;
   static const TextStyle kTextStyle = TextStyle(
     color: Colors.black,
     fontWeight: FontWeight.w700,
@@ -123,26 +125,6 @@ class Style {
     floatingLabelBehavior: FloatingLabelBehavior.auto,
     contentPadding: const EdgeInsets.symmetric(horizontal: 12.0),
     prefixIcon: const Icon(Icons.search, size: 32, color: Colors.white),
-    suffixIcon: Padding(
-      padding: const EdgeInsets.only(left: 3.0, top: 10.0),
-      child: badges.Badge(
-        badgeContent: const Text('2'),
-        badgeStyle: const badges.BadgeStyle(
-          shape: badges.BadgeShape.circle,
-          badgeColor: Color(0XFF6CC795),
-          elevation: 0,
-          padding: EdgeInsets.all(3.0),
-        ),
-        position: badges.BadgePosition.topEnd(top: 16, end: 28),
-        showBadge: true,
-        ignorePointer: false,
-        child: const Icon(
-          Icons.filter_list_alt,
-          size: 32,
-          color: Colors.white,
-        ),
-      ),
-    ),
     fillColor: const Color(0XFF1C1D22),
     border: InputBorder.none,
     alignLabelWithHint: true,
