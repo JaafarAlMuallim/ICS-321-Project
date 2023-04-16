@@ -3,27 +3,27 @@
     <div class="row">
         <h1 class="text-center">New Tournament</h1>
         <div class="col-md-6 offset-md-3">
-            <form action="/tournaments" method="Post" novalidate class="validated-form" enctype="multipart/form-data">
+            <form action="/tournaments" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
                 <div class="mb-3"> <label for="name" class="form-label">Name</label>
-                    <input class="form-control" type="text" name="tournament[name]"" id="name"
-                        placeholder="Tournament Name" required>
+                    <input class="form-control" type="text" name="tournament[name]" id="name"
+                        placeholder="Tournament Name" autofocus required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label for="location" class="form-label">Start Date</label>
+                    <label for="startDate" class="form-label">Start Date</label>
                     <input class="form-control" type="date" name="tournament[start_date]" id="startDate"
-                        placeholder="Start Date" required>
+                        autofocus required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="location" class="form-label">End Date</label>
+                    <label for="endDate" class="form-label">End Date</label>
                     <input class="form-control" type="date" name="tournament[end_date]" id="endDate"
-                        placeholder="End Date" required>
+                        autofocus required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>

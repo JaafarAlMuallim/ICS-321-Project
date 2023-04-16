@@ -22,11 +22,11 @@ const extension = (joi) => ({
     },
   });
 const Joi = baseJoi.extend(extension);
-module.exports.TournaemntSchema = Joi.object({
+module.exports.tournamentSchema = Joi.object({
     tournament: Joi.object({
         name: Joi.string().required().escapeHTML(),
-        startDate: Joi.date().required(),
-        endDate: Joi.date().required(),
+        start_date: Joi.date().required(),
+        end_date: Joi.date().required(),
     }).required(),
 })
 

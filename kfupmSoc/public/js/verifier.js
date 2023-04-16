@@ -30,7 +30,6 @@ regButton.addEventListener('click', function() {
   const fname = document.querySelector('#fname');
   const lname = document.querySelector('#lname');
   const phonenumber = document.querySelector('#phonenumber');
-  console.log(fname.value != '' && lname.value != '' && phonenumber.value != '');
   if(fname.value != '' && lname.value != '' && phonenumber.value != ''){
       forms.classList.add('was-validated');
     } else {
@@ -45,7 +44,6 @@ regButton.addEventListener('click', function() {
     regSubmit.disabled = false;
     regButton.disabled = false;
   }, 5000); 
-  console.log(phonenumber.value);
   window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', 
   {'size':'invisible', 
   'callback': (response) => {
@@ -61,7 +59,6 @@ regButton.addEventListener('click', function() {
     .then((confirmationResult) => {
       window.confirmationResult = confirmationResult;
       confirmRes = confirmationResult;
-      console.log(confirmRes);
     }).catch((error) => {
       grecaptcha.reset(window.recaptchaWidgetId);
     // Or, if you haven't stored the widget ID:
@@ -118,7 +115,6 @@ if(regSubmit != null){
       const user = result.user;
       regForm.submit();
     }).catch((error) => {
-      console.log(error);
     });
   })
 }
@@ -131,7 +127,6 @@ if(logSubmit != null){
       const user = result.user;
       logForm.submit();
     }).catch((error) => {
-      console.log(error);
     });
   })
 } 

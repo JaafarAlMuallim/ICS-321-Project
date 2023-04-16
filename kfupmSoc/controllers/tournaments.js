@@ -1,5 +1,3 @@
-// const Campground = require("../models/campground");
-const Tournament = require("../models/tournaments");
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
@@ -12,27 +10,33 @@ supabase = client.createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KE
 
 
 module.exports.index = async (req, res) => {
-    // const tournaments = await Tournament.find();
-    const find = await supabase.from('tournament').select();
+    const find = await supabase.from('tournament').select().order('tr_id', { ascending: true });
     const tournaments = find.data;
-    // const tournaments = null
-    res.render("tournaments/index", { tournaments })
+    return res.render("tournaments/index", { tournaments })
 }
 
 module.exports.new = (req, res) => {
-    res.render("tournaments/new")
+   return res.render("tournaments/new")
 }
 
 module.exports.createTournament = async (req, res, next) => {
-    const data = req.body.tournaemnt;
-    const admin = req.user._id;
+    const data = req.body.tournament;
+    const admin = req.session.user.admin_id;
+    const { data: counter, errorCounter, status } = await supabase
+	.from("tournament")
+	.select() 
     const { data: tournament, error } = await supabase
         .from('tournament')
         .insert([
-            { tr_name: data.name, start_date: data.startDate, end_date: data.endDate, adminstrator: admin },
+            { tr_id: counter.length + 1 ,tr_name: data.name, start_date: data.start_date, end_date: data.end_date, adminstrator: admin },
         ]);
+    if(error){
+        req.flash("error", error.message);
+        res.redirect("/tournaments/new");
+        return;
+    }
     req.flash("success", "Successfully Created The Tournament")
-    res.redirect(`/tournaments/${tournament[0].tr_id}`);
+    res.redirect(`/tournaments/${tournament.tr_id}`);
 }
 module.exports.showTournament = async (req, res, next) => {
     const teams = await supabase.from('team').select('team_uuid').eq('tr_id', req.params.id);
@@ -58,46 +62,76 @@ module.exports.showTournament = async (req, res, next) => {
     for (let i = 0; i < matches.data.length; i++) {
         matchArr.push(matches.data[i].match_no)
     }
+
+    const captains = await supabase.from('match_captain').select().in('match_no', matchArr);
+    const captainsData = captains.data;
+
     const matchesPlayed = await supabase.from('match_played').select().in('match_no', matchArr);
     const played = matchesPlayed.data
-    console.log(refereeData)
-    const tournamentID = req.params.id;
-    if(!played){
-        req.flash("error", "Cannot Find That Tournament!");
-        return res.redirect("/tournaments");
+    const playersOfMatch = []
+    for(let i = 0; i < matchesPlayed.data.length; i++){
+        for(let j = 0; j < players.data.length; j++){
+            if(matchesPlayed.data[i].player_of_match == players.data[j].player_uuid){
+                playersOfMatch.push(players.data[j])
+            }
+        }
     }
-    res.render("tournaments/show", {played, playersData, refereeData, venueData, tournamentID});
+    const tournamentID = req.params.id;
+    const tournamentData = await supabase.from('tournament').select().eq('tr_id', tournamentID).limit(1);
+    const tournament = tournamentData.data[0];
+    if(!tournamentData){
+        req.flash("error", "Cannot Find Tournament!");
+        return res.redirect("/tournaments");
+    } 
+    res.render("tournaments/show", {played, playersOfMatch ,playersData, captainsData, refereeData, venueData, tournament});
 }
 
 module.exports.deleteTournament = async (req, res, next) => {
-    // const deleted = await Campground.findByIdAndDelete(req.params.id);
-    // req.flash("success", "Successfully Deleted The Camp");
-    // res.redirect("/campgrounds");
+    const {id} = req.params;
+    const { data: data, error } = await supabase
+    .from('tournament')
+    .delete().eq('tr_id',id);
+    
+    if(error){
+        req.flash("error", error.message);
+        res.redirect("/tournaments");
+    } else {
+        req.flash("success", "Successfully Deleted The Tournament")
+        res.redirect("/tournaments");
+    }
 }
 module.exports.editTournament = async (req, res, next) => {
-    // const camp = await Campground.findById(req.params.id);
+    const { id } = req.params;
 
-    // if (!camp) {
-    //     req.flash("error", "Cannot Find That Campground");
-    //     return res.redirect("/campgrounds")
-    // }
-    // res.render("campgrounds/edit", { camp })
+    const { data: tournaments, error } = await supabase
+        .from('tournament')
+        .select('*')
+        .eq('tr_id', id);
+    if (error) {
+        req.flash("error", error.message);
+        res.redirect("/tournaments");
+        return;
+    }
+    const tournament = tournaments[0]
+    res.render('tournaments/edit', {tournament});
 }
 module.exports.updateTournament = async (req, res, next) => {
-    // if (!req.body.campground) throw new AppError("Invalid Data", 400);
-    // const { id } = req.params;
-    // console.log(req.body);
-    // const camp = await Campground.findByIdAndUpdate(id, req.body.campground, { runValidators: true });
-    // const imgs = req.files.map(file => ({ url: file.path, filename: file.filename }));
-    // camp.images.push(...imgs);
-    // await camp.save();
+    const data = req.body.tournament;
+    const {id} = req.params;
+    const { data: counter, errorCounter, status } = await supabase
+	.from("tournament")
+	.select() 
+    const { data: tournament, error } = await supabase
+        .from('tournament')
+        .update([
+            { tr_name: data.name, start_date: data.start_date, end_date: data.end_date },
+        ]).eq('tr_id', id)
+    if(error){
+        req.flash("error", error.message);
+        res.redirect(`/tournaments/${id}`);
+    } else {
+        req.flash("success", "Successfully Updated The Tournament")
+        res.redirect(`/tournaments/${id}`);
 
-    // if (req.body.deleteImages.length) {
-    //     for (let filename of req.body.deleteImages) {
-    //         await cloudinary.uploader.destroy(filename);
-    //     }
-    //     await camp.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } });
-    // }
-    // req.flash("success", "Successfully Updated The Camp");
-    // res.redirect(`/campgrounds/${id}`);
+    }
 }

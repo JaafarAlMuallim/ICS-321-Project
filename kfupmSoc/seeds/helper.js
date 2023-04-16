@@ -1,9 +1,11 @@
-require("dotenv").config();
+const Tournament = require("../models/tournaments");
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+}
+const client = require('@supabase/supabase-js');
+const supabaseUrl = process.env.SUPABASE_URL;
 
-// const client = require('@supabase/supabase-js');
-// const supabaseUrl = process.env.SUPABASE_URL;
-
-// const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseKey = process.env.SUPABASE_KEY;
 // var supabase;
 // function connect(){
 //     supabase =  client.createClient(supabaseUrl, supabaseKey);
@@ -40,7 +42,7 @@ const db = getFirestore(firebaseApp);
 //     console.log(addedDocRef);
 // }
 
-async function getAll(){
+async function getAllFire(){
     const docSnap = await getDocs(collection(db, "Admins"));
     const phonenumber = '0540014988';
         var exists = false;
@@ -48,6 +50,13 @@ async function getAll(){
            console.log(doc.data().phone_num == phonenumber);
                 
             })}
+async function getAllSupa(){
+    const { data:counter, errorCounter, status } = await supabase
+	.from("admin")
+	.select("*") 
 
-getAll();
+	console.log(counter.length);
+            };
+
+getAllSupa();
 

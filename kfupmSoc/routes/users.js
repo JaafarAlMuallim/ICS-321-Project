@@ -17,6 +17,4 @@ router.route("/login")
 
 router.get('/logout', user.logout);
 
-router.route("/auth")
-    .post(wrapAsync(user.verifyPhone));
 module.exports = router;

@@ -56,7 +56,7 @@ module.exports.register = async (req, res) => {
                 req.flash("error", errorInsertion.message);
                 res.redirect("/register");
             } else {
-                req.session.currentUser = {
+                req.session.user = {
                     admin_id: docSnap.size+1,
                     admin_fname: fname,
                     admin_lname: lname,
@@ -94,13 +94,16 @@ module.exports.userLogin = async(req, res) => {
                 res.redirect('/register');
             } else {
 
-                req.session.currentUser = {
+                req.session.user = {
                     admin_id: docRef.data().admin_id,
                     admin_fname: docRef.data().admin_fname,
                     admin_lname: docRef.data().admin_lname,
                     phoneNum: docRef.data().phone_num
                 }
                 req.flash("success", "Verified!, Welcome to KFUPMSOC");
+                if(req.session.returnTo)
+                    res.redirect(req.session.returnTo);
+                else
                 res.redirect('/tournaments');
             }
         } 
@@ -109,94 +112,7 @@ module.exports.userLogin = async(req, res) => {
 module.exports.logout = async(req, res) => {
         await auth.signOut();
         delete req.session.returnTo;
-        delete req.session.currentUser;
+        delete req.session.user;
         req.flash("success", "See You Next Time");
         res.redirect('/login');
     }
-
-module.exports.verifyPhone = async(req, res) => {
-    console.log('Called');
-    const {phonenumber} = req.body.phonenumber;
-    console.log(req.body);
-    // window.recaptchaVerifier = new RecaptchaVerifier('verify', {
-    //     'size': 'invisible',
-    //     'callback': (response) => {
-    //         console.log('XXX');
-    //     }
-    //   }, auth);
-    //   const appVerifier = window.recaptchaVerifier;
-//     recaptchaVerifier.render().then((widgetId) => {
-//         window.recaptchaWidgetId = widgetId;
-//         widget = widgetId;
-//       });
-//     const recaptchaResponse = grecaptcha.getResponse(widget);
-//     const appVerifier = window.recaptchaVerifier;
-//     signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-//     .then((confirmationResult) => { 
-//         window.confirmationResult = confirmationResult;
-//         confirmRes = confirmationResult
-//         console.log(phoneNumber);
-//     }).catch((error) => {
-//         console.log(error.message);
-//         grecaptcha.reset(window.recaptchaWidgetId);
-//         window.recaptchaVerifier.render().then(function(widgetId) {
-//         grecaptcha.reset(widgetId);
-// });
-//         });
-    }
-
-    // const {phoneNum} =  req.body;
-    // const { user, error } = await supabase.auth.signInWithOtp({
-    //     phone: phoneNum,
-    // });
-    // if (error) {
-    //     console.log(error.message);
-    //     req.flash("error", e.message);
-    //     res.redirect("/register");
-    // } else {
-    //     req.login(user, err => {
-    //         if (err){
-    //             console.log(err.message);
-    //         } else {
-    //             req.flash("success", "Verified! Welcome to KFUPMSOC");
-    //         }
-            
-    //     });
-    // }
-
-// module.exports.verifyRegPhone = async(req, res) => {
-//     const admin = req.body;
-//     const { data, error } = await supabase
-//     .from('admin')
-//     .select('count(*)');
-//     console.log(data);
-//     // const count = data[0].count;
-//     var phoneNum;
-//     if(admin.phonenumber.charAt(0) == '+'){
-//          phoneNum = '0' + admin.phonenumber.slice(4)
-//     } else {
-//         phoneNum = '0' + admin.phonenumber.slice(3)
-//     }
-//     console.log(phoneNum);
-//     const { data: newUser, errorInesrt } = await supabase
-//         .from('admin')
-//         .insert([
-//             { admin_id: count+1, admin_fname: admin.fname, admin_lname: admin.lname, phone_num: phoneNum, verified: false},
-//         ]);
-
-//     // const { user, errorVerification } = await supabase.auth.signInWithOtp({
-//     //     phone: admin.phonenumber,
-//     // });
-//     // if(errorVerification){
-//     //     req.flash("error", errorVerification.message);
-//     //     res.redirect('/register');
-        
-//     // const { errorDelete } = await supabase
-//     //     .from('countries')
-//     //     .delete()
-//     //     .eq('phone_num', admin.phonenumber)
-//     // }else {
-//         req.flash("success", "Verified!, check your phone for OTP message");
-//         res.redirect('/reg-auth');
-//     // }
-// }

@@ -19,6 +19,15 @@
                             </p>
                             <p>
                                 <a href="/tournaments/<%= tournament.tr_id%>">View <%= tournament.tr_name%></a>
+                                <% if(currentUser){ %>
+                                    <% if(currentUser.admin_id == tournament.adminstrator){ %>
+                                        <hr>
+                                        <a class="card-link btn btn-info" href="/tournaments/<%=tournament.tr_id %>/edit">Edit</a>
+                                        <form class="d-inline" action="/tournaments/<%= tournament.tr_id %>?_method=DELETE" method="POST">
+                                            <Button class="btn btn-danger">Delete</Button>
+                                        </form>
+                                        <% } %>
+                                   <% } %>
                             </p>
                         </div>
                     </div>

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const tournaments = require("../controllers/tournaments");
-const { isLoggedIn, validateTournament } = require("../middleware");
+const { isLoggedIn, validateTournament, isAdmin } = require("../middleware");
 const wrapAsync = require("../utils/wrapAsync");
 const AppError = require("../utils/error");
 
@@ -14,8 +14,8 @@ router.get("/new", isLoggedIn, tournaments.new);
 
 router.route("/:id")
     .get(wrapAsync(tournaments.showTournament))
-    .delete(isLoggedIn, wrapAsync(tournaments.deleteTournament))
-    .put(isLoggedIn, validateTournament, wrapAsync(tournaments.update));
+    .put(isLoggedIn, validateTournament, wrapAsync(tournaments.updateTournament))
+    .delete(isLoggedIn, isAdmin, wrapAsync(tournaments.deleteTournament));
 
-router.get("/:id/edit", isLoggedIn, wrapAsync(tournaments.edit));
+router.get("/:id/edit", isLoggedIn, isAdmin, wrapAsync(tournaments.editTournament));
 module.exports = router;

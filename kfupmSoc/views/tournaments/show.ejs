@@ -1,7 +1,13 @@
 <% layout("layouts/boilerplate") %>
 
-    <h1>All Tournaments</h1>
-    <% if(played){ %>
+    <h1><%= tournament.tr_name %></h1>
+      <h4> From <%= tournament.start_date %> <br>
+       To <%= tournament.end_date %>
+    </h4>
+    <% if(played.length == 0){ %>
+        <h2>No Matches are registered yet</h2>
+
+        <% } else{ %>
         <% for(let play of played){ %>
 
             <div class="card mb-3">
@@ -12,35 +18,44 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">
-                               Match Number = <%= play.match_no %> <br>
+                               Match Number is <%= play.match_no %> <br>
                                On <%= play.play_date%> <br> 
-                               Ended with score <%= play.results %>
+                               Ended with score <%= play.goal_score %>
                             </h5>
                             <% for(let ref of refereeData){ %>
                             <% if(play.referee_id == ref.referee_id){ %>
                             <p class="card-text">
-                                Referee = <%= ref.referee_name %>
+                                Referee is <%= ref.referee_name %>
                             </p>
                             <% } %>
                             <% } %>
                             <% for(let player of playersData){ %>
                             <% if(play.player_of_match == player.player_uuid){ %>
                             <p class="card-text">
-                                Player of the match = <%= player.name %> <br>
-                                Of Team <%= player.team_tr %>
+                                Player of the match is <%= player.player_name %> <br>
+                                Of Team <%= player.team_tr %> with Number <%= player.jersey_no %>
+                            </p>
+                            <% } %>
+                            <% for(let captain of captainsData){ %>
+                            <% if(play.match_no == captain.player_captain && captain.player_captain == player.player_uuid){ %>
+                            <p class="card-text">
+                                Team <%= player.team_tr %> in this tournament Captain is <%= player.player_name %> <br>
+                                with Number <%= player.jersey_no %>
                             </p>
                                 <% } %>
                             <% } %>
+                            <% } %>
+                            
                             <% for(let venue of venueData){ %>
                             <% if(play.venue_id == venue.venue_id){ %>
                             <p class="card-text">
-                                Venue = <%= venue.venue_name %> <br>
-                                Audience = <%= play.audience%> / <%= venue.aud_capacity %>
+                                Venue is <%= venue.venue_name %> <br>
+                                Audience number <%= play.audience%> / <%= venue.aud_capacity %>
                             </p>
                                 <% } %>
                             <% } %>
                             <p>
-                                <a href="/tournaments/<%= tournamentID %>/match<%= play.match_no %>">View Statstics</a>
+                                <a href="/tournaments/<%= tournament.tr_id %>/matches/<%= play.match_no %>">View Statstics</a>
                             </p>
                         </div>
                     </div>
@@ -48,6 +63,4 @@
             </div>
             <% } %>
 
-        <% } else {%>
-            <h2>No Tournaments initiatied yet</h2>
-            <% } %>
+        <% } %>

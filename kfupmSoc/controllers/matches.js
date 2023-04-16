@@ -7,7 +7,7 @@
 module.exports.index = async (req, res) => {
     // const tournaments = await Tournament.find();
     const tournaments = null
-    res.render("tournaments/index", { tournaments })
+    res.render("matches/index", { tournaments })
 }
 
 module.exports.new = (req, res) => {
@@ -22,7 +22,7 @@ module.exports.createTournament = async (req, res, next) => {
     // const camp = new Campground(req.body.campground);
     // camp.geometry = geoData.body.features[0].geometry;
     // camp.images = req.files.map(file => ({ url: file.path, filename: file.filename }));
-    // camp.author = req.user._id;
+    // camp.author = req.session.user._id;
     // await camp.save();
     // req.flash("success", "Successfully Added The Camp");
     // res.redirect(`campgrounds/${camp._id}`);

@@ -11,6 +11,7 @@ const session = require("express-session");
 const helmet = require("helmet");
 const app = express();
 const tournaments = require("./routes/tournaments");
+const matches = require("./routes/matches");
 const users = require("./routes/users");
 const AppError = require("./utils/error");
 const secret = process.env.SECRET || "thisshouldbebettersecreet";
@@ -25,14 +26,13 @@ const config = {
         maxAge: (1000 * 60 * 60 * 24 * 7)
     }
 }
-var currentUser;
 app.use(session(config));
 app.use(flash());
 
 
 app.use((req, res, next) => {
     res.locals.session = req.session;
-    res.locals.currentUser = req.session.currentUser;
+    res.locals.currentUser = req.session.user;
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
@@ -108,20 +108,14 @@ const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
   if (user) {
     const uid = user.uid;
-    console.log(uid);
     currentUser = auth.currentUser;
   } else {
-    console.log('OUT');
   }
 });
 
 app.use("/", users);
 app.use("/tournaments", tournaments);
-app.use("/tournaments/:id", tournaments);
-// app.use("/tournaments/matches", matches)
-// app.use("/tournaments/matches/:id/info", match_info)
-// app.use("/campgrounds/:id/reviews", reviews);
-// app.use("/campgrounds/:id/reviews", reviews);
+app.use("/tournaments/:id/matches", matches);
 
 app.get("/", (req, res) => {
     res.render("home");

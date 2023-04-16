@@ -1,28 +1,30 @@
 <% layout("layouts/boilerplate") %>
+<% layout("layouts/boilerplate") %>
 
     <div class="row">
-        <h1 class="text-center">New Tournament</h1>
+        <h1 class="text-center">Update Tournament Info</h1>
         <div class="col-md-6 offset-md-3">
-            <form action="/tournaments/<%=tournament.tr_id%>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+            <form action="/tournaments/<%=tournament.tr_id%>?_method=PUT" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
                 <div class="mb-3"> <label for="name" class="form-label">Name</label>
-                    <input class="form-control" type="text" name="tournament[name]"" id="name"
-                        placeholder="Tournament Name" value="<%= tournament.tr_name%>"required>
+                    <input class="form-control" type="text" name="tournament[name]" id="name"
+                        placeholder="Tournament Name" value="<%= tournament.tr_name %>" autofocus required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
+
                 <div class="mb-3">
-                    <label for="location" class="form-label">Start Date</label>
+                    <label for="startDate" class="form-label">Start Date</label>
                     <input class="form-control" type="date" name="tournament[start_date]" id="startDate"
-                        placeholder="Start Date" value="<%= tournament.start_date%>" required>
+                    value="<%= tournament.start_date %>"autofocus required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="location" class="form-label">End Date</label>
-                    <input class="form-control" type="date" name="tournament[end_date]" id="endDate"
-                        placeholder="End Date" value="<%= tournament.end_date%>" required>
+                    <label for="endDate" class="form-label">End Date</label>
+                    <input class="form-control" type="date" name="tournament[end_date]" id="endDate"                    
+                    value="<%= tournament.end_date %>" autofocus required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -31,6 +33,7 @@
 
             </form>
 
-            <a href="/tournaments">Cancel</a>
+            <a href="/tournaments/<%= tournament.tr_id %>">Cancel</a>
         </div>
     </div>
+    
