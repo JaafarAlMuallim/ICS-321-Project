@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:kfupm_soc/components/rounded_button.dart';
 import 'package:kfupm_soc/screens/login_screen.dart';
 import 'package:kfupm_soc/screens/register_screen.dart';
+import '../../Core/Animation/Fade_Animation.dart';
 
 import '../Core/Colors/Hex_Color.dart';
 
@@ -49,73 +50,87 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       // backgroundColor: animation.value,
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: const [0.1, 0.4, 0.7, 0.9],
-            colors: [
-              HexColor("#527aaf").withOpacity(0.8),
-              HexColor("#527aaf"),
-              HexColor("#031a38"),
-              HexColor("#031a38")
-            ],
-          ),
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-                HexColor("#fff").withOpacity(0.2), BlendMode.dstATop),
-            image: AssetImage(
-              'images/welcomebkg.jpg',
-            ) as ImageProvider,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                Flexible(
-                  child: Hero(
-                    tag: 'logo',
-                    child: Container(
-                      height: 60.0,
-                      child: Image.asset('images/logo_transparent.png'),
-                    ),
-                  ),
-                ),
-                AnimatedTextKit(
-                    pause: Duration(milliseconds: 1000),
-                    repeatForever: true,
-                    animatedTexts: [
-                      TypewriterAnimatedText(
-                        '   KFUPMSOC',
-                        textStyle: TextStyle(
-                            fontSize: 45.0,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.black),
-                        speed: Duration(milliseconds: 150),
-                      )
-                    ]),
+      body: FadeAnimation(
+        delay: 0.8,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              stops: const [0.1, 0.4, 0.7, 0.9],
+              colors: [
+                HexColor("#527aaf").withOpacity(0.8),
+                HexColor("#527aaf"),
+                HexColor("#031a38"),
+                HexColor("#031a38")
               ],
             ),
-            SizedBox(
-              height: 48.0,
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                  HexColor("#fff").withOpacity(0.2), BlendMode.dstATop),
+              image: const NetworkImage(
+                'https://t3.ftcdn.net/jpg/03/55/60/70/360_F_355607062_zYMS8jaz4SfoykpWz5oViRVKL32IabTP.jpg',
+              ),
             ),
-            Roundedbutton(
-              color: Colors.blue.shade400,
-              title: 'Log In',
-              onPressed: (() => Navigator.pushNamed(context, LoginScreen.id)),
+          ),
+          child: FadeAnimation(
+            delay: 0.8,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Hero(
+                        tag: 'logo',
+                        child: Container(
+                          height: 60.0,
+                          child: Image.asset('images/logo_transparent.png'),
+                        ),
+                      ),
+                    ),
+                    AnimatedTextKit(
+                        pause: Duration(milliseconds: 1000),
+                        repeatForever: true,
+                        animatedTexts: [
+                          TypewriterAnimatedText(
+                            '   KFUPMSOC',
+                            textStyle: TextStyle(
+                                fontSize: 45.0,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white),
+                            speed: Duration(milliseconds: 150),
+                          )
+                        ]),
+                  ],
+                ),
+                SizedBox(
+                  height: 48.0,
+                ),
+                Roundedbutton(
+                  color: Colors.blue.shade400,
+                  title: 'Log In',
+                  onPressed: (() =>
+                      Navigator.pushNamed(context, LoginScreen.id)),
+                ),
+                Roundedbutton(
+                  color: Colors.blue.shade800,
+                  title: 'Register',
+                  onPressed: (() =>
+                      Navigator.pushNamed(context, RegisterScreen.id)),
+                ),
+                Roundedbutton(
+                  color: Colors.blue.shade900,
+                  title: 'Guest',
+                  onPressed: (() {}
+                      // Navigator.pushNamed(context, LoginScreen.id)
+                      ),
+                ),
+              ],
             ),
-            Roundedbutton(
-              color: Colors.blue.shade800,
-              title: 'Register',
-              onPressed: (() =>
-                  Navigator.pushNamed(context, RegisterScreen.id)),
-            ),
-          ],
+          ),
         ),
       ),
     );

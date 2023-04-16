@@ -44,6 +44,7 @@ dependencies:
   simple_animations: 4.2.0
   supercharged: ^2.1.1
   flutter_dotenv: ^5.0.2
+  firebase_auth: ^4.4.1
 
 dev_dependencies:
   flutter_test:
