@@ -58,17 +58,17 @@ class AuthenticationRepository {
         } else {
           verificationID = verificationId;
           verificationID = verificationId;
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => OTPScreen(
-                phoneNum: phoneNum,
-                verificationId: verificationID,
-                user: user,
-              ),
-            ),
-          );
+          // TODO UNcomment Later
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => OTPScreen(
+          //       phoneNum: phoneNum,
+          //       verificationId: verificationID,
+          //       user: user,
+          //     ),
+          //   ),
+          // );
         }
       },
       codeAutoRetrievalTimeout: (verificationId) {

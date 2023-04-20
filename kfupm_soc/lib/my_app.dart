@@ -19,25 +19,32 @@ class MyApp extends StatelessWidget {
       },
       initialRoute: WelcomeScreen.id,
       title: 'KFUPMSOC',
+      // theme: ThemeData.dark().copyWith(
+      //   scaffoldBackgroundColor: Colors.white,
+      //   appBarTheme: const AppBarTheme(
+      //     backgroundColor: Color.fromARGB(255, 39, 128, 176),
+      //   ),
+      //   canvasColor: const Color.fromARGB(255, 39, 128, 176),
+      //   colorScheme: const ColorScheme(
+      //     brightness: Brightness.dark,
+      //     primary: Style.kActiveButton,
+      //     onPrimary: Style.kBottomBar,
+      //     secondary: Style.kNameContainer,
+      //     onSecondary: Style.kButtonText,
+      //     error: Colors.red,
+      //     onError: Style.kPressedCard,
+      //     background: Color.fromARGB(255, 39, 128, 176),
+      //     onBackground: Style.kBackgroundBlurred,
+      //     surface: Style.kIconColor,
+      //     onSurface: Style.kInActivated,
+      //   ),
+      // ),
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color.fromARGB(255, 39, 128, 176),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.white,
         ),
-        canvasColor: const Color.fromARGB(255, 39, 128, 176),
-        colorScheme: const ColorScheme(
-          brightness: Brightness.dark,
-          primary: Style.kActiveButton,
-          onPrimary: Style.kBottomBar,
-          secondary: Style.kNameContainer,
-          onSecondary: Style.kButtonText,
-          error: Colors.red,
-          onError: Style.kPressedCard,
-          background: Color.fromARGB(255, 39, 128, 176),
-          onBackground: Style.kBackgroundBlurred,
-          surface: Style.kIconColor,
-          onSurface: Style.kInActivated,
-        ),
+        primaryColor: Colors.white,
+        scaffoldBackgroundColor: const Color(0xff222121),
       ),
     );
   }

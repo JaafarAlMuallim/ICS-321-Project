@@ -38,7 +38,7 @@ dependencies:
   badges: ^3.0.3
   google_fonts: ^4.0.3
   supabase_flutter: ^1.6.2
-  flutter_svg: ^2.0.4
+  flutter_svg: ^2.0.5
   flutter_emoji: ^2.4.0
   simple_animations: 4.2.0
   supercharged: ^2.1.1
@@ -71,10 +71,12 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - images/
+    - assets/images/
+    - assets/svgs/
+
   # To add assets to your application, add an assets section, like this:
   # assets:
-  #   - images/a_dot_burr.jpeg
+    # - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

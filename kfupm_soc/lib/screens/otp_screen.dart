@@ -14,11 +14,12 @@ import 'package:otp_text_field/style.dart';
 import '../authentication_respository/authentication_repository.dart';
 
 class OTPScreen extends StatefulWidget {
-  const OTPScreen({super.key, this.verificationId, this.phoneNum, this.user});
-  final String? verificationId;
-  final String? phoneNum;
+  // const OTPScreen({super.key, this.verificationId, this.phoneNum, this.user});
+  const OTPScreen({super.key});
+  // final String? verificationId;
+  // final String? phoneNum;
   static String id = 'OTP';
-  final AppUser? user;
+  // final AppUser? user;
   @override
   State<OTPScreen> createState() => _OTPScreenState();
 }
@@ -30,16 +31,17 @@ class _OTPScreenState extends State<OTPScreen> {
   bool showSpinner = false;
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   String errorMessage = '';
-  getUser() async {
-    found = await AuthenticationRepository().findUser(widget.phoneNum!);
-  }
+  // getUser() async {
+  //   // found = await AuthenticationRepository().findUser(widget.phoneNum!);
+  // }
 
   @override
   void initState() {
-    getUser();
+    // getUser();
     super.initState();
   }
 
+  // TODO Authenticate
   @override
   Widget build(BuildContext context) {
     final controller = OtpFieldController();
@@ -59,8 +61,9 @@ class _OTPScreenState extends State<OTPScreen> {
                       ),
                       const Text('Verification', style: Style.h1),
                       const SizedBox(height: 40),
-                      Text(
-                        'We sent a verification code to ${widget.phoneNum}',
+                      const Text(
+                        // 'We sent a verification code to ${widget.phoneNum}',
+                        'We sent a verification code to XXXXXXXXXX',
                         style: Style.h4,
                         textAlign: TextAlign.center,
                       ),
@@ -75,61 +78,61 @@ class _OTPScreenState extends State<OTPScreen> {
                         height: 40,
                       ),
                       OTPTextField(
-                          otpFieldStyle: OtpFieldStyle(
-                              backgroundColor: const Color(0xff5B5959),
-                              focusBorderColor: Colors.transparent),
-                          length: 6,
-                          spaceBetween: 13,
-                          textFieldAlignment: MainAxisAlignment.center,
-                          width: MediaQuery.of(context).size.width,
-                          fieldWidth: 53,
-                          style: Style.otpStyle,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical:
-                                  MediaQuery.of(context).size.width - 450),
-                          controller: controller,
-                          fieldStyle: FieldStyle.box,
-                          onChanged: (value) => setState(() {
-                                otp = value;
-                              }),
-                          onCompleted: (pin) async {
-                            var navigator = Navigator.of(context);
-                            setState(() {
-                              showSpinner = false;
-                            });
-                            bool verified = await AuthenticationRepository()
-                                .verifyOTP(
-                                    pin, widget.verificationId!, context);
-                            if (verified) {
-                              if (!found) {
-                                String x = await SignUpController().addDocument(
-                                    widget.user!.name!, widget.user!.phoneNum!);
-                                if (x == 'Success') {
-                                  navigator
-                                      .popAndPushNamed(TournamentScreen.id);
-                                } else {
-                                  ShowSnackBar.showSnackbar(
-                                      context, x, "", () {});
-                                }
-                              } else {
-                                if (widget.user!.name != null) {
-                                  navigator
-                                      .popAndPushNamed(TournamentScreen.id);
-                                } else {
-                                  ShowSnackBar.showSnackbar(context,
-                                      'Something went wrong', "", () {});
-                                  navigator.popAndPushNamed(LoginScreen.id);
-                                }
-                              }
-                            } else {
-                              controller.clear();
-                              if (mounted) {
-                                setState(() {
-                                  showSpinner = false;
-                                });
-                              }
-                            }
-                          }),
+                        otpFieldStyle: OtpFieldStyle(
+                            backgroundColor: const Color(0xff5B5959),
+                            focusBorderColor: Colors.transparent),
+                        length: 6,
+                        spaceBetween: 13,
+                        textFieldAlignment: MainAxisAlignment.center,
+                        width: MediaQuery.of(context).size.width,
+                        fieldWidth: 53,
+                        style: Style.otpStyle,
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.width - 450),
+                        controller: controller,
+                        fieldStyle: FieldStyle.box,
+                        // onChanged: (value) => setState(() {
+                        //       otp = value;
+                        //     }),
+                        // onCompleted: (pin) async {
+                        //   var navigator = Navigator.of(context);
+                        //   setState(() {
+                        //     showSpinner = false;
+                        //   });
+                        //   bool verified = await AuthenticationRepository()
+                        //       .verifyOTP(
+                        //           pin, widget.verificationId!, context);
+                        //   if (verified) {
+                        //     if (!found) {
+                        //       String x = await SignUpController().addDocument(
+                        //           widget.user!.name!, widget.user!.phoneNum!);
+                        //       if (x == 'Success') {
+                        //         navigator
+                        //             .popAndPushNamed(TournamentScreen.id);
+                        //       } else {
+                        //         ShowSnackBar.showSnackbar(
+                        //             context, x, "", () {});
+                        //       }
+                        //     } else {
+                        //       if (widget.user!.name != null) {
+                        //         navigator
+                        //             .popAndPushNamed(TournamentScreen.id);
+                        //       } else {
+                        //         ShowSnackBar.showSnackbar(context,
+                        //             'Something went wrong', "", () {});
+                        //         navigator.popAndPushNamed(LoginScreen.id);
+                        //       }
+                        //     }
+                        //   } else {
+                        //     controller.clear();
+                        //     if (mounted) {
+                        //       setState(() {
+                        //         showSpinner = false;
+                        //       });
+                        //     }
+                        //   }
+                        // )},
+                      ),
                       const SizedBox(
                         height: 30,
                       ),
@@ -142,7 +145,7 @@ class _OTPScreenState extends State<OTPScreen> {
                             //TODO Let the program send a code and make it unavailable for 30 seconds
                           },
                           child: Text(
-                            "Send code.",
+                            "Send code",
                             style:
                                 Style.h4.copyWith(fontWeight: FontWeight.bold),
                           ))
