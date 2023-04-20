@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/constants/styles.dart';
 import 'package:kfupm_soc/screens/Login_screen.dart';
+import 'package:kfupm_soc/screens/otp_screen.dart';
 import 'package:kfupm_soc/screens/register_screen.dart';
 import 'package:kfupm_soc/screens/welcome_screen.dart';
 
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
         WelcomeScreen.id: (context) => const WelcomeScreen(),
         RegisterScreen.id: (context) => const RegisterScreen(),
         LoginScreen.id: (context) => const LoginScreen(),
+        OTPScreen.id: (context) => const OTPScreen(),
       },
       initialRoute: WelcomeScreen.id,
       title: 'KFUPMSOC',

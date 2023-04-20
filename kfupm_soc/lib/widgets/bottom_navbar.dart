@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields
 
 import 'package:flutter/material.dart';
+import 'package:kfupm_soc/misc/custom_route.dart';
+import 'package:kfupm_soc/screens/tournaments_screen.dart';
 import 'package:kfupm_soc/widgets/icon_bottom_bar.dart';
 
 import '../constants/styles.dart';
@@ -40,7 +42,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                         Navigator.pushReplacement(
                           context,
                           CustomRoute(
-                            child: HomeScreen(),
+                            child: TournamentScreen(),
                             direction: AxisDirection.right,
                           ),
                         );
@@ -59,7 +61,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       Navigator.pushReplacement(
                         context,
                         CustomRoute(
-                          child: CalanderScreen(),
+                          child: TournamentScreen(),
                           direction: _currentIndex <= 1
                               ? AxisDirection.left
                               : AxisDirection.right,
@@ -80,7 +82,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                         Navigator.pushReplacement(
                           context,
                           CustomRoute(
-                            child: MapScreen(),
+                            child: TournamentScreen(),
                             direction: _currentIndex <= 2
                                 ? AxisDirection.left
                                 : AxisDirection.right,
@@ -102,7 +104,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                         Navigator.pushReplacement(
                           context,
                           CustomRoute(
-                            child: ProfileScreen(),
+                            child: TournamentScreen(),
                             direction: AxisDirection.left,
                           ),
                         );

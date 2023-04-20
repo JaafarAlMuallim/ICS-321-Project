@@ -25,6 +25,12 @@ class Style {
   static const kActivated = Color.fromARGB(255, 97, 17, 141);
   static const kInActivated = Color(0xFF636365);
   static const kAppBarColor = Colors.white;
+  static const textColor = Colors.white;
+  static const background = Colors.transparent;
+  static const containerColor = Color(0xffA40000);
+  static const padding = EdgeInsets.all(16);
+  static const height = 90;
+
   static const TextStyle kTextStyle = TextStyle(
     color: Colors.black,
     fontWeight: FontWeight.w700,

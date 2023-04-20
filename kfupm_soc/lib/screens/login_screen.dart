@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/Core/fade_animation.dart';
-
-import 'package:kfupm_soc/screens/authentication_screen.dart';
+import 'package:kfupm_soc/screens/otp_screen.dart';
 
 import 'package:kfupm_soc/screens/register_screen.dart';
 
@@ -154,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.pop(context);
                               Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
-                                return const AuthenticationScreen();
+                                return const OTPScreen();
                               }));
                             }),
                             style: TextButton.styleFrom(
