@@ -12,6 +12,7 @@ const helmet = require("helmet");
 const app = express();
 const tournaments = require("./routes/tournaments");
 const matches = require("./routes/matches");
+const teams = require("./routes/teams");
 const users = require("./routes/users");
 const AppError = require("./utils/error");
 const secret = process.env.SECRET || "thisshouldbebettersecreet";
@@ -52,31 +53,45 @@ app.use(helmet());
 
 const scriptSrcUrls = [
     "https://stackpath.bootstrapcdn.com/",
-    "https://kit.fontawesome.com/",
     "https://cdnjs.cloudflare.com/",
     "https://cdn.jsdelivr.net",
     "https://www.gstatic.com/",
     "https://www.google.com/",
     "https://identitytoolkit.googleapis.com/",
+    'https://ka-f.fontawesome.com/releases/v6.4.0/css/',
+    'https://kit.fontawesome.com/',
+    'https://code.jquery.com/',
+    'https://code.jquery.com/'
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",
     "https://stackpath.bootstrapcdn.com/",
     "https://fonts.googleapis.com/",
-    "https://use.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
     "https://cdn.jsdelivr.net",
     "https://www.google.com/",
-    "https://identitytoolkit.googleapis.com/"
+    "https://identitytoolkit.googleapis.com/",
+    'https://ka-f.fontawesome.com/releases/v6.4.0/css/' 
     
 ];
 const connectSrcUrls = [
     "https://www.google.com/",
     'https://identitytoolkit.googleapis.com/',
-    'https://securetoken.googleapis.com/'
+    'https://securetoken.googleapis.com/',
+    'https://ka-f.fontawesome.com/releases/v6.4.0/css/' 
 ];
-const fontSrcUrls = [];
+const fontSrcUrls = [
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net",
+    'https://ka-f.fontawesome.com/releases/v6.4.0/css/',
+    'https://ka-f.fontawesome.com/releases/v6.4.0/webfonts/',
+    'https://fonts.gstatic.com/s/opensans/v34/',
+    'https://fonts.gstatic.com/s/roboto/v30/',
+    'https://fonts.gstatic.com/s/orbitron/v29/'
+];
 const frameSrcUrls = [
     "https://www.google.com/",
+    'https://ka-f.fontawesome.com/releases/v6.4.0/css/' 
 ]
 app.use(
     helmet.contentSecurityPolicy({
@@ -116,6 +131,7 @@ onAuthStateChanged(auth, (user) => {
 app.use("/", users);
 app.use("/tournaments", tournaments);
 app.use("/tournaments/:id/matches", matches);
+app.use("/tournaments/:id/teams", teams);
 
 app.get("/", (req, res) => {
     res.render("home");

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const matches = require("../controllers/matches");
+const teams = require("../controllers/teams");
 
 const wrapAsync = require("../utils/wrapAsync");
 const AppError = require("../utils/error");
@@ -9,7 +9,10 @@ const AppError = require("../utils/error");
 
 // const { isLoggedIn, isAuthor, validateCamp } = require("../middleware");
 router.route("/:id")
-    .get(wrapAsync(matches.index))
+    .get(wrapAsync(teams.index))
+
+router.get("/:id/captain", wrapAsync(teams.changeCaptain))
+
     // .post(isLoggedIn, upload.array("image"), validateCamp, wrapAsync(camp.createCamp));
 // .post(upload.array("image"), (req, res) => {
 //     console.log(req.body, req.files);

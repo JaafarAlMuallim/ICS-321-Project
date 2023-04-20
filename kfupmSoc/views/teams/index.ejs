@@ -1,0 +1,86 @@
+<% layout("layouts/boilerplate") %>
+
+    <h1>Team <%= team.team_id %></h1>
+    <!-- check if coaches -->
+    <% if(coaches.length == 0){ %>
+    <h2>No Coaches are registered in this team yet</h2>
+    <% } else { %>
+        <h3>Coaches</h3>
+        <% for(let coach of coaches){ %>
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                          <h5>
+                            <%= coach.coach.coach_name  %>
+                          </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        <% } %>
+        <% if(captainsArray.length == 0){ %>
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                          <h5>
+                            <i class="fa-regular fa-c"></i> &nbsp; &nbsp;
+                          No registered Captain for this team yet
+                          </h5>
+                        </div>
+                        <a class="card-link btn btn-info" href="/tournaments/<%= team.tr_id %>/teams/<%= team.team_uuid %>/captain">Specify Team Captain</a>
+                    </div>
+                </div>
+            </div>
+        <% } else { %>
+            <h3>Captain</h3>
+            <% for(let captain of captainsArray){ %>
+                <div class="card mb-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                              <h5>
+                                <i class="fa-regular fa-c"></i> &nbsp; &nbsp;
+                                <%= captain.player_name  %>
+                              </h5>
+                            </div>
+                            <a class="card-link btn btn-info" href="/tournaments/<%= team.tr_id %>/teams/<%= team.team_uuid %>/captain">Change Team Captain</a>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+        <% } %>
+    <% if(players.length == 0){ %>
+        <h2>No Players are registered in this team yet</h2>
+    <% } else { %>
+        <h3>Players</h3>
+        <% for(let player of players){ %>
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                            <%= player.jersey_no  %>&nbsp; &nbsp; <%= player.player_name %>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    <% } %>
+                            
+

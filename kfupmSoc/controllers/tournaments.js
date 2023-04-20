@@ -36,7 +36,7 @@ module.exports.createTournament = async (req, res, next) => {
         return;
     }
     req.flash("success", "Successfully Created The Tournament")
-    res.redirect(`/tournaments/${tournament.tr_id}`);
+    res.redirect(`/tournaments/${tournament.tr_id}/groups`);
 }
 module.exports.showTournament = async (req, res, next) => {
     const teams = await supabase.from('team').select('team_uuid').eq('tr_id', req.params.id);
@@ -134,4 +134,35 @@ module.exports.updateTournament = async (req, res, next) => {
         res.redirect(`/tournaments/${id}`);
 
     }
+}
+module.exports.showGroups = async (req, res, next) => {
+    const { id } = req.params;
+    // fetch all teams from supabase and pass it to the view
+    const { data: teams, errorCounter, status } = await supabase
+        .from("team")
+        .select()
+    res.render('tournaments/groups', {id,teams})
+}
+module.exports.createGroups = async (req, res, next) => {
+    const { id } = req.params;
+    console.log(id);
+    console.log(req.body);
+    // const { data: teams, errorCounter, status } = await supabase
+    //     .from("team")
+    //     .select()
+    // res.render('tournaments/groups', {id,teams})
+    res.redirect('/tournaments/id')
+}
+module.exports.showTeams = async (req, res, next) => {
+    const { id } = req.params;
+
+    // get tournament from id
+    const { data: tournament, error } = await supabase
+        .from('tournament') 
+        .select()
+        .eq('tr_id', id);
+    const { data: teams, errorCounter, status } = await supabase
+        .from("team")
+        .select(); 
+    res.render('tournaments/teams', {tournament, id, teams})
 }

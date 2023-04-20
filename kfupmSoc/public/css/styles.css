@@ -76,7 +76,7 @@ body {
 }
 
 
-#recaptch-container{
+#recaptcha-container{
     position: absolute;
     top: 50%; 
     left: 50%; 
@@ -84,4 +84,7 @@ body {
 }
 .new {
     justify-content: center;
+}
+.fixedElement {
+    position:fixed;
 }

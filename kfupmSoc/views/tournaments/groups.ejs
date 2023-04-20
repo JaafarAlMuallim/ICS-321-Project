@@ -1,0 +1,45 @@
+<% layout("layouts/boilerplate") %>
+    
+<div class="header">
+
+    <div class="my-3">
+
+
+            <button id="submitbtn" class="btn btn-success">Submit Groups</button>
+    </div>
+    <h3 style="display: inline;">All Teams</h3>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+    <h3 style="display: inline;">Group A</h3>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+    <h3 style="display: inline;">Group B</h3>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+    <h3 style="display: inline;">Group C</h3>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+    <h3 style="display: inline;">Group D</h3>
+
+
+
+</div>
+
+<div class="body">
+    <div id="teams" class="droppable">
+        <% for(team of teams){ %>
+        <div class="draggable" draggable="true">
+                <div class="team-name">
+                    <%= team.team_id %>
+                </div>
+        </div> 
+        <% } %>
+    </div>
+    <div id="A" class="droppable">
+    </div>
+    <div id="B" class="droppable">
+    </div>
+    <div id="C" class="droppable">
+    </div>
+    <div id="D" class="droppable">
+    </div>
+
+</div>
+<script src="/js/groups.js"></script>
+<!-- <script type="javascript" src="/js/createGroups.js"></script> -->

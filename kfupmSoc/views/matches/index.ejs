@@ -1,60 +1,249 @@
 <% layout("layouts/boilerplate") %>
     <div class="row">
         <div class="col-md-6">
-            <div class="card text-center mb-5">
-                <a class="tags text-black" href="#>">
-                    <img crossorigin="anonymous" src="./images/football.jepg" class="card-img-top" alt="">
+            <div class="card mb-5 h-100">
                     <div class="card-header new">
-                        <img crossorigin="anonymous" src="/images/favicon.png" alt="" class="post-icon">
                             <p class="card-text d-inline fs-4">
                                 <strong>
-                                    Team 1
+                                    Team <%= teamOne.player.team.team_id %>
                                 </strong>
                             </p>
-                        </a>
             </div>
 
             <div class="card-header fw-normal fs-4">
-                Goals - Scorer - minute - penalty or not
+                <% if(goalsArray){ %>
+                    <% for(let goal of goalsArray){ %>
+                        <% if(goal.player.team.team_uuid == teamOne.player.team.team_uuid){%>
+                            <i>
+                                <i class="fa-regular fa-futbol"></i>
+                               <%=goal.goal_time%> <%=goal.player.player_name%>
+                            </i><br>
+                        <%} else { %>
+                            <i>
+                                <i class="fa-regular fa-futbol" style="color:red";></i>
+                                -----
+                            </i><br>
+                      <% } %>
+                    <%} %>
+                <%} else { %>
+                    <i>
+                        <i class="fa-regular fa-futbol"></i>
+                        No Goals Scored
+                    </i><br>
+             <% } %>
                 <hr>
-                Booked Cards
+                <% if(cardsArray){ %>
+                    <% for(let card of cardsArray){ %>
+                        <% if(card.player.team_tr == teamOne.player.team_tr){ %>
+                            <i>
+                            <% if(card.sentOff == 'N'){ %>
+                                <i class="fa-regular fa-copy" style="color:yellow;"></i>
+                                <% } else { %>
+                                <i class="fa-regular fa-copy" style="color:red;"></i>
+                            <% } %>
+                            <%=card.player.player_name%><br>
+                        </i>
+                        <% } else { %>
+                            <i>
+                                <i class="fa-regular fa-flag" style="color:black"></i>
+                                ------
+                            </i><br>
+                        <% } %>
+                        <% } %>
+                    <% } else {%>
+                        <i><i class="fa-regular fa-copy" style="color: black;"></i><br>
+                        No Cards given
+                    </i>
+                    <% } %>
+                    
                 <hr>
-                Coach
+                    <% for(let coach of coaches){ %>
+                        <% if(coach.team_uuid == teamOne.player.team.team_uuid){ %>
+                        <i>
+                            <i class="fa-solid fa-people-roof"></i>
+                            <%=coach.coach.coach_name%>
+                        </i>
+                        <br>
+                        <%} else {%>
+                            <% if(coach == coaches[coaches.length - 1]){ %>                            
+                            <i>
+                                <i class="fa-solid fa-people-roof"></i>
+                                No Coach(es) in this team
+                            </i>
+                            <br>
+                            <% } %>
+                        <% } %>
+                    <% } %>
                 <hr>
-                Captain
+                    <% for(let captain of captains){ %>
+                        <% if(captain.player.team.team_uuid == teamOne.player.team.team_uuid){ %>
+                            <i>
+                            <i class="fa-solid fa-people-roof"></i>
+                            <%=captain.player.player_name%><br>
+                            </i>
+                        <%} else { %>
+                            <% if(captain == captains[captains.length - 1]){ %>
+                                <i>
+                                    <i class="fa-solid fa-people-roof"></i>
+                                    No Captain in this team
+                                </i>
+                             <% } %>
+                        <% } %>
+                    <% } %>
                 <hr>
-                Gk
+                <i>
+                    <i class="fa-solid fa-hands"></i>
+                    <%=teamOne.player.player_name%><br>
+                </i>
+                <hr>
+                <table class="table table-bordered table-hover table-striped-columns">
+                    <thead>
+                      <tr>
+                        <th scope="col">Group</th>
+                        <th scope="col"><i class="fa-solid fa-ranking-star"></i></th>
+                        <th scope="col">W</th>
+                        <th scope="col">D</th>
+                        <th scope="col">L</th>
+                        <th scope="col">+/-</th>
+                        <th scope="col">Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="col"><%=teamOne.player.team.team_group%></th>
+                        <th scope="col"><%=teamOne.player.team.group_position%></th>
+                        <th scope="col"><%=teamOne.player.team.won%></th>
+                        <th scope="col"><%=teamOne.player.team.draw%></th>
+                        <th scope="col"><%=teamOne.player.team.lost%></th>
+                        <th scope="col"><%=teamOne.player.team.goal_for%> / <%=teamOne.player.team.goal_against%></th>
+                        <th scope="col"><%=teamOne.player.team.points%></th>
+                      </tr>
+                    </tbody>
+                  </table>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-       
-        <div class="card text-center mb-5">
-            <a class="tags text-black" href="#>">
-                <img crossorigin="anonymous" src="./images/football.jepg" class="card-img-top" alt="">
-                <div class="card-header">
-                    <img crossorigin="anonymous" src="./images/favicon.png" alt="" class="post-icon">
-                    <p class="card-text d-inline fs-4">
-                        <strong>
-                            Team 2
-                        </strong>
-                    </p>
-            </a>
+        <div class="col-md-6">
+            <div class="card mb-5 h-100">
+                    <div class="card-header new">
+                            <p class="card-text d-inline fs-4">
+                                <strong>
+                                    Team <%= teamTwo.player.team.team_id %>
+                                </strong>
+                            </p>
+            </div>
+
+            <div class="card-header fw-normal fs-4">
+                <% if(goalsArray){ %>
+                    <% for(let goal of goalsArray){ %>
+                        <% if(goal.player.team.team_uuid == teamTwo.player.team.team_uuid){%>
+                            <i>
+                                <i class="fa-regular fa-futbol"></i>
+                                <%=goal.goal_time%>  <%=goal.player.player_name%>
+                            </i><br>
+                        <%} else { %>
+                            <i>
+                                <i class="fa-regular fa-futbol" style="color: red;"></i>
+                                -----
+                            </i><br>
+                       <% } %>
+                    <%} %>
+                    <%} else { %>
+                        <i>
+                            <<i class="fa-regular fa-futbol"></i>
+                            No Goals Scored>
+                        </i>
+              <% } %>
+                <hr>
+                <% if(cardsArray){ %>
+                    <% for(let card of cardsArray){ %>
+                        <% if(card.player.team_tr == teamTwo.player.team_tr){ %>
+                            <i>
+                            <% if(card.sentOff == 'N'){ %>
+                                <i class="fa-regular fa-copy" style="color:yellow;"></i>
+                                <% } else { %>
+                                <i class="fa-regular fa-copy" style="color:red;"></i>
+                            <% } %>
+                            <%=card.player.player_name%><br>
+                        </i>
+                        <% } else { %>
+                            <i>
+                                <i class="fa-regular fa-flag" style="color:black"></i>
+                                ------
+                            </i><br>
+                        <% } %>
+                        <% } %>
+                    <% } else {%>
+                        <i><i class="fa-regular fa-copy" style="color: black;"></i><br>
+                        No Cards given
+                    </i>
+                    <% } %>
+                    
+                <hr>
+                    <% for(let coach of coaches){ %>
+                        <% if(coach.team_uuid == teamTwo.player.team.team_uuid){ %>
+                        <i>
+                            <i class="fa-solid fa-people-roof"></i>
+                            <%=coach.coach.coach_name%>
+                        </i>
+                        <br>
+                        <%} else {%>
+                            <% if(coach == coaches[coaches.length - 1]){ %>                            
+                            <i>
+                                <i class="fa-solid fa-people-roof"></i>
+                                No Coach(es) in this team
+                            </i>
+                            <br>
+                            <% } %>
+                        <% } %>
+                    <% } %>
+                <hr>
+                    <% for(let captain of captains){ %>
+                        <% if(captain.player.team.team_uuid == teamTwo.player.team.team_uuid){ %>
+                            <i>
+                            <i class="fa-solid fa-people-roof"></i>
+                            <%=captain.player.player_name%><br>
+                            </i>
+                        <%} else { %>
+                            <% if(captain == captains[captains.length - 1]){ %>
+                                <i>
+                                    <i class="fa-solid fa-people-roof"></i>
+                                    No Captain in this team
+                                </i>
+                             <% } %>
+                        <% } %>
+                    <% } %>
+                <hr>
+                <i>
+                    <i class="fa-solid fa-hands"></i>
+                    <%=teamTwo.player.player_name%><br>
+                </i>
+                <hr>
+                <table class="table table-bordered table-hover table-striped-columns">
+                    <thead>
+                      <tr>
+                        <th scope="col">Group</th>
+                        <th scope="col"><i class="fa-solid fa-ranking-star"></i></th>
+                        <th scope="col">W</th>
+                        <th scope="col">D</th>
+                        <th scope="col">L</th>
+                        <th scope="col">+/-</th>
+                        <th scope="col">Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="col"><%=teamTwo.player.team.team_group%></th>
+                        <th scope="col"><%=teamTwo.player.team.group_position%></th>
+                        <th scope="col"><%=teamTwo.player.team.won%></th>
+                        <th scope="col"><%=teamTwo.player.team.draw%></th>
+                        <th scope="col"><%=teamTwo.player.team.lost%></th>
+                        <th scope="col"><%=teamTwo.player.team.goal_for%> / <%=teamTwo.player.team.goal_against%></th>
+                        <th scope="col"><%=teamTwo.player.team.points%></th>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
         </div>
-
-        <div class="card-header fw-normal fs-4">
-            Goals - Scorer - minute - penalty or not
-            <hr>
-            Booked Cards
-            <hr>
-            Coach
-            <hr>
-            Captain
-            <hr>
-            Gk
-
-        </div>
-
-
     </div>
     </div>

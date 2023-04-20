@@ -4,9 +4,10 @@
       <h4> From <%= tournament.start_date %> <br>
        To <%= tournament.end_date %>
     </h4>
+    <a class="card-link btn btn-info" href="/tournaments/<%= tournament.tr_id %>/teams">Registered Teams</a>
     <% if(played.length == 0){ %>
         <h2>No Matches are registered yet</h2>
-
+        
         <% } else{ %>
         <% for(let play of played){ %>
 

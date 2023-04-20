@@ -12,10 +12,17 @@ router.route("/")
 
 router.get("/new", isLoggedIn, tournaments.new);
 
+// router.get("/groups", isLoggedIn, tournaments.createGroups);
 router.route("/:id")
-    .get(wrapAsync(tournaments.showTournament))
-    .put(isLoggedIn, validateTournament, wrapAsync(tournaments.updateTournament))
-    .delete(isLoggedIn, isAdmin, wrapAsync(tournaments.deleteTournament));
+.get(wrapAsync(tournaments.showTournament))
+.put(isLoggedIn, validateTournament, wrapAsync(tournaments.updateTournament))
+.delete(isLoggedIn, isAdmin, wrapAsync(tournaments.deleteTournament));
+
+router.route("/:id/groups")
+        .get(tournaments.showGroups)
+        .post(tournaments.createGroups);
+
+router.get("/:id/teams/", wrapAsync(tournaments.showTeams));
 
 router.get("/:id/edit", isLoggedIn, isAdmin, wrapAsync(tournaments.editTournament));
 module.exports = router;

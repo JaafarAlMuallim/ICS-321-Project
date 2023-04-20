@@ -136,7 +136,7 @@ stop2_sec numeric NOT NULL,
 PRIMARY KEY (match_no),
 FOREIGN KEY (venue_id) REFERENCES venue (venue_id),
 FOREIGN KEY (referee_id) REFERENCES referee (referee_id), 
-FOREIGN KEY (player_of_match) REFERENCES player(player_uuid));
+FOREIGN KEY (player_of_match) REFERENCES player (player_uuid) );
 
 
 INSERT INTO match_played VALUES (1, 'G', '2020-03-11', 'WIN', 'N', '2-1', 11, 7001, 5113, 13, 131, 242); 

@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap");
+
+.body {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  gap: 2px;
+}
+.droppable {
+  flex: 1;
+  padding: 0 2rem;
+  background: linear-gradient(30deg, #090979, #00d4ff);
+  border-radius: 0.5rem;
+  overflow: auto;
+  margin-bottom: 30px;
+}
+.page {
+  flex: 1;
+  padding: 0 2rem;
+  border-radius: 0.5rem;
+  margin-bottom: 30px;
+}
+
+.draggable {
+  margin: 1rem 2rem;
+  line-height: 150%;
+  overflow: hidden;
+  cursor: move;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: black;
+  background-color: rgba(240, 240, 240, 0.7);
+  transition: var(--transitionTime);
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+.new-added {
+  animation: insert var(--transitionTime) linear;
+}
+
+.will-remove {
+  animation: remove var(--transitionTime) linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes insert {
+  from {
+    max-height: 0;
+  }
+  to {
+    max-height: 100vh;
+  }
+}
+
+@keyframes remove {
+  from {
+    max-height: 100vh;
+  }
+  to {
+    max-height: 0;
+    opacity: 0;
+  }
+}
