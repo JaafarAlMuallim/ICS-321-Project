@@ -1,6 +1,11 @@
+import 'package:extended_phone_number_input/consts/enums.dart';
+import 'package:extended_phone_number_input/phone_number_controller.dart';
+import 'package:extended_phone_number_input/phone_number_input.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
+import 'package:kfupm_soc/authentication_respository/authentication_repository.dart';
 import 'package:kfupm_soc/screens/Login_screen.dart';
+import 'package:kfupm_soc/screens/welcome_screen.dart';
 
 import '../Core/fade_animation.dart';
 
@@ -19,26 +24,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Color backgroundColor = const Color.fromARGB(255, 26, 37, 48);
   bool ispasswordev = true;
 
-  FormData? selected;
-
   TextEditingController nameController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
   TextEditingController bdateController = TextEditingController();
   TextEditingController kfupmidController = TextEditingController();
+  // TODO register As Player Coach Referee...
+  static String name = '';
 
-  static String fullname = '';
+  static String phoneNum = '';
 
-  static String phonenum = '';
-
-  static String email = '';
-
-  static String kfupmid = '';
-
-  static String bdate = '';
+  static String kfupmId = '';
 
   @override
   Widget build(BuildContext context) {
+    PhoneNumberInputController phonenumController =
+        PhoneNumberInputController(context);
+
     return Scaffold(
       body: Stack(children: <Widget>[
         Container(
@@ -84,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         FadeAnimation(
                           delay: 0.8,
                           child: Image.asset(
-                            'images/logo_transparent.png',
+                            'assets/images/logo_transparent.png',
                             width: 100,
                             height: 100,
                           ),
@@ -106,50 +106,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(5.0),
                             decoration: BoxDecoration(
-                              color: selected == FormData.name
-                                  ? enabled
-                                  : backgroundColor,
+                              color: backgroundColor,
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(12.0),
                               ),
                             ),
                             width: 300,
-                            height: 40,
+                            height: 50,
                             child: TextField(
                               controller: nameController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: 'Full Name',
                                 hintStyle: TextStyle(
-                                  color: selected == FormData.name
-                                      ? enabledtxt
-                                      : deaible,
-                                  fontSize: 12,
+                                  fontSize: 14,
                                 ),
                                 prefixIcon: Icon(
                                   Icons.title,
                                   size: 20,
-                                  color: selected == FormData.name
-                                      ? enabledtxt
-                                      : deaible,
                                 ),
                                 enabledBorder: InputBorder.none,
                               ),
                               keyboardType: TextInputType.name,
-                              style: TextStyle(
-                                color: selected == FormData.name
-                                    ? enabledtxt
-                                    : deaible,
-                                fontSize: 12,
+                              style: const TextStyle(
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                               textAlignVertical: TextAlignVertical.center,
                               onChanged: (value) {
-                                fullname = value;
-                              },
-                              onTap: () {
-                                setState(() {
-                                  selected = FormData.name;
-                                });
+                                name = value;
                               },
                             ),
                           ),
@@ -158,51 +142,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         FadeAnimation(
                           delay: 1,
                           child: Container(
-                            padding: const EdgeInsets.all(5.0),
                             decoration: BoxDecoration(
-                              color: selected == FormData.phone
-                                  ? enabled
-                                  : backgroundColor,
+                              color: backgroundColor,
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(12.0)),
                             ),
                             width: 300,
-                            height: 40,
-                            child: TextField(
-                              controller: phoneController,
-                              decoration: InputDecoration(
-                                hintText: 'Phone Number',
-                                hintStyle: TextStyle(
-                                  color: selected == FormData.phone
-                                      ? enabledtxt
-                                      : deaible,
-                                  fontSize: 12,
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.phone_android_rounded,
-                                  size: 20,
-                                  color: selected == FormData.phone
-                                      ? enabledtxt
-                                      : deaible,
-                                ),
-                                enabledBorder: InputBorder.none,
-                              ),
-                              keyboardType: TextInputType.phone,
-                              style: TextStyle(
-                                color: selected == FormData.phone
-                                    ? enabledtxt
-                                    : deaible,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlignVertical: TextAlignVertical.center,
+                            height: 75,
+                            child: PhoneNumberInput(
+                              controller: phonenumController,
+                              searchHint: 'Search for country',
+                              allowPickFromContacts: false,
+                              errorText: 'Check phone number format',
+                              initialCountry: 'SA',
+                              locale: 'en',
+                              countryListMode: CountryListMode.bottomSheet,
+                              contactsPickerPosition:
+                                  ContactsPickerPosition.suffix,
                               onChanged: (value) {
-                                phonenum = value;
-                              },
-                              onTap: () {
-                                setState(() {
-                                  selected = FormData.phone;
-                                });
+                                phoneNum = value;
                               },
                             ),
                           ),
@@ -213,103 +171,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(5.0),
                             decoration: BoxDecoration(
-                              color: selected == FormData.email
-                                  ? enabled
-                                  : backgroundColor,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(12.0)),
-                            ),
-                            width: 300,
-                            height: 40,
-                            child: TextField(
-                              controller: emailController,
-                              decoration: InputDecoration(
-                                hintText: 'Email',
-                                hintStyle: TextStyle(
-                                  color: selected == FormData.email
-                                      ? enabledtxt
-                                      : deaible,
-                                  fontSize: 12,
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.email_outlined,
-                                  size: 20,
-                                  color: selected == FormData.email
-                                      ? enabledtxt
-                                      : deaible,
-                                ),
-                                enabledBorder: InputBorder.none,
-                              ),
-                              keyboardType: TextInputType.emailAddress,
-                              style: TextStyle(
-                                color: selected == FormData.email
-                                    ? enabledtxt
-                                    : deaible,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlignVertical: TextAlignVertical.center,
-                              onChanged: (value) {
-                                email = value;
-                              },
-                              onTap: () {
-                                setState(() {
-                                  selected = FormData.email;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        FadeAnimation(
-                          delay: 1,
-                          child: Container(
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              color: selected == FormData.kfupmId
-                                  ? enabled
-                                  : backgroundColor,
+                              color: backgroundColor,
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(12.0),
                               ),
                             ),
                             width: 300,
-                            height: 40,
+                            height: 50,
                             child: TextField(
                               controller: kfupmidController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: 'KFUPM ID',
                                 hintStyle: TextStyle(
-                                  color: selected == FormData.kfupmId
-                                      ? enabledtxt
-                                      : deaible,
-                                  fontSize: 12,
+                                  fontSize: 14,
                                 ),
                                 prefixIcon: Icon(
                                   Icons.account_box_outlined,
                                   size: 20,
-                                  color: selected == FormData.kfupmId
-                                      ? enabledtxt
-                                      : deaible,
                                 ),
                                 enabledBorder: InputBorder.none,
                               ),
                               keyboardType: TextInputType.number,
-                              style: TextStyle(
-                                color: selected == FormData.kfupmId
-                                    ? enabledtxt
-                                    : deaible,
-                                fontSize: 12,
+                              style: const TextStyle(
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                               textAlignVertical: TextAlignVertical.center,
                               onChanged: (value) {
-                                kfupmid = value;
-                              },
-                              onTap: () {
-                                setState(() {
-                                  selected = FormData.kfupmId;
-                                });
+                                kfupmId = value;
                               },
                             ),
                           ),
@@ -320,49 +209,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(5.0),
                             decoration: BoxDecoration(
-                              color: selected == FormData.bdate
-                                  ? enabled
-                                  : backgroundColor,
+                              color: backgroundColor,
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(12.0)),
                             ),
                             width: 300,
-                            height: 40,
+                            height: 50,
                             child: TextField(
+                              readOnly: true,
                               controller: bdateController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: 'Birth Date',
                                 hintStyle: TextStyle(
-                                  color: selected == FormData.bdate
-                                      ? enabledtxt
-                                      : deaible,
-                                  fontSize: 12,
+                                  fontSize: 14,
                                 ),
                                 prefixIcon: Icon(
                                   Icons.date_range_outlined,
                                   size: 20,
-                                  color: selected == FormData.bdate
-                                      ? enabledtxt
-                                      : deaible,
                                 ),
                                 enabledBorder: InputBorder.none,
                               ),
                               keyboardType: TextInputType.datetime,
-                              style: TextStyle(
-                                color: selected == FormData.bdate
-                                    ? enabledtxt
-                                    : deaible,
-                                fontSize: 12,
+                              style: const TextStyle(
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                               textAlignVertical: TextAlignVertical.center,
-                              onChanged: (value) {
-                                bdate = value;
-                              },
-                              onTap: () {
-                                setState(() {
-                                  selected = FormData.bdate;
-                                });
+                              onChanged: (value) {},
+                              onTap: () async {
+                                DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime(2000),
+                                  firstDate: DateTime(1950),
+                                  lastDate: DateTime(2018),
+                                );
+
+                                if (pickedDate != null) {
+                                  setState(() {
+                                    bdateController.text =
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(pickedDate);
+                                  });
+                                }
                               },
                             ),
                           ),
@@ -371,7 +259,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         FadeAnimation(
                           delay: 1,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              AuthenticationRepository().regAuth(
+                                  name: name,
+                                  phoneNum: phoneNum,
+                                  kfupmId: kfupmId,
+                                  bdate: bdateController.text,
+                                  context: context);
+                            },
                             style: TextButton.styleFrom(
                               backgroundColor: const Color(0xFF2697FF),
                               padding: const EdgeInsets.symmetric(
@@ -446,7 +341,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           right: 0.0,
           child: AppBar(
             leading: IconButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () =>
+                  Navigator.popAndPushNamed(context, WelcomeScreen.id),
               icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
             ),
             title: const Text(''),
@@ -457,12 +353,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ]),
     );
   }
-}
-
-enum FormData {
-  name,
-  phone,
-  email,
-  kfupmId,
-  bdate,
 }

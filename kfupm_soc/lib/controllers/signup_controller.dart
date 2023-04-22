@@ -6,18 +6,21 @@ class SignUpController {
   final name = TextEditingController();
   final uni = TextEditingController();
 
-  Future<String> addDocument(String name, String phoneNum) async {
+  Future<String> addDocument(
+      String name, String phoneNum, String kfupmId, String bdate) async {
     String x = await AuthenticationRepository()
-        .documentUserinFireStore(name, phoneNum);
+        .documentUserinFireStore(name, phoneNum, kfupmId, bdate);
     return x;
   }
 }
 
-void phoneAuthentication(String name, String uni, String phoneNum,
-    String gender, BuildContext context) {
+void phoneAuthentication(String name, String phoneNum, String kfupmId,
+    DateTime bdate, BuildContext context) {
   AuthenticationRepository().phoneAuth(
     context: context,
     name: name,
     phoneNum: phoneNum,
+    kfupmId: kfupmId,
+    bdate: bdate,
   );
 }

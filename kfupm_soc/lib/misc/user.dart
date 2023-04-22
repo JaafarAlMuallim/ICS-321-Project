@@ -1,11 +1,8 @@
 class AppUser {
-  int? id;
   String? name;
   String? phoneNum;
-
-  get getId => id;
-
-  set setId(id) => this.id = id;
+  String? kfupmId;
+  String? bdate;
 
   get getName => name;
 
@@ -13,7 +10,15 @@ class AppUser {
 
   get getPhoneNum => phoneNum;
 
-  set setPhoneNum(String? phoneNum) => phoneNum = phoneNum;
+  set setPhoneNum(String? phoneNum) => this.phoneNum = phoneNum;
 
-  AppUser({this.id, this.name, this.phoneNum});
+  get getKfupmId => kfupmId;
+
+  set setKfupmId(String? kfupmId) => kfupmId = kfupmId;
+
+  get getBdate => bdate;
+
+  set setBdate(bdate) => this.bdate = bdate;
+
+  AppUser({this.name, this.phoneNum, this.kfupmId, this.bdate});
 }

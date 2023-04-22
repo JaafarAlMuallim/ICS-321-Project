@@ -48,6 +48,8 @@ dependencies:
   firebase_core: ^2.10.0
   cloud_firestore: ^4.5.2
   extended_phone_number_input: ^1.0.2
+  syncfusion_flutter_datepicker: ^21.1.41
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
