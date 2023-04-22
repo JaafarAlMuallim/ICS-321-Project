@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kfupm_soc/constants/styles.dart';
 import 'package:kfupm_soc/misc/user.dart';
+import 'package:kfupm_soc/screens/login_screen.dart';
 import 'package:kfupm_soc/screens/otp_screen.dart';
 import 'package:kfupm_soc/screens/register_screen.dart';
 import 'package:kfupm_soc/widgets/snackbar.dart';
@@ -15,13 +19,16 @@ class AuthenticationRepository {
   set setVerificationID(String verificationID) =>
       this.verificationID = verificationID;
 
-  Future<String> documentUserinFireStore(String name, String phoneNum) async {
+  Future<String> documentUserinFireStore(
+      String name, String phoneNum, String kfupmId, String bdate) async {
     try {
+      // TODO add in supabase and in firebase
       Future.delayed(const Duration(seconds: 4));
       await _fireStore.collection('Users').doc(_auth.currentUser!.uid).set({
         'name': name,
         'phoneNumber': phoneNum,
-        'schedule': [],
+        'kfupmId': kfupmId,
+        'bdate': bdate,
       });
       return 'Success';
     } on FirebaseException catch (e) {
@@ -31,57 +38,102 @@ class AuthenticationRepository {
     }
   }
 
+  Future<void> regAuth(
+      {required String name,
+      required String phoneNum,
+      required String kfupmId,
+      required String bdate,
+      required BuildContext context}) async {
+    bool isUser = await findUser(phoneNum);
+    AppUser user =
+        AppUser(name: name, phoneNum: phoneNum, kfupmId: kfupmId, bdate: bdate);
+    if (isUser) {
+      ShowSnackBar.showSnackbar(
+          context, "This Phone number is already Registered", "Login", () {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        Navigator.pop(context);
+        Navigator.pushNamed(context, LoginScreen.id);
+      }, Style.containerColor);
+    } else {
+      // TODO add info to supabase
+      // flutter sign up with phone number
+
+      await _auth.verifyPhoneNumber(
+          phoneNumber: phoneNum,
+          verificationCompleted: (PhoneAuthCredential cradential) async =>
+              await _auth.signInWithCredential(cradential),
+          verificationFailed: (error) {
+            if (error.code == 'invalid-phone-number') {
+              ShowSnackBar.showSnackbar(context, 'Invalid Phone Number', "",
+                  () {}, Style.containerColor);
+            } else {
+              ShowSnackBar.showSnackbar(
+                  context, error.message, "", () {}, Style.containerColor);
+            }
+          },
+          codeSent: (verificationId, forceResendingToken) {
+            verificationID = verificationId;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OTPScreen(
+                    phoneNum: phoneNum,
+                    verificationId: verificationID,
+                    user: user),
+              ),
+            );
+          },
+          codeAutoRetrievalTimeout: (verificationId) {
+            verificationID = verificationId;
+          });
+    }
+  }
+
   Future<void> phoneAuth(
       {String? name,
-      String? uni,
       required String phoneNum,
-      String? gender,
+      String? kfupmId,
+      DateTime? bdate,
       required BuildContext context}) async {
-    AppUser user = AppUser(
-      name: name,
-      phoneNum: phoneNum,
-    );
+    AppUser user = AppUser(phoneNum: phoneNum);
     bool isUser = await findUser(phoneNum);
-    await _auth.verifyPhoneNumber(
-      phoneNumber: phoneNum,
-      verificationCompleted: (phoneAuthCredential) async {
-        await _auth.signInWithCredential(phoneAuthCredential);
-      },
-      codeSent: (verificationId, forceResendingToken) {
-        if (!isUser) {
-          ShowSnackBar.showSnackbar(
-              context, "This Phone number is not registered", "Register", () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            Navigator.pop(context);
-            Navigator.pushNamed(context, RegisterScreen.id);
+    if (!isUser) {
+      ShowSnackBar.showSnackbar(
+          context, "This Phone number is not Registered", "Register", () {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        Navigator.pop(context);
+        Navigator.pushNamed(context, RegisterScreen.id);
+      }, Style.containerColor);
+    } else {
+      await _auth.verifyPhoneNumber(
+          phoneNumber: phoneNum,
+          verificationCompleted: (PhoneAuthCredential cradential) async =>
+              await _auth.signInWithCredential(cradential),
+          verificationFailed: (error) {
+            if (error.code == 'invalid-phone-number') {
+              ShowSnackBar.showSnackbar(context, 'Invalid Phone Number', "",
+                  () {}, Style.containerColor);
+            } else {
+              ShowSnackBar.showSnackbar(
+                  context, error.message, "", () {}, Style.containerColor);
+            }
+          },
+          codeSent: (verificationId, forceResendingToken) {
+            verificationID = verificationId;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OTPScreen(
+                    phoneNum: phoneNum,
+                    verificationId: verificationID,
+                    user: user),
+              ),
+            );
+          },
+          codeAutoRetrievalTimeout: (verificationId) {
+            verificationID = verificationId;
           });
-        } else {
-          verificationID = verificationId;
-          verificationID = verificationId;
-          // TODO UNcomment Later
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => OTPScreen(
-          //       phoneNum: phoneNum,
-          //       verificationId: verificationID,
-          //       user: user,
-          //     ),
-          //   ),
-          // );
-        }
-      },
-      codeAutoRetrievalTimeout: (verificationId) {
-        verificationID = verificationId;
-      },
-      verificationFailed: (error) {
-        if (error.code == 'invalid-phone-number') {
-          ShowSnackBar.showSnackbar(context, 'Invalid Phone Number', "", () {});
-        } else {
-          ShowSnackBar.showSnackbar(context, 'Something went wrong', "", () {});
-        }
-      },
-    );
+    }
   }
 
   Future<bool> verifyOTP(
@@ -94,7 +146,7 @@ class AuthenticationRepository {
     } catch (e) {
       ShowSnackBar.showSnackbar(context, "Wrong OTP!", "Got it!", () {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      });
+      }, Style.containerColor);
       return false;
     }
   }
@@ -104,9 +156,11 @@ class AuthenticationRepository {
     try {
       _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseException catch (e) {
-      ShowSnackBar.showSnackbar(context, e.message, "", () {});
+      ShowSnackBar.showSnackbar(
+          context, e.message, "", () {}, Style.containerColor);
     } catch (e) {
-      ShowSnackBar.showSnackbar(context, 'Something went wrong', "", () {});
+      ShowSnackBar.showSnackbar(
+          context, 'Something went wrong', "", () {}, Style.containerColor);
     }
   }
 

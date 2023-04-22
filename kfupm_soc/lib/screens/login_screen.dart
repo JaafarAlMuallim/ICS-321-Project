@@ -1,8 +1,13 @@
+import 'package:extended_phone_number_input/consts/enums.dart';
+import 'package:extended_phone_number_input/phone_number_controller.dart';
+import 'package:extended_phone_number_input/phone_number_input.dart';
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/Core/fade_animation.dart';
+import 'package:kfupm_soc/authentication_respository/authentication_repository.dart';
 import 'package:kfupm_soc/screens/otp_screen.dart';
 
 import 'package:kfupm_soc/screens/register_screen.dart';
+import 'package:kfupm_soc/screens/welcome_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
@@ -18,14 +23,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Color deaible = Colors.grey;
   Color backgroundColor = const Color.fromARGB(255, 26, 37, 48);
   bool ispasswordev = true;
-  FormData? selected;
 
   TextEditingController phoneController = TextEditingController();
 
-  static String phonenum = '';
+  static String phoneNum = '';
 
   @override
   Widget build(BuildContext context) {
+    PhoneNumberInputController phonenumController =
+        PhoneNumberInputController(context);
     return Scaffold(
       body: Stack(children: <Widget>[
         Container(
@@ -76,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         FadeAnimation(
                           delay: 0.8,
                           child: Image.asset(
-                            'images/logo_transparent.png',
+                            'assets/images/logo_transparent.png',
                             width: 100,
                             height: 100,
                           ),
@@ -98,49 +104,24 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(5.0),
                             decoration: BoxDecoration(
-                              color: selected == FormData.phone
-                                  ? enabled
-                                  : backgroundColor,
+                              color: backgroundColor,
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(12.0)),
                             ),
                             width: 300,
-                            height: 40,
-                            child: TextField(
-                              controller: phoneController,
-                              decoration: InputDecoration(
-                                hintText: 'Phone',
-                                hintStyle: TextStyle(
-                                  color: selected == FormData.phone
-                                      ? enabledtxt
-                                      : deaible,
-                                  fontSize: 12,
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.phone_outlined,
-                                  size: 20,
-                                  color: selected == FormData.phone
-                                      ? enabledtxt
-                                      : deaible,
-                                ),
-                                enabledBorder: InputBorder.none,
-                              ),
-                              keyboardType: TextInputType.phone,
-                              style: TextStyle(
-                                color: selected == FormData.phone
-                                    ? enabledtxt
-                                    : deaible,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlignVertical: TextAlignVertical.center,
+                            height: 90,
+                            child: PhoneNumberInput(
+                              controller: phonenumController,
+                              searchHint: 'Search for country',
+                              allowPickFromContacts: false,
+                              errorText: 'Check phone number format',
+                              initialCountry: 'SA',
+                              locale: 'en',
+                              countryListMode: CountryListMode.bottomSheet,
+                              contactsPickerPosition:
+                                  ContactsPickerPosition.suffix,
                               onChanged: (value) {
-                                phonenum = value;
-                              },
-                              onTap: () {
-                                setState(() {
-                                  selected = FormData.phone;
-                                });
+                                phoneNum = value;
                               },
                             ),
                           ),
@@ -150,11 +131,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           delay: 1,
                           child: TextButton(
                             onPressed: (() {
-                              Navigator.pop(context);
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (context) {
-                                return const OTPScreen();
-                              }));
+                              AuthenticationRepository().phoneAuth(
+                                  phoneNum: phoneNum, context: context);
                             }),
                             style: TextButton.styleFrom(
                               backgroundColor: const Color(0xFF2697FF),
@@ -230,7 +208,8 @@ class _LoginScreenState extends State<LoginScreen> {
           right: 0.0,
           child: AppBar(
             leading: IconButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () =>
+                  Navigator.popAndPushNamed(context, WelcomeScreen.id),
               icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
             ),
             title: const Text(''),
@@ -241,8 +220,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ]),
     );
   }
-}
-
-enum FormData {
-  phone,
 }

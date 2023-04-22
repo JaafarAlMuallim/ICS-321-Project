@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kfupm_soc/constants/styles.dart';
 
 class ShowSnackBar {
-  static showSnackbar(BuildContext context, message, textAction, action) {
+  static showSnackbar(
+      BuildContext context, message, textAction, action, color) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       elevation: 5,
       duration: const Duration(seconds: 5),
@@ -32,7 +33,7 @@ class ShowSnackBar {
         ],
       ),
       padding: Style.padding,
-      backgroundColor: Style.containerColor,
+      backgroundColor: color,
       behavior: SnackBarBehavior.floating,
     ));
   }

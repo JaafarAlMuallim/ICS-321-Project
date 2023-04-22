@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/constants/styles.dart';
 import 'package:kfupm_soc/screens/Login_screen.dart';
 import 'package:kfupm_soc/screens/otp_screen.dart';
 import 'package:kfupm_soc/screens/register_screen.dart';
+import 'package:kfupm_soc/screens/tournaments_screen.dart';
 import 'package:kfupm_soc/screens/welcome_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -16,8 +18,11 @@ class MyApp extends StatelessWidget {
         RegisterScreen.id: (context) => const RegisterScreen(),
         LoginScreen.id: (context) => const LoginScreen(),
         OTPScreen.id: (context) => const OTPScreen(),
+        TournamentScreen.id: (context) => const TournamentScreen(),
       },
-      initialRoute: WelcomeScreen.id,
+      initialRoute: FirebaseAuth.instance.currentUser == null
+          ? WelcomeScreen.id
+          : TournamentScreen.id,
       title: 'KFUPMSOC',
       // theme: ThemeData.dark().copyWith(
       //   scaffoldBackgroundColor: Colors.white,

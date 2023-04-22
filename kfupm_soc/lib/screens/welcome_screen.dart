@@ -112,22 +112,31 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   ),
                 ]),
                 SizedBox(height: 48.0),
-                Roundedbutton(
-                  color: Colors.blue.shade400,
-                  onPressed: (() =>
-                      Navigator.pushNamed(context, LoginScreen.id)),
-                  title: 'Log In',
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Roundedbutton(
+                    color: Colors.blue.shade400,
+                    onPressed: (() =>
+                        Navigator.pushNamed(context, LoginScreen.id)),
+                    title: 'Log In',
+                  ),
                 ),
-                Roundedbutton(
-                  color: Colors.blue.shade800,
-                  onPressed: (() =>
-                      Navigator.pushNamed(context, RegisterScreen.id)),
-                  title: 'Register',
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Roundedbutton(
+                    color: Colors.blue.shade800,
+                    onPressed: (() =>
+                        Navigator.pushNamed(context, RegisterScreen.id)),
+                    title: 'Register',
+                  ),
                 ),
-                Roundedbutton(
-                  color: Colors.blue.shade900,
-                  onPressed: (() {}),
-                  title: 'Guest',
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Roundedbutton(
+                    color: Colors.blue.shade900,
+                    onPressed: (() {}),
+                    title: 'Guest',
+                  ),
                 ),
               ],
             ),
