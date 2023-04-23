@@ -34,8 +34,6 @@ class _OTPScreenState extends State<OTPScreen> {
   String errorMessage = '';
   getUser() async {
     found = await AuthenticationRepository().findUser(widget.phoneNum!);
-    print(found);
-    print(widget.user!);
   }
 
   @override

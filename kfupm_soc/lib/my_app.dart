@@ -1,9 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:kfupm_soc/constants/styles.dart';
+
 import 'package:kfupm_soc/screens/Login_screen.dart';
+import 'package:kfupm_soc/screens/match_info_screen.dart';
+import 'package:kfupm_soc/screens/matches_screen.dart';
 import 'package:kfupm_soc/screens/otp_screen.dart';
+import 'package:kfupm_soc/screens/profile_screen.dart';
 import 'package:kfupm_soc/screens/register_screen.dart';
+import 'package:kfupm_soc/screens/requests_screen.dart';
+import 'package:kfupm_soc/screens/stats_screen.dart';
+import 'package:kfupm_soc/screens/teams_screen.dart';
+import 'package:kfupm_soc/screens/tournament_info_screen.dart';
 import 'package:kfupm_soc/screens/tournaments_screen.dart';
 import 'package:kfupm_soc/screens/welcome_screen.dart';
 
@@ -19,6 +26,14 @@ class MyApp extends StatelessWidget {
         LoginScreen.id: (context) => const LoginScreen(),
         OTPScreen.id: (context) => const OTPScreen(),
         TournamentScreen.id: (context) => const TournamentScreen(),
+        TournamentInfoScreen.id: (context) =>
+            const TournamentInfoScreen(tournamentId: 'x'),
+        TeamScreen.id: (context) => const TeamScreen(),
+        MatchesScreen.id: (context) => const MatchesScreen(),
+        MatchInfoScreen.id: (context) => const MatchInfoScreen(),
+        ProfileScreen.id: (context) => const ProfileScreen(),
+        RequestsScreen.id: (context) => const RequestsScreen(),
+        StatsticsScreen.id: (context) => const StatsticsScreen(),
       },
       initialRoute: FirebaseAuth.instance.currentUser == null
           ? WelcomeScreen.id

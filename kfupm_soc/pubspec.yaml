@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   badges: ^3.0.3
   google_fonts: ^4.0.3
-  supabase_flutter: ^1.6.2
+  supabase_flutter: ^1.7.0
   flutter_svg: ^2.0.5
   flutter_emoji: ^2.4.0
   simple_animations: 4.2.0

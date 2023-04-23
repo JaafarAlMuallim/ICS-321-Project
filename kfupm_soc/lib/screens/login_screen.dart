@@ -4,7 +4,6 @@ import 'package:extended_phone_number_input/phone_number_input.dart';
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/Core/fade_animation.dart';
 import 'package:kfupm_soc/authentication_respository/authentication_repository.dart';
-import 'package:kfupm_soc/screens/otp_screen.dart';
 
 import 'package:kfupm_soc/screens/register_screen.dart';
 import 'package:kfupm_soc/screens/welcome_screen.dart';

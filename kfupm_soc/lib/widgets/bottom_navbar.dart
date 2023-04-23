@@ -1,11 +1,11 @@
-// ignore_for_file: prefer_const_constructors, prefer_final_fields
-
 import 'package:flutter/material.dart';
-import 'package:kfupm_soc/misc/custom_route.dart';
+import 'package:kfupm_soc/constants/styles.dart';
+import 'package:kfupm_soc/screens/matches_screen.dart';
+import 'package:kfupm_soc/screens/profile_screen.dart';
+import 'package:kfupm_soc/screens/requests_screen.dart';
+import 'package:kfupm_soc/screens/stats_screen.dart';
+import 'package:kfupm_soc/screens/teams_screen.dart';
 import 'package:kfupm_soc/screens/tournaments_screen.dart';
-import 'package:kfupm_soc/widgets/icon_bottom_bar.dart';
-
-import '../constants/styles.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -19,33 +19,28 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  int _currentIndex = BottomNavBar._selectedIndex;
+  final int _currentIndex = BottomNavBar._selectedIndex;
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Style.kAppBarColor,
+      color: Style.kScaffoldColor,
       elevation: 0,
       child: SizedBox(
         height: 70,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
+          padding: const EdgeInsets.only(left: 25, right: 25),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconBottomBar(
-                icon: Icons.home,
+                icon: Icons.tour,
                 selected: BottomNavBar._selectedIndex == 0,
                 onPressed: () {
                   setState(
                     () {
                       if (_currentIndex != 0) {
-                        Navigator.pushReplacement(
-                          context,
-                          CustomRoute(
-                            child: TournamentScreen(),
-                            direction: AxisDirection.right,
-                          ),
-                        );
+                        Navigator.pushReplacementNamed(
+                            context, TournamentScreen.id);
                         BottomNavBar._selectedIndex = 0;
                       }
                     },
@@ -53,42 +48,53 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 },
               ),
               IconBottomBar(
-                icon: Icons.calendar_month,
-                selected: _currentIndex == 1,
-                onPressed: () {
-                  setState(() {
-                    if (_currentIndex != 1) {
-                      Navigator.pushReplacement(
-                        context,
-                        CustomRoute(
-                          child: TournamentScreen(),
-                          direction: _currentIndex <= 1
-                              ? AxisDirection.left
-                              : AxisDirection.right,
-                        ),
-                      );
-                      BottomNavBar._selectedIndex = 1;
-                    }
-                  });
-                },
-              ),
-              IconBottomBar(
-                icon: Icons.map,
-                selected: _currentIndex == 2,
+                icon: Icons.group_rounded,
+                selected: BottomNavBar._selectedIndex == 1,
                 onPressed: () {
                   setState(
                     () {
+                      if (_currentIndex != 1) {
+                        Navigator.pushReplacementNamed(context, TeamScreen.id);
+                        BottomNavBar._selectedIndex = 1;
+                      }
+                    },
+                  );
+                },
+              ),
+              IconBottomBar(
+                  icon: Icons.calendar_month,
+                  selected: _currentIndex == 2,
+                  onPressed: () {
+                    setState(() {
                       if (_currentIndex != 2) {
-                        Navigator.pushReplacement(
-                          context,
-                          CustomRoute(
-                            child: TournamentScreen(),
-                            direction: _currentIndex <= 2
-                                ? AxisDirection.left
-                                : AxisDirection.right,
-                          ),
-                        );
+                        Navigator.pushReplacementNamed(
+                            context, MatchesScreen.id);
                         BottomNavBar._selectedIndex = 2;
+                      }
+                    });
+                  }),
+              IconBottomBar(
+                  icon: Icons.bar_chart,
+                  selected: _currentIndex == 3,
+                  onPressed: () {
+                    setState(() {
+                      if (_currentIndex != 3) {
+                        Navigator.pushReplacementNamed(
+                            context, StatsticsScreen.id);
+                        BottomNavBar._selectedIndex = 3;
+                      }
+                    });
+                  }),
+              IconBottomBar(
+                icon: Icons.request_page,
+                selected: _currentIndex == 4,
+                onPressed: () {
+                  setState(
+                    () {
+                      if (_currentIndex != 4) {
+                        Navigator.pushReplacementNamed(
+                            context, RequestsScreen.id);
+                        BottomNavBar._selectedIndex = 4;
                       }
                     },
                   );
@@ -96,19 +102,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
               ),
               IconBottomBar(
                 icon: Icons.account_circle,
-                selected: _currentIndex == 3,
+                selected: _currentIndex == 5,
                 onPressed: () {
                   setState(
                     () {
-                      if (_currentIndex != 3) {
-                        Navigator.pushReplacement(
-                          context,
-                          CustomRoute(
-                            child: TournamentScreen(),
-                            direction: AxisDirection.left,
-                          ),
-                        );
-                        BottomNavBar._selectedIndex = 3;
+                      if (_currentIndex != 5) {
+                        Navigator.pushReplacementNamed(
+                            context, ProfileScreen.id);
+                        BottomNavBar._selectedIndex = 5;
                       }
                     },
                   );
@@ -118,6 +119,32 @@ class _BottomNavBarState extends State<BottomNavBar> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class IconBottomBar extends StatelessWidget {
+  const IconBottomBar(
+      {super.key,
+      required this.icon,
+      required this.selected,
+      required this.onPressed});
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        IconButton(
+          onPressed: onPressed,
+          icon: Icon(icon,
+              size: 40,
+              color: selected ? Style.kActivated : Style.kInActivated),
+        ),
+      ],
     );
   }
 }

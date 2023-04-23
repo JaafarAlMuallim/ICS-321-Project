@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Style {
-  static const kScaffoldColor = Color(0XFF1C1D22);
+  // static const kScaffoldColor = Color(0XFF1C1D22);
+  static const kScaffoldColor = Color(0xff222121);
   static const kTextColor = Color(0XFFF5F7F9);
   static const kInActiveButton = Color(0XFF82868D);
   static const kActiveButton = Color(0XFFF5F7F9);
@@ -30,6 +31,11 @@ class Style {
   static const containerColor = Color(0xffA40000);
   static const padding = EdgeInsets.all(16);
   static const height = 90;
+  static const kSubtitleStyle = TextStyle(
+    fontSize: 18.0,
+    fontFamily: 'SourceSans',
+    color: Colors.white,
+  );
 
   static const TextStyle kTextStyle = TextStyle(
     color: Colors.black,

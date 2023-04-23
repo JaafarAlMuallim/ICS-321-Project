@@ -22,7 +22,7 @@ class AuthenticationRepository {
   Future<String> documentUserinFireStore(
       String name, String phoneNum, String kfupmId, String bdate) async {
     try {
-      // TODO add in supabase and in firebase
+      // TODO add in supabase
       Future.delayed(const Duration(seconds: 4));
       await _fireStore.collection('Users').doc(_auth.currentUser!.uid).set({
         'name': name,
@@ -170,8 +170,6 @@ class AuthenticationRepository {
           .collection('Users')
           .where('phoneNumber', isEqualTo: phoneNum)
           .get();
-      print(phoneNum);
-      print(data.docs.first);
       if (data.docs.first.exists) {
         return true;
       } else {

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-class MatchInfoScreen extends StatelessWidget {
-  const MatchInfoScreen({super.key});
-  static String id = 'matchInfo';
-
+class RequestsScreen extends StatelessWidget {
+  const RequestsScreen({super.key});
+  static String id = 'requests';
   @override
   Widget build(BuildContext context) {
     return Container();
