@@ -63,6 +63,7 @@ class _TeamScreenState extends State<TeamScreen> {
             Navigator.pushNamed(context, TeamInfoScreen.id,
                 arguments: doc['team_uuid']);
           },
+          height: 430,
         ),
       );
     }
@@ -92,7 +93,7 @@ class _TeamScreenState extends State<TeamScreen> {
           title: const Padding(
             padding: EdgeInsets.only(left: 5, top: 5),
             child: Text(
-              'Tournament',
+              'Teams',
               style: Style.kSubtitleStyle,
             ),
           ),

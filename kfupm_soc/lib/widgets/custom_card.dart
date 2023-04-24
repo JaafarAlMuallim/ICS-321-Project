@@ -3,13 +3,14 @@
 import 'package:flutter/material.dart';
 
 class CustomCard extends StatelessWidget {
-  const CustomCard({
-    super.key,
-    required this.containerContent,
-    required this.onPress,
-  });
+  const CustomCard(
+      {super.key,
+      required this.containerContent,
+      required this.onPress,
+      required this.height});
   final Widget? containerContent;
   final VoidCallback? onPress;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class CustomCard extends StatelessWidget {
             ),
           ],
         ),
-        constraints: const BoxConstraints(maxWidth: 400, maxHeight: 430),
+        constraints: BoxConstraints(maxWidth: 400, maxHeight: height ?? 430),
         margin: const EdgeInsets.all(10),
         child: containerContent,
       ),

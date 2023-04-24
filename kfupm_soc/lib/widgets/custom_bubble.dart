@@ -16,7 +16,7 @@ class CustomBubble extends StatelessWidget {
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.purple.shade400,
+          color: Colors.blue.shade400,
           borderRadius: const BorderRadius.all(Radius.circular(25)),
         ),
         width: 130.0,

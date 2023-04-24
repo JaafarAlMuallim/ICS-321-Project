@@ -22,7 +22,6 @@ class AuthenticationRepository {
   Future<String> documentUserinFireStore(
       String name, String phoneNum, String kfupmId, String bdate) async {
     try {
-      // TODO add in supabase
       Future.delayed(const Duration(seconds: 4));
       await _fireStore.collection('Users').doc(_auth.currentUser!.uid).set({
         'name': name,

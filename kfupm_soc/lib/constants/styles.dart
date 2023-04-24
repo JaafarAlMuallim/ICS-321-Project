@@ -23,7 +23,7 @@ class Style {
   static const kResetBackground = Color.fromRGBO(223, 105, 106, 0.3);
   static const kUnoveredColor = Color(0XFF0077B6);
   static const khoveredColor = Color(0XFF00B4D8);
-  static const kActivated = Color.fromARGB(255, 97, 17, 141);
+  static final kActivated = Colors.blue.shade400;
   static const kInActivated = Color(0xFF636365);
   static const kAppBarColor = Colors.white;
   static const textColor = Colors.white;
@@ -63,8 +63,7 @@ class Style {
 
   static const TextStyle h4 = TextStyle(
     color: Colors.white,
-    fontSize: 25,
-    fontStyle: FontStyle.italic,
+    fontSize: 22,
   );
 
   static const TextStyle otpStyle = TextStyle(

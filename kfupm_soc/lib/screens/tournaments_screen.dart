@@ -25,37 +25,40 @@ class _TournamentScreenState extends State<TournamentScreen> {
     List<Widget> cards = [];
     for (dynamic doc in data) {
       cards.add(CustomCard(
-          containerContent: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: SizedBox.fromSize(
-                  child: Image.asset('assets/images/welcomebkg.jpg'),
-                ),
+        containerContent: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: SizedBox.fromSize(
+                child: Image.asset('assets/images/welcomebkg.jpg'),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Text(
-                  doc['tr_name'],
-                  style: Style.h3,
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Text(
+                doc['tr_name'],
+                style: Style.h3,
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Text(
-                  '${doc['start_date']} - ${doc['end_date']}',
-                  style: Style.kSubtitleStyle,
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Text(
+                '${doc['start_date']} - ${doc['end_date']}',
+                style: Style.kSubtitleStyle,
               ),
-            ],
-          ),
-          onPress: () {
-            Navigator.pushNamed(context, TournamentInfoScreen.id,
-                arguments: doc['tr_id']);
-          }));
+            ),
+          ],
+        ),
+        onPress: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      TournamentInfoScreen(tournamentId: doc['tr_id'])));
+        },
+        height: 430,
+      ));
       setState(() {
         _loading = false;
       });
