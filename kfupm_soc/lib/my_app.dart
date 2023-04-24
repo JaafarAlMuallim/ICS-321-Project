@@ -10,7 +10,6 @@ import 'package:kfupm_soc/screens/register_screen.dart';
 import 'package:kfupm_soc/screens/requests_screen.dart';
 import 'package:kfupm_soc/screens/stats_screen.dart';
 import 'package:kfupm_soc/screens/teams_screen.dart';
-import 'package:kfupm_soc/screens/tournament_info_screen.dart';
 import 'package:kfupm_soc/screens/tournaments_screen.dart';
 import 'package:kfupm_soc/screens/welcome_screen.dart';
 
@@ -20,14 +19,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       routes: {
         WelcomeScreen.id: (context) => const WelcomeScreen(),
         RegisterScreen.id: (context) => const RegisterScreen(),
         LoginScreen.id: (context) => const LoginScreen(),
         OTPScreen.id: (context) => const OTPScreen(),
         TournamentScreen.id: (context) => const TournamentScreen(),
-        TournamentInfoScreen.id: (context) =>
-            const TournamentInfoScreen(tournamentId: 'x'),
+        // TournamentInfoScreen.id: (context) =>
+        //     const TournamentInfoScreen(tournamentId: 'x'),
         TeamScreen.id: (context) => const TeamScreen(),
         MatchesScreen.id: (context) => const MatchesScreen(),
         MatchInfoScreen.id: (context) => const MatchInfoScreen(),

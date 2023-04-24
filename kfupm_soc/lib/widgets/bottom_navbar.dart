@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/constants/styles.dart';
-import 'package:kfupm_soc/screens/matches_screen.dart';
 import 'package:kfupm_soc/screens/profile_screen.dart';
 import 'package:kfupm_soc/screens/requests_screen.dart';
 import 'package:kfupm_soc/screens/stats_screen.dart';
@@ -62,39 +61,27 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 },
               ),
               IconBottomBar(
-                  icon: Icons.calendar_month,
+                  icon: Icons.bar_chart,
                   selected: _currentIndex == 2,
                   onPressed: () {
                     setState(() {
                       if (_currentIndex != 2) {
                         Navigator.pushReplacementNamed(
-                            context, MatchesScreen.id);
+                            context, StatsticsScreen.id);
                         BottomNavBar._selectedIndex = 2;
                       }
                     });
                   }),
               IconBottomBar(
-                  icon: Icons.bar_chart,
-                  selected: _currentIndex == 3,
-                  onPressed: () {
-                    setState(() {
-                      if (_currentIndex != 3) {
-                        Navigator.pushReplacementNamed(
-                            context, StatsticsScreen.id);
-                        BottomNavBar._selectedIndex = 3;
-                      }
-                    });
-                  }),
-              IconBottomBar(
                 icon: Icons.request_page,
-                selected: _currentIndex == 4,
+                selected: _currentIndex == 3,
                 onPressed: () {
                   setState(
                     () {
-                      if (_currentIndex != 4) {
+                      if (_currentIndex != 3) {
                         Navigator.pushReplacementNamed(
                             context, RequestsScreen.id);
-                        BottomNavBar._selectedIndex = 4;
+                        BottomNavBar._selectedIndex = 3;
                       }
                     },
                   );
@@ -102,14 +89,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
               ),
               IconBottomBar(
                 icon: Icons.account_circle,
-                selected: _currentIndex == 5,
+                selected: _currentIndex == 4,
                 onPressed: () {
                   setState(
                     () {
-                      if (_currentIndex != 5) {
+                      if (_currentIndex != 4) {
                         Navigator.pushReplacementNamed(
                             context, ProfileScreen.id);
-                        BottomNavBar._selectedIndex = 5;
+                        BottomNavBar._selectedIndex = 4;
                       }
                     },
                   );

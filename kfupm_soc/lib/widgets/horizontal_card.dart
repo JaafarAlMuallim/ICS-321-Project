@@ -2,35 +2,35 @@
 
 import 'package:flutter/material.dart';
 
-class CardWidget extends StatelessWidget {
-  const CardWidget({
-    super.key,
-    required this.containerContent,
-    required this.onPress,
-  });
+class HorizontalCard extends StatelessWidget {
+  const HorizontalCard(
+      {super.key,
+      required this.containerContent,
+      required this.onPress,
+      required this.height});
   final Widget? containerContent;
   final VoidCallback? onPress;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.purple.shade400,
+          color: Colors.blue.shade600,
           borderRadius: const BorderRadius.all(
             Radius.circular(30),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.purple.withOpacity(0.3),
+              color: Colors.blue.withOpacity(0.5),
               offset: const Offset(0, 3),
               blurRadius: 7,
               spreadRadius: 5,
             ),
           ],
         ),
-        width: 300,
-        constraints: const BoxConstraints(maxWidth: 400, maxHeight: 300),
+        constraints: BoxConstraints(maxWidth: 400, maxHeight: height ?? 200),
         margin: const EdgeInsets.all(10),
         child: containerContent,
       ),
