@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/constants/styles.dart';
-import 'package:kfupm_soc/screens/team_info_screen.dart';
 import 'package:kfupm_soc/screens/tournaments_screen.dart';
 import 'package:kfupm_soc/widgets/bottom_navbar.dart';
 import 'package:kfupm_soc/widgets/custom_card.dart';
-import 'package:kfupm_soc/widgets/horizontal_card.dart';
 
 class StatsticsScreen extends StatefulWidget {
   const StatsticsScreen({super.key});
@@ -24,6 +22,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
       _loading = true;
     });
     List<Widget> cards = [];
+    print(mvps);
     for (dynamic doc in mvps) {
       cards.add(
         CustomCard(
@@ -56,7 +55,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 4),
                       child: Text(
-                        'Highest Number of MVPs was ${doc['counter']} \nFrom The Player ${doc['pos']} - ${doc['jersey_no']} ${doc['team_id']} \nFrom Team ${doc['team_id']}',
+                        'Highest Number of MVPs was ${doc['x']} \nFrom The Player ${doc['pos']} - ${doc['jersey_no']} ${doc['name']} \nFrom Team ${doc['team_id']}',
                         style: Style.h3.copyWith(fontSize: 22),
                       ),
                     ),

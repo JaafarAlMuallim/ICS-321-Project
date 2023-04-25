@@ -59,15 +59,15 @@ class _TournamentScreenState extends State<TournamentScreen> {
         },
         height: 430,
       ));
-      setState(() {
-        _loading = false;
-      });
     }
     return cards;
   }
 
   fetchData() async {
     data = await supabase.from('tournament').select();
+    setState(() {
+      _loading = false;
+    });
   }
 
   @override
@@ -102,39 +102,3 @@ class _TournamentScreenState extends State<TournamentScreen> {
     );
   }
 }
-// Sign Out
-// Container(
-//                 // text button for sign out
-//                 child: TextButton(
-//                   style: TextButton.styleFrom(
-//                     backgroundColor: const Color(0xFF2697FF),
-//                     padding: const EdgeInsets.symmetric(
-//                       vertical: 14.0,
-//                       horizontal: 80,
-//                     ),
-//                     shape: const RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.all(Radius.circular(12.0)),
-//                     ),
-//                   ),
-//                   onPressed: () {
-//                     try {
-//                       _auth.signOut();
-//                       Navigator.popAndPushNamed(context, LoginScreen.id);
-//                       ShowSnackBar.showSnackbar(
-//                           context, 'Sign Out Succesfully', '', () {
-//                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-//                       }, Colors.green);
-//                     } on FirebaseException catch (e) {
-//                       ShowSnackBar.showSnackbar(context, e.message, "Sign Out",
-//                           () {
-//                         Navigator.popAndPushNamed(context, LoginScreen.id);
-//                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-//                       }, Style.containerColor);
-//                     }
-//                   },
-//                   child: const Text(
-//                     'Sign Out',
-//                     style: Style.kTextStyle,
-//                   ),
-//                 ),
-//               ),

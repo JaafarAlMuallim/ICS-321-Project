@@ -47,9 +47,11 @@ class _ParticipatedScreenState extends State<ParticipatedScreen> {
         .select('*, member(*)')
         .in_('team_uuid', teamUuids)
         .order('jersey_no', ascending: true);
-    setState(() {
-      _loading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _loading = false;
+      });
+    }
   }
 
   List<Widget> createCards() {
