@@ -43,7 +43,7 @@ module.exports.index = async (req, res) => {
         .from('player')
         .select('*, member(*)')
         .in('team_uuid', teamUuids)
-        .eq('approved', true)
+        .eq('approved', 'approved')
         .order('jersey_no', {ascending: true});
 
         const captains = [];

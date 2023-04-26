@@ -20,7 +20,7 @@ router.route('/requests')
 
 router.route('/requests/:id')
     .post(wrapAsync(user.approved))
-    .delete(wrapAsync(user.decline))
+    .post(wrapAsync(user.decline))
 router.get('/logout', user.logout);
 
 module.exports = router;
