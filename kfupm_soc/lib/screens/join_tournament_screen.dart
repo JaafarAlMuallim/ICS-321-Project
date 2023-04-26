@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/screens/requests_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -5,15 +7,15 @@ import '../Core/fade_animation.dart';
 
 final supabase = Supabase.instance.client;
 
-class JoinTeamScreen extends StatefulWidget {
-  const JoinTeamScreen({super.key});
-  static const String id = 'joinTeam_screen';
+class JoinTournamentScreen extends StatefulWidget {
+  const JoinTournamentScreen({super.key});
+  static const String id = 'join_tournament_screen';
 
   @override
-  State<JoinTeamScreen> createState() => _JoinTeamScreenState();
+  State<JoinTournamentScreen> createState() => _JoinTournamentScreenState();
 }
 
-class _JoinTeamScreenState extends State<JoinTeamScreen> {
+class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
   Color enabled = const Color.fromARGB(255, 56, 76, 89);
   Color enabledtxt = Colors.white;
   Color deaible = Colors.grey;
@@ -21,15 +23,13 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
 
   TextEditingController positionController = TextEditingController();
   TextEditingController jerseyNumberController = TextEditingController();
-  TextEditingController teamController = TextEditingController();
-  List<int> data = [];
-  List<String> pos = ['GK', 'DF', 'MF', 'FD'];
-  int? selectedValue = null;
-  String? selectedValue2 = null;
+  TextEditingController tournamentController = TextEditingController();
+  List<dynamic> data = [];
+  // List<String> pos = ['GK', 'DF', 'MF', 'FD'];
+  int? selectedTournament;
 
   fetchData() async {
-    data = await supabase.from('team').select("team_id");
-    print("data are: $data");
+    data = await supabase.from('tournament').select('*');
   }
 
   @override
@@ -38,16 +38,16 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
     super.initState();
   }
 
-  // ignore: non_constant_identifier_names
-  insertData(String member_uuid, String team_uuid, String position,
-      int jersey_no) async {
-    await supabase.from("player").insert({
-      'member_uuid': member_uuid,
-      'team_uuid': team_uuid,
-      'position': position,
-      'jersey_no': jersey_no,
-      'approved': false
-    });
+  // Check if user is authenticated.
+  insertData(String trId, String position, int jerseyNo) async {
+    // await supabase.from("player").insert({
+    //   'member_uuid': memberUuid,
+    //   'tr_id': trId,
+    //   'position': position,
+    //   'jersey_no': jerseyNo,
+    //   'approved': false
+    // });
+    // TODO insert in team with default value of no group (make it nullable) and integers should be 0 approved is pending
   }
 
   @override
@@ -106,7 +106,7 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
                         FadeAnimation(
                           delay: 1,
                           child: Text(
-                            'Choose team, position, and jersey number',
+                            'Choose tournament',
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.9),
                               letterSpacing: 0.5,
@@ -128,105 +128,29 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
                             height: 50,
                             child: TextField(
                               decoration: InputDecoration(
-                                labelText: 'Choose team',
-                                hintText: 'Choose team',
-                                border: OutlineInputBorder(),
-                                suffixIcon: DropdownButtonFormField(
-                                  value: selectedValue,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedValue = newValue;
-                                    });
-                                  },
-                                  items: data
-                                      .map<DropdownMenuItem<int>>((int value) {
-                                    return DropdownMenuItem<int>(
-                                      value: value,
-                                      child: Text(
-                                        value as String,
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
+                                labelText: 'Choose tournament',
+                                hintText: 'Choose tournament',
+                                border: const OutlineInputBorder(),
+                                // TODO dropdown menu builder
+                                // suffixIcon: DropdownButtonFormField(
+                                //   value: selectedTournament,
+                                //   onChanged: (newValue) {
+                                //     setState(() {
+                                //       selectedTournament = newValue;
+                                //     });
+                                //   },
+                                //   items: data.map<DropdownMenuItem<dynamic>>(
+                                //       (dynamic value) {
+                                //     return DropdownMenuItem<dynamic>(
+                                //       value: value,
+                                //       child: Text(
+                                //         value as String,
+                                //         style: const TextStyle(fontSize: 16),
+                                //       ),
+                                //     );
+                                //   }).toList(),
+                                // ),
                               ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        FadeAnimation(
-                          delay: 1,
-                          child: Container(
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              color: backgroundColor,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(12.0),
-                              ),
-                            ),
-                            width: 300,
-                            height: 50,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                labelText: 'Choose position',
-                                border: OutlineInputBorder(),
-                                suffixIcon: DropdownButtonFormField(
-                                  value: selectedValue2,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedValue2 = newValue;
-                                    });
-                                  },
-                                  items: pos.map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        FadeAnimation(
-                          delay: 1,
-                          child: Container(
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              color: backgroundColor,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(12.0),
-                              ),
-                            ),
-                            width: 300,
-                            height: 50,
-                            child: TextField(
-                              controller: jerseyNumberController,
-                              decoration: const InputDecoration(
-                                hintText: 'Jersey Number',
-                                hintStyle: TextStyle(
-                                  fontSize: 14,
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.account_box_outlined,
-                                  size: 20,
-                                ),
-                                enabledBorder: InputBorder.none,
-                              ),
-                              keyboardType: TextInputType.number,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlignVertical: TextAlignVertical.center,
-                              onChanged: (value) {
-                                // kfupmId = value;
-                              },
                             ),
                           ),
                         ),
@@ -236,7 +160,7 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
                           child: TextButton(
                             onPressed: () {
                               // insertData();
-                              print("button pressed");
+                              // TODO no empty blocks
                             },
                             style: TextButton.styleFrom(
                               backgroundColor: const Color(0xFF2697FF),

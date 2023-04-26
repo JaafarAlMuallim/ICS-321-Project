@@ -22,7 +22,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
       _loading = true;
     });
     List<Widget> cards = [];
-    print(mvps);
     for (dynamic doc in mvps) {
       cards.add(
         CustomCard(
@@ -55,7 +54,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 4),
                       child: Text(
-                        'Highest Number of MVPs was ${doc['x']} \nFrom The Player ${doc['pos']} - ${doc['jersey_no']} ${doc['name']} \nFrom Team ${doc['team_id']}',
+                        'Highest Number of MVPs was ${doc['coutner']} \nFrom The Player ${doc['pos']} - ${doc['jersey_no']} ${doc['name']} \nFrom Team ${doc['team_id']}',
                         style: Style.h3.copyWith(fontSize: 22),
                       ),
                     ),
@@ -174,11 +173,8 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 
   fetchData() async {
     mvps = await supabase.rpc('count_mvps');
-    print(mvps);
     goals = await supabase.rpc('count_goals');
-    print(goals);
     redCards = await supabase.rpc('get_cards');
-    print(redCards);
 
     setState(() {
       _loading = false;

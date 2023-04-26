@@ -1,16 +1,11 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
 
-import 'package:animated_text_kit/animated_text_kit.dart';
-
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/constants/styles.dart';
-import 'package:kfupm_soc/screens/joinTeam_screen.dart';
-import 'package:kfupm_soc/screens/joinTournmaent_screen.dart';
-import 'package:kfupm_soc/screens/tournaments_screen.dart';
+import 'package:kfupm_soc/screens/join_team_screen.dart';
+import 'package:kfupm_soc/screens/join_tournament_screen.dart';
 import 'package:kfupm_soc/widgets/bottom_navbar.dart';
 import 'package:kfupm_soc/widgets/rounded_button.dart';
-import 'package:kfupm_soc/screens/login_screen.dart';
-import 'package:kfupm_soc/screens/register_screen.dart';
 
 import '../Core/fade_animation.dart';
 
@@ -24,6 +19,8 @@ class RequestsScreen extends StatefulWidget {
 
 class _RequestsScreenState extends State<RequestsScreen> {
   @override
+
+  // TODO show history of requests??
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -84,7 +81,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                       Navigator.pop(context);
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
-                        return const jointournamentScreen();
+                        return const JoinTournamentScreen();
                       }));
                     },
                     title: '+ Join tournament',

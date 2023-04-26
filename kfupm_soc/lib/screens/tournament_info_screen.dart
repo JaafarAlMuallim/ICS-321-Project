@@ -22,45 +22,31 @@ class _TournamentInfoScreenState extends State<TournamentInfoScreen> {
   List<dynamic> matchesData = [];
 
   fetchData() async {
-    teamsData =
-        await supabase.from('team').select().eq('tr_id', widget.tournamentId);
+    teamsData = await supabase
+        .from('team')
+        .select(
+          '*, registered_team(*)',
+        )
+        .eq('tr_id', widget.tournamentId);
     List teamUuids = [];
+
     for (dynamic team in teamsData) {
       teamUuids.add(team['team_uuid']);
     }
-    // get team captains
-    // captainsData = await supabase
-    //     .from('team_captain')
-    //     .select()
-    //     .in_('team_uuid', teamUuids);
     matchesData = await supabase
         .from('match_details')
         .select(
-            '*, match_played (*, referee (*), member:player_of_match(*)), asst_referee (*)')
+            '*, match_played(*, referee (*), member:player_of_match(*)), asst_referee (*)')
         .eq('tr_id', widget.tournamentId);
+
+    print(matchesData);
     // get match uuid in a list
     List matchUuids = [];
     for (dynamic match in matchesData) {
       matchUuids.add(match['match_uuid']);
     }
-
-    // get the penalty shootout in these matches
-    // penaltyShootoutData = await supabase
-    //     .from('penalty_shootout')
-    //     .select()
-    //     .in_('match_no', matchUuids);
     venueData =
         await supabase.from('venue').select('*, match_played (venue_id)');
-    // captainsData = await supabase
-    //     .from('team_captain')
-    //     .select('*, member(*)')
-    //     .in_('team_uuid', teamUuids);
-
-    // coachesData = await supabase
-    //     .from('team_coach')
-    //     .select('*, member (*)')
-    //     .in_('team_uuid', teamUuids);
-    // print(matchesData);
     setState(() {
       _loading = false;
     });
@@ -113,7 +99,7 @@ class _TournamentInfoScreenState extends State<TournamentInfoScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
               child: Text(
-                'Team ${matches[increment][0]['team_id']} VS Team ${matches[increment][1]['team_id']}',
+                'Team ${matches[increment][0]['registered_team']['team_name']} VS Team ${matches[increment][1]['registered_name']['team_name']}',
                 style: Style.kSubtitleStyle,
               ),
             ),
