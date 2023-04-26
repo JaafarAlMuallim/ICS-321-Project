@@ -20,7 +20,7 @@ class _TournamentInfoScreenState extends State<TournamentInfoScreen> {
   List<dynamic> teamsData = [];
   List<dynamic> venueData = [];
   List<dynamic> matchesData = [];
-
+  // TODO team name instead of id
   fetchData() async {
     teamsData =
         await supabase.from('team').select().eq('tr_id', widget.tournamentId);

@@ -4,13 +4,13 @@
       <h4> From <%= tournament.start_date %> <br>
        To <%= tournament.end_date %>
     </h4>
-    <a class="card-link btn btn-info" href="/tournaments/<%= tournament.tr_id %>/teams">Registered Teams</a>
-    <% if(played.length == 0){ %>
+    <a class="card-link btn btn-info my-3" href="/tournaments/<%= tournament.tr_id%>/teams">Registered Teams</a>
+    <% if(matchesData.length == 0){ %>
         <h2>No Matches are registered yet</h2>
         
         <% } else{ %>
-        <% for(let play of played){ %>
-
+        <% let increment = 0 %>
+        <% for(let match of matchesData){ %>
             <div class="card mb-3">
                 <div class="row">
                     <div class="col-md-4">
@@ -19,49 +19,34 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">
-                               Match Number is <%= play.match_no %> <br>
-                               On <%= play.play_date%> <br> 
-                               Ended with score <%= play.goal_score %>
+                               Match Number is <%= match.match_played.match_id %> <br>
+                               On <%= match.match_played.play_date%> <br> 
+                               Ended with score <%= match.match_played.goal_score %>
                             </h5>
-                            <% for(let ref of refereeData){ %>
-                            <% if(play.referee_id == ref.referee_id){ %>
                             <p class="card-text">
-                                Referee is <%= ref.referee_name %>
+                                Referee is <%= match.match_played.referee.referee_name %>
+                                Assistant is <%= match.asst_referee.asst_ref_name %>
                             </p>
-                            <% } %>
-                            <% } %>
-                            <% for(let player of playersData){ %>
-                            <% if(play.player_of_match == player.player_uuid){ %>
                             <p class="card-text">
-                                Player of the match is <%= player.player_name %> <br>
-                                Of Team <%= player.team_tr %> with Number <%= player.jersey_no %>
+                                Player of the match is <%= match.match_played.member.name %> <br>
                             </p>
-                            <% } %>
-                            <% for(let captain of captainsData){ %>
-                            <% if(play.match_no == captain.player_captain && captain.player_captain == player.player_uuid){ %>
-                            <p class="card-text">
-                                Team <%= player.team_tr %> in this tournament Captain is <%= player.player_name %> <br>
-                                with Number <%= player.jersey_no %>
-                            </p>
-                                <% } %>
-                            <% } %>
-                            <% } %>
                             
-                            <% for(let venue of venueData){ %>
-                            <% if(play.venue_id == venue.venue_id){ %>
                             <p class="card-text">
-                                Venue is <%= venue.venue_name %> <br>
-                                Audience number <%= play.audience%> / <%= venue.aud_capacity %>
+                                <%= matches[increment][0].registered_team.team_name %> VS <%= matches[increment][1].registered_team.team_name %> <br>
                             </p>
-                                <% } %>
-                            <% } %>
+                               
+                            <p class="card-text">
+                                Venue is <%= venues[increment].venue_name %> <br>
+                                Audience <%= match.match_played.audience%> / <%= venues[increment].aud_capacity %>
+                            </p>
                             <p>
-                                <a href="/tournaments/<%= tournament.tr_id %>/matches/<%= play.match_no %>">View Statstics</a>
+                                <a href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>">View Statstics</a>
                             </p>
+                            
                         </div>
                     </div>
                 </div>
             </div>
+            <% increment++; %>
             <% } %>
-
         <% } %>

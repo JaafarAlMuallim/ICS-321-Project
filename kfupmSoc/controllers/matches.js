@@ -11,85 +11,83 @@ const client = require('@supabase/supabase-js');
 const supabase = client.createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 module.exports.index = async (req, res) => {
-    // const tournaments = await Tournament.find();
     const {id} = req.params;
 
-    // join match and team table on player_gk
     const { data: matches, errorMatches } = await supabase.from('match_details').select(`
-    match_no, goal_score, penalty_score, asst_ref, player_gk,
-    player( player_uuid, player_id, team_tr, jersey_no, player_name, position_to_play, 
-        team( team_uuid, team_id, tr_id, team_group, won, draw, lost, goal_for, goal_against, goal_diff, points, group_position )),
-    asst_ref( asst_ref_id, asst_ref_name)
-    `).eq('match_no', id);
-    const teamIds = [matches[0].player.team.team_uuid, matches[1].player.team.team_uuid]; 
-    
-    const teamOne = matches[0];
-    const teamTwo = matches[1];
-    const { data: coaches, error } = await supabase.from('team_coaches').select(`
-    team_tr, coach_id, 
-    coach ( coach_id, coach_name )
-    `).in('team_tr', teamIds)
+    *
+    `).eq('match_uuid', id);
+    const teamIds = [matches[0].team_one, matches[0].team_two]; 
 
-    // get Captains
+    // get teams from teamIds
+    const { data: teams, errorTeams } = await supabase.from('team').select(`
+    *, registered_team (*)`).in('team_uuid', teamIds).order('team_id', {ascending: true})
+
+    const { data: coaches, error } = await supabase.from('team_coach').select(`
+        *, 
+        member ( * )
+        `).in('team_uuid', teamIds);
+
     const {data: captains, errorCaptain} = await supabase
-        .from('match_captain')
-        .select(`match_no, player_captain,
-            player( player_uuid, player_id, team_tr, jersey_no, player_name, position_to_play, 
-                team( team_uuid, team_id, tr_id, team_group ))`)
-        .eq('match_no', id);
-
-    const {data: matchPlayed, errorPlayerOfMatch} = await supabase
-        .from('match_played')
-        .select(`*, player:player_uuid (*)`)
-        .eq('match_no', id);
-
+        .from('team_captain')
+        .select(`*, member(*, player(*, registered_team(*, team(*))))`)
+        .in('team_uuid', teamIds);
+    
     const {data: subs, errorSub} = await supabase
-        .from('player_in_out').select(`match_no, player_id, in_out, time_in_out, play_schedule, play_half,
-        player( player_uuid, player_id, team_tr, jersey_no, player_name, position_to_play, 
-            team( team_uuid, team_id, tr_id, team_group )
-        )`)
+        .from('player_in_out')
+        .select(`*, member(*, player(*, registered_team(*, team(*))))`)
         .eq('match_no', id);
 
     const {data: goals, errorGoal} = await supabase
-        .from('goal_details').select(`match_no, player_id, goal_time, goal_half, goal_schedule,
-        player( player_uuid, player_id, team_tr, jersey_no, player_name, position_to_play, 
-            team( team_uuid, team_id, tr_id, team_group)
-        )`)
-        .eq('match_no', id).order('goal_time', { ascending: true });
+        .from('goal_details')
+        .select(`*, member(*, player(*, registered_team(*, team(*))))`)
+        .eq('match_no', id).order('goal_time', {ascending: true});
 
     const {data: cards, errorCard} = await supabase
         .from('player_booked').
-        select(`match_no, player_id, booking_time, sent_off, play_schedule, play_half, 
-        player( player_uuid, player_id, team_tr, jersey_no, player_name, position_to_play,
-            team( team_uuid, team_id, tr_id, team_group)
-        )`)
+        select(`*, member(*, player(*, registered_team(*, team(*))))`)
         .eq('match_no', id);
         
-            // create array that contains goals scored by both teamOne and teamTwo only in the same array
-    const goalsArray = [];
-    goals.forEach(goal => {
-        if (goal.player.team.team_uuid == teamOne.player.team.team_uuid && teamOne.player.team.team_uuid == goal.player.team.team_uuid && goal.player.team_tr == teamOne.player.team_tr) {
+        const goalsArray = [];
+        goals.forEach(goal => {
+        if (goal.member.player[0].registered_team.team_uuid == teams[0].team_uuid && goal.member.player[0].registered_team.team[0].tr_id == teams[0].tr_id) {
             goalsArray.push(goal);
-        } else if (goal.player.team.team_uuid == teamTwo.player.team.team_uuid && teamTwo.player.team.team_uuid == goal.player.team.team_uuid && goal.player.team_tr == teamTwo.player.team_tr) {
+        } else if (goal.member.player[0].registered_team.team_uuid == teams[1].team_uuid && goal.member.player[0].registered_team.team[0].tr_id == teams[1].tr_id) {
             goalsArray.push(goal);
         }
-    });
+        });
        const cardsArray = []
          cards.forEach(card => {
-            if (card.player.team.team_uuid == teamOne.player.team.team_uuid && teamOne.player.team.team_uuid == card.player.team.team_uuid && card.player.team_tr == teamOne.player.team_tr) {
+            if (card.member.player[0].registered_team.team_uuid == teams[0].team_uuid && card.member.player[0].registered_team.team[0].tr_id == teams[0].tr_id) {
                 cardsArray.push(card);
-            } else if (card.player.team.team_uuid == teamTwo.player.team.team_uuid && teamTwo.player.team.team_uuid == card.player.team.team_uuid && card.player.team_tr == teamTwo.player.team_tr) {
+            } else if (card.member.player[0].registered_team.team_uuid == teams[1].team_uuid && card.member.player[0].registered_team.team[0].tr_id == teams[1].tr_id) {
                 cardsArray.push(card);
             }});
 
         const {data: penaltyShootout, errorPenaltyShootout} = await supabase
         .from('penalty_shootout')
-        .select(`match_no, player_id, score_goal, kick_no,
-        player( player_uuid, player_id, team_tr, jersey_no, player_name, position_to_play,
-            team( team_uuid, team_id, tr_id, team_group)
-        )`)
+        .select(`*,
+        member( *, player(*, registered_team(*, team(*))))`)
         .eq('match_no', id);
-        res.render("matches/index", {teamOne, teamTwo, coaches, captains, matchPlayed, subs, goalsArray, cardsArray, penaltyShootout});
+
+        // create subsArray
+        const subsArray = [];
+        subs.forEach(sub => {
+            if (sub.member.player[0].registered_team.team_uuid == teams[0].team_uuid && sub.member.player[0].registered_team.team[0].tr_id == teams[0].tr_id) {
+                subsArray.push(sub);
+            } else if (sub.member.player[0].registered_team.team_uuid == teams[1].team_uuid && sub.member.player[0].registered_team.team[0].tr_id == teams[1].tr_id) {
+                subsArray.push(sub);
+            }
+        });
+        // create penaltiesArray
+        const penaltiesArray = [];
+        penaltyShootout.forEach(penalty => {
+            if (penalty.member.player[0].registered_team.team_uuid == teams[0].team_uuid && penalty.member.player[0].registered_team.team[0].tr_id == teams[0].tr_id) {
+                penaltiesArray.push(penalty);
+            } else if (penalty.member.player[0].registered_team.team_uuid == teams[1].team_uuid && penalty.member.player[0].registered_team.team[0].tr_id == teams[1].tr_id) {
+                penaltiesArray.push(penalty);
+            }
+        });
+        res.render("matches/index", {teams, coaches, captains, subsArray, goalsArray, cardsArray, penaltiesArray});
     }
 
 

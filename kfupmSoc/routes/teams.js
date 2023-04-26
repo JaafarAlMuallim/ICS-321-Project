@@ -8,10 +8,12 @@ const AppError = require("../utils/error");
 
 
 // const { isLoggedIn, isAuthor, validateCamp } = require("../middleware");
+router.route("/")
+    .get(wrapAsync(teams.allTeams));
 router.route("/:id")
     .get(wrapAsync(teams.index))
 
-router.get("/:id/captain", wrapAsync(teams.changeCaptain))
+router.post("/:id/changeCaptain/:id", wrapAsync(teams.changeCaptain))
 
     // .post(isLoggedIn, upload.array("image"), validateCamp, wrapAsync(camp.createCamp));
 // .post(upload.array("image"), (req, res) => {

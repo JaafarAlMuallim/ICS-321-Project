@@ -1,0 +1,85 @@
+<% layout("layouts/boilerplate") %>
+
+    <h1>Statistics</h1>
+    <% for(mvp of mvps){ %>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h2 class="card-title">
+                            MVPS
+                        </h2>
+                        <h5 class="card-text">
+                            Highest Number of MVPs across all tournaments is  <b><%= mvp.counter %></b>
+                            From the player <b><%= mvp.pos %></b> - <b><%=mvp.jersey_no%></b> - <b><%= mvp.name %></b> 
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+        <% for(goal of goals){ %>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h2 class="card-title">
+                            Goals
+                        </h2>
+                        <h5 class="card-text">
+                            Highest Number of Goals across all tournaments is  <b><%= goal.counter %></b>
+                            From the player <b><%= goal.pos %></b> - <b><%=goal.jersey_no%></b> - <b><%= goal.name %></b> 
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+        
+        <% if(cards.length == 0){ %>
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h2 class="card-title">
+                                Red Cards
+                            </h2>
+                            <h5 class="card-text">
+                                No Red Cards
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } else { %>
+            <% for(card of cards){ %>
+                <div class="card mb-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h2 class="card-title">
+                                    Red Card
+                                </h2>
+                                <h5 class="card-text">
+                                    <b><%= card.pos %></b> - <b><%= card.jersey_no %></b> - <b><%= card.name %></b> of <b><%= card.team_id %></b> got &nbsp
+                                    <i class="fa-regular fa-copy" style="color:red;"></i> &nbsp
+                                    in match  <b><%= card.match_id %></b>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        <% } %>

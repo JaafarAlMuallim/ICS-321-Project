@@ -21,6 +21,8 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
     setState(() {
       _loading = true;
     });
+
+    // TODO team name instead of id
     List<Widget> cards = [];
     print(mvps);
     for (dynamic doc in mvps) {
@@ -92,6 +94,8 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                   const SizedBox(
                     height: 20,
                   ),
+
+                  //
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

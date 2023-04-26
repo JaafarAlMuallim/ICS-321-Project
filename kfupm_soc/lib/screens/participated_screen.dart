@@ -19,7 +19,7 @@ class _ParticipatedScreenState extends State<ParticipatedScreen> {
   List<dynamic> captainsData = [];
   List<dynamic> coachesData = [];
   List<dynamic> playersData = [];
-
+// TODO team name instead of id
   fetchData() async {
     teamsData = await supabase
         .from('team')

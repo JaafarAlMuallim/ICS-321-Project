@@ -5,70 +5,81 @@ if (process.env.NODE_ENV !== "production") {
 const client = require('@supabase/supabase-js');
 const supabase = client.createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
+module.exports.allTeams = async (req, res) => {
+
+    const {data: teams, error} = await supabase.from('team').select('*, registered_team(*)').order('team_id', {ascending: true});
+    res.render('teams/allTeams', {teams})
+}
+
 module.exports.index = async (req, res) => {
-    // const tournaments = await Tournament.find();
+
     const {id} = req.params;
 
-    // select the team only 
-    const {data: team, errorTeam} = await supabase
+    const {data: teamsData} = await supabase
         .from('team')
-        .select()
-        .eq('team_uuid', id);
+        .select('*, registered_team(*)')
+        .eq('team_uuid', id)
+        .order('team_id', {ascending: true});
 
-    const { data: teamPlayers, errorTeams } = await supabase
-        .from('team')
-        .select(`*,
-        player ( *, team ( team_uuid, team_id, tr_id, team_group ))
-        `).eq('team_uuid', id)
-        .order('team_uuid', { ascending: true });
-
-    const {data: captains, errorCaptain} = await supabase
-        .from('team')
-        .select(`*,
-            player(*, team( team_uuid, team_id, tr_id, team_group ), match_captain(*))`)
-        .eq('team_uuid', id);
-    // add all records match_captain to an array
-    const captainsArray = [];
-    console.log(captains[0].player.length)
-    for(let k = 0; k < captains[0].player.length; k++){
-            if(captains[0].player[k].match_captain.length != 0){
-                for(let i = 0; i < captains[0].player[k].match_captain.length ; i++){
-                    captainsArray.push(captains[0].player[k]);
-                }
-            }
+    const team = teamsData[0];
+    console.log(team);
+    const teamUuids = [];
+    for (let team of teamsData) {
+      teamUuids.push(team['team_uuid']);
     }
-    
-    console.log(captainsArray[0]);
-    
-    const { data: coaches, errorCoaches } = await supabase.from('team_coaches')
-    .select(`*,
-    coach ( coach_id, coach_name )
-    `).eq('team_tr', id)
+    // get team captains
+    const {data: captainsData} = await supabase
+        .from('team_captain')
+        .select('*, member(*, player(*))')
+        .in('team_uuid', teamUuids);
+        
+    const {data: coachesData} = await supabase
+        .from('team_coach')
+        .select('*, member (*)')
+        .in('team_uuid', teamUuids);
 
-    const players = teamPlayers[0].player
-    res.render('teams/index', {team, teamPlayers, players, captainsArray, coaches})
+    // get players in team
+    const {data:playersData} = await supabase
+        .from('player')
+        .select('*, member(*)')
+        .in('team_uuid', teamUuids)
+        .eq('approved', true)
+        .order('jersey_no', {ascending: true});
+
+        const captains = [];
+        const coaches = [];
+        for(let captain of captainsData){
+            if(team.team_uuid == captain.team_uuid){
+                captains.push(captain);
+            }
+        }
+            for (let coach of coachesData) {
+              if (team.team_uuid == coach.team_uuid) {
+                coaches.push(coach);
+              }
+            }
+    res.render('teams/index', {team, captains, coaches, playersData})
     }
 
 module.exports.changeCaptain = async (req, res) => {
     const {id} = req.params;
-    const {newCaptain} = req.body;
-    const {data: team, errorTeam} = await supabase
-        .from('team')
-        .select()
-        .eq('team_uuid', id);
+    const teamId = req.originalUrl.split('/')[2];
+    const {data:exists, error1} = await supabase.from('team_captain').select().eq('team_uuid', teamId);
     
-    // get count of the number of matches
-    const {data: matches, errorMatches} = await supabase
-        .from('match')
+    // if exists then we update the column if not we insert new one
+    if(exists.length > 0){
+        const {data, error} = await supabase
+
+        .from('team_captain')   
+        .update({member_uuid: id})
+        .eq('team_uuid', teamId)
         .select()
-        .eq('match_group', team[0].team_group);
-        
-    // upsert new captain 
-    const {data: newCaptainData, errorNewCaptain} = await supabase
-        .from('match_captain')
-        .upsert({
-            team_tr: id,
-            player_id: newCaptain,
-            match_id: team[0].team_group
-        });
+    }else{
+        const {data, error} = await supabase
+        .from('team_captain')
+        .upsert({team_uuid: teamId, member_uuid: id})
+        .select()
+    }
+    res.redirect(`/teams/${teamId}`)
+    
 }
