@@ -75,7 +75,7 @@ module.exports.showTournament = async (req, res, next) => {
 
           const venues = [];
           for (let doc of matchesData) {
-            for (let doc1 of venueData) {x
+            for (let doc1 of venueData) {
               if (doc1.venue_id == doc.match_played.venue_id) {
                 venues.push(doc1);
               }
