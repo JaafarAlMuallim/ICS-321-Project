@@ -3,6 +3,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 import 'package:flutter/material.dart';
+import 'package:kfupm_soc/screens/otp_screen.dart';
 import 'package:kfupm_soc/screens/tournaments_screen.dart';
 import 'package:kfupm_soc/widgets/rounded_button.dart';
 import 'package:kfupm_soc/screens/login_screen.dart';
@@ -139,6 +140,16 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                       Navigator.pushNamed(context, TournamentScreen.id);
                     }),
                     title: 'Guest',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Roundedbutton(
+                    color: Colors.blue.shade900,
+                    onPressed: (() {
+                      Navigator.pushNamed(context, OTPScreen.id);
+                    }),
+                    title: ' Test',
                   ),
                 ),
               ],

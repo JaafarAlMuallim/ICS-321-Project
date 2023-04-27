@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kfupm_soc/constants/app_theme.dart';
 import 'package:kfupm_soc/constants/styles.dart';
 import 'package:kfupm_soc/screens/profile_screen.dart';
 import 'package:kfupm_soc/screens/requests_screen.dart';
@@ -22,7 +23,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Style.kScaffoldColor,
+      color: CustomColors.navy,
       elevation: 0,
       child: SizedBox(
         height: 70,

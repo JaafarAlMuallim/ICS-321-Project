@@ -9,6 +9,9 @@ import 'package:kfupm_soc/screens/login_screen.dart';
 import 'package:kfupm_soc/screens/otp_screen.dart';
 import 'package:kfupm_soc/screens/register_screen.dart';
 import 'package:kfupm_soc/widgets/snackbar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+final supabase = Supabase.instance.client;
 
 class AuthenticationRepository {
   final _auth = FirebaseAuth.instance;
@@ -37,6 +40,15 @@ class AuthenticationRepository {
     }
   }
 
+  insertData(String name, String phoneNum, String kfupmId, String bdate) async {
+    await supabase.from("member").insert({
+      'name': name,
+      'bdate': bdate,
+      'kfupm_id': kfupmId,
+      'phone_num': phoneNum,
+    });
+  }
+
   Future<void> regAuth(
       {required String name,
       required String phoneNum,
@@ -54,7 +66,7 @@ class AuthenticationRepository {
         Navigator.pushNamed(context, LoginScreen.id);
       }, Style.containerColor);
     } else {
-      // TODO add info to supabase
+      insertData(name, phoneNum, kfupmId, bdate);
       // flutter sign up with phone number
 
       await _auth.verifyPhoneNumber(

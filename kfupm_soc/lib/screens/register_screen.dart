@@ -27,7 +27,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController bdateController = TextEditingController();
   TextEditingController kfupmidController = TextEditingController();
-  // TODO register As Player Coach Referee...
   static String name = '';
 
   static String phoneNum = '';

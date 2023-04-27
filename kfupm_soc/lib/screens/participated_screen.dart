@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kfupm_soc/constants/app_theme.dart';
 import 'package:kfupm_soc/constants/styles.dart';
 import 'package:kfupm_soc/screens/tournaments_screen.dart';
 import 'package:kfupm_soc/widgets/bottom_navbar.dart';
@@ -170,7 +171,7 @@ class _ParticipatedScreenState extends State<ParticipatedScreen> {
           ),
         ),
         elevation: 0,
-        backgroundColor: Style.kScaffoldColor,
+        backgroundColor: CustomColors.navy,
         centerTitle: true,
       ),
       body: _loading
