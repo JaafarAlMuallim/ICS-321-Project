@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/constants/app_theme.dart';
 import 'package:kfupm_soc/constants/styles.dart';
@@ -6,6 +7,8 @@ import 'package:kfupm_soc/screens/requests_screen.dart';
 import 'package:kfupm_soc/screens/stats_screen.dart';
 import 'package:kfupm_soc/screens/teams_screen.dart';
 import 'package:kfupm_soc/screens/tournaments_screen.dart';
+
+final _auth = FirebaseAuth.instance;
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -95,6 +98,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   setState(
                     () {
                       if (_currentIndex != 4) {
+                        // _auth.signOut();
                         Navigator.pushReplacementNamed(
                             context, ProfileScreen.id);
                         BottomNavBar._selectedIndex = 4;

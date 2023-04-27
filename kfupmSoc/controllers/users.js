@@ -124,7 +124,7 @@ module.exports.renderRequests = async(req, res) => {
     .from('player')
     .select('*, registered_team(*, team(*)), member(*)')
     .eq('approved', 'pending');
-    // res.render("users/requests", {requests});
+    console.log(players);
     res.render("users/requests", {players});
     // res.render('/', {players});
 }
@@ -134,7 +134,7 @@ module.exports.approved = async(req, res) => {
     const {id} = req.params;
     const { data: player, error } = await supabase
     .from('player')
-    .update({'approved' : 'approved'})
+    .update({'approved' : 'true'})
     .eq('member_uuid', id);
 
     req.flash('success', 'Player Successfully Approved in His Team');
@@ -145,7 +145,7 @@ module.exports.decline = async(req, res) => {
     const {id} = req.params;
     const { data: player, error } = await supabase
     .from('player')
-    .update({'approved': 'declined'})
+    .update({'approved': 'false'})
     .eq('member_uuid', id);
 
     req.flash('success', 'Player Declined From Joining Team');

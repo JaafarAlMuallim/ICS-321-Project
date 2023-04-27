@@ -2,11 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:kfupm_soc/screens/Login_screen.dart';
+import 'package:kfupm_soc/screens/join_team_screen.dart';
+import 'package:kfupm_soc/screens/join_tournament_screen.dart';
 import 'package:kfupm_soc/screens/match_info_screen.dart';
 import 'package:kfupm_soc/screens/matches_screen.dart';
 import 'package:kfupm_soc/screens/otp_screen.dart';
 import 'package:kfupm_soc/screens/profile_screen.dart';
 import 'package:kfupm_soc/screens/register_screen.dart';
+import 'package:kfupm_soc/screens/request_history_screen.dart';
 import 'package:kfupm_soc/screens/requests_screen.dart';
 import 'package:kfupm_soc/screens/stats_screen.dart';
 import 'package:kfupm_soc/screens/teams_screen.dart';
@@ -34,6 +37,9 @@ class MyApp extends StatelessWidget {
         ProfileScreen.id: (context) => const ProfileScreen(),
         RequestsScreen.id: (context) => const RequestsScreen(),
         StatsticsScreen.id: (context) => const StatsticsScreen(),
+        JoinTeamScreen.id: (context) => const JoinTeamScreen(),
+        JoinTournamentScreen.id: (context) => const JoinTournamentScreen(),
+        RequestHistoryScreen.id: (context) => const RequestHistoryScreen()
       },
       initialRoute: FirebaseAuth.instance.currentUser == null
           ? WelcomeScreen.id

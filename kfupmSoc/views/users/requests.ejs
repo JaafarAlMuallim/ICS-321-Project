@@ -14,7 +14,7 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h3 class="card-title">
-                                <%= player.member.name %> Has Requested To Join <%= player.team.registered_team.team_id %> In Position <%=player.position%> With Jersey Number <%= player.jersey_no%>
+                                <%= player.member.name %> Has Requested To Join <%= player.registered_team.team_name %> In Position <%=player.position%> With Jersey Number <%= player.jersey_no%>
                             </h3>
                             <p>
                                 <form class="d-inline" action="/requests/<%=player.member_uuid%>" method="POST">

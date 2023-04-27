@@ -110,7 +110,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-
                   FadeAnimation(
                     delay: 0.8,
                     child: Center(
@@ -121,6 +120,9 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           'Highest Number of goals was ${doc['counter']} \nFrom The Player ${doc['pos']} - ${doc['jersey_no']} - ${doc['name']} \nFrom Team ${doc['team_id']}',
                           style: Style.h3.copyWith(fontSize: 22),
                         ),
+                      ),
+                    ),
+                  ),
                 ]),
             onPress: () {},
             height: 430),

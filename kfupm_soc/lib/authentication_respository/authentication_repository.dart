@@ -24,9 +24,16 @@ class AuthenticationRepository {
 
   Future<String> documentUserinFireStore(
       String name, String phoneNum, String kfupmId, String bdate) async {
+    List<dynamic> data = [];
     try {
+      data = await supabase.from("member").insert({
+        'name': name,
+        'bdate': bdate,
+        'kfupm_id': kfupmId,
+        'phone_num': phoneNum,
+      }).select();
       Future.delayed(const Duration(seconds: 4));
-      await _fireStore.collection('Users').doc(_auth.currentUser!.uid).set({
+      await _fireStore.collection('Users').doc(data[0]['member_uuid']).set({
         'name': name,
         'phoneNumber': phoneNum,
         'kfupmId': kfupmId,
@@ -40,15 +47,6 @@ class AuthenticationRepository {
     }
   }
 
-  insertData(String name, String phoneNum, String kfupmId, String bdate) async {
-    await supabase.from("member").insert({
-      'name': name,
-      'bdate': bdate,
-      'kfupm_id': kfupmId,
-      'phone_num': phoneNum,
-    });
-  }
-
   Future<void> regAuth(
       {required String name,
       required String phoneNum,
@@ -59,16 +57,12 @@ class AuthenticationRepository {
     AppUser user =
         AppUser(name: name, phoneNum: phoneNum, kfupmId: kfupmId, bdate: bdate);
     if (isUser) {
-      ShowSnackBar.showSnackbar(
-          context, "This Phone number is already Registered", "Login", () {
+      ShowSnackBar.showSnackbar(context, "Already Registered", "Login", () {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         Navigator.pop(context);
         Navigator.pushNamed(context, LoginScreen.id);
       }, Style.containerColor);
     } else {
-      insertData(name, phoneNum, kfupmId, bdate);
-      // flutter sign up with phone number
-
       await _auth.verifyPhoneNumber(
           phoneNumber: phoneNum,
           verificationCompleted: (PhoneAuthCredential cradential) async =>

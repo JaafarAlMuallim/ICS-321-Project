@@ -5,7 +5,20 @@
     </div>
     <!-- check if coaches -->
     <% if(coaches.length == 0){ %>
-    <h2>No Coaches are registered in this team yet</h2>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                      <h5>
+                        No Coaches are registered in this team yet
+                      </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
     <% } else { %>
         <h3>Coaches</h3>
         <% for(let coach of coaches){ %>
@@ -38,8 +51,6 @@
                           No registered Captain for this team yet
                           </h5>
                         </div>
-                        <div class="dropdown">
-                            <button onclick="myFunction()" class="dropbtn">Specify Team Captain</button>
                             <div class="dropdown">
                                 <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                   Choose Captain
@@ -55,8 +66,7 @@
                                         <% } %>
                                     <% } %>
                                 </ul>
-                              </div>
-                          </div>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -90,16 +100,30 @@
                                         <% } %>
                                     <% } %>
                                 </ul>
-                              </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <% } %>
         <% } %>
-    <% if(playersData.length == 0){ %>
-        <h2>No Players are registered in this team yet</h2>
-    <% } else { %>
         <h3>Players</h3>
+    <% if(playersData.length == 0){ %>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            No Players are registered in this team yet
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } else { %>
+       
         <% for(let player of playersData){ %>
             <div class="card mb-3">
                 <div class="row">

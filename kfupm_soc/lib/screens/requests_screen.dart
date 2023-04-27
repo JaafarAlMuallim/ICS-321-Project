@@ -1,14 +1,19 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kfupm_soc/Core/fade_animation.dart';
 import 'package:kfupm_soc/constants/app_theme.dart';
 import 'package:kfupm_soc/constants/styles.dart';
 import 'package:kfupm_soc/screens/join_team_screen.dart';
 import 'package:kfupm_soc/screens/join_tournament_screen.dart';
+import 'package:kfupm_soc/screens/login_screen.dart';
+import 'package:kfupm_soc/screens/request_history_screen.dart';
 import 'package:kfupm_soc/widgets/bottom_navbar.dart';
 import 'package:kfupm_soc/widgets/rounded_button.dart';
+import 'package:kfupm_soc/widgets/snackbar.dart';
 
-import '../Core/fade_animation.dart';
+final _auth = FirebaseAuth.instance;
 
 class RequestsScreen extends StatefulWidget {
   const RequestsScreen({super.key});
@@ -79,11 +84,15 @@ class _RequestsScreenState extends State<RequestsScreen> {
                   child: Roundedbutton(
                     color: Colors.blue.shade400,
                     onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return const JoinTournamentScreen();
-                      }));
+                      if (_auth.currentUser != null) {
+                        Navigator.pushNamed(context, JoinTournamentScreen.id);
+                      } else {
+                        Navigator.popAndPushNamed(context, LoginScreen.id);
+                        ShowSnackBar.showSnackbar(
+                            context, "Login to join tournament", "Login", () {
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        }, Colors.orange[700]);
+                      }
                     },
                     title: '+ Join tournament',
                   ),
@@ -93,13 +102,35 @@ class _RequestsScreenState extends State<RequestsScreen> {
                   child: Roundedbutton(
                     color: Colors.blue.shade800,
                     onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return const JoinTeamScreen();
-                      }));
+                      if (_auth.currentUser != null) {
+                        Navigator.pushNamed(context, JoinTeamScreen.id);
+                      } else {
+                        Navigator.popAndPushNamed(context, LoginScreen.id);
+                        ShowSnackBar.showSnackbar(
+                            context, "Login to join a team", "Login", () {
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        }, Colors.orange[700]);
+                      }
                     },
                     title: '+ Join team',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Roundedbutton(
+                    color: Colors.blue.shade800,
+                    onPressed: () {
+                      if (_auth.currentUser != null) {
+                        Navigator.pushNamed(context, RequestHistoryScreen.id);
+                      } else {
+                        Navigator.popAndPushNamed(context, LoginScreen.id);
+                        ShowSnackBar.showSnackbar(context,
+                            "Login to show your requests history", "Login", () {
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        }, Colors.orange[700]);
+                      }
+                    },
+                    title: '+ Show my history',
                   ),
                 ),
               ],

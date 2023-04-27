@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fire;
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/Core/fade_animation.dart';
 import 'package:kfupm_soc/constants/app_theme.dart';
 import 'package:kfupm_soc/constants/styles.dart';
 import 'package:kfupm_soc/screens/welcome_screen.dart';
 import 'package:kfupm_soc/widgets/bottom_navbar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-final _auth = FirebaseAuth.instance;
-final _db = FirebaseFirestore.instance;
+final supabase = Supabase.instance.client;
+
+final _auth = fire.FirebaseAuth.instance;
+// final _db = FirebaseFirestore.instance;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -24,13 +27,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool loggedIn = false;
   DocumentSnapshot? doc;
   getUser() async {
-    User? user = _auth.currentUser;
+    fire.User? user = _auth.currentUser;
     if (user != null) {
-      final docRef = _db.collection('Users').doc(user.uid);
-      doc = await docRef.get();
-      // TODO serach for coachings and playing carrer in supabase base.
+      List<dynamic> data = await supabase
+          .from('member')
+          .select('*')
+          .eq('phone_num', user.phoneNumber);
       setState(() {
-        name = doc!['name'];
+        name = data[0]['name'];
         loggedIn = true;
       });
     }
