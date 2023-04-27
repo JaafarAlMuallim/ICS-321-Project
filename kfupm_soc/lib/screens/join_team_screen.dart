@@ -41,19 +41,25 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
           .from('member')
           .select('*')
           .eq('phone_num', user.phoneNumber);
-      setState(() {
-        playerUuid = data[0]['member_uuid'];
-      });
+      if (mounted) {
+        setState(() {
+          playerUuid = data[0]['member_uuid'];
+        });
+      }
     }
   }
 
   fetchData() async {
     List<dynamic> response =
         await supabase.from('team').select("*, registered_team(*)");
-    setState(() {
-      data = response;
-      _loading = false;
-    });
+    if (mounted) {
+      setState(() {
+        data = response;
+        _loading = false;
+        // print('data are : $data');
+      });
+    }
+    Future.delayed(Duration(seconds: 2));
   }
 
   @override
@@ -169,7 +175,6 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
                                           return TextField(
                                             decoration: InputDecoration(
                                               labelText: 'Choose team',
-                                              hintText: 'Choose team',
                                               border:
                                                   const OutlineInputBorder(),
                                               suffixIcon:
@@ -302,9 +307,6 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
                                               () {},
                                               Colors.red);
                                         } else {
-                                          print(selectedTeam!);
-                                          print(selectedPosition!);
-                                          print(jerseyNumberController.text);
                                           insertData(
                                               selectedTeam!,
                                               selectedPosition!,
@@ -363,11 +365,7 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
                 child: AppBar(
                   leading: IconButton(
                     onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return const RequestsScreen();
-                      }));
+                      Navigator.popAndPushNamed(context, RequestsScreen.id);
                     },
                     icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
                   ),

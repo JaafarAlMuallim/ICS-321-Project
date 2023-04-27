@@ -1,6 +1,7 @@
 // ignore_for_file: sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:kfupm_soc/constants/app_theme.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard(
@@ -16,15 +17,15 @@ class CustomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        decoration: BoxDecoration(
-          color: Colors.blue.shade600,
-          borderRadius: const BorderRadius.all(
+        decoration: const BoxDecoration(
+          color: CustomColors.enabled,
+          borderRadius: BorderRadius.all(
             Radius.circular(30),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.blue.withOpacity(0.5),
-              offset: const Offset(0, 3),
+              color: CustomColors.secondaryColor,
+              offset: Offset(0, 3),
               blurRadius: 7,
               spreadRadius: 5,
             ),

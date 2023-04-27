@@ -42,20 +42,25 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
           .from('member')
           .select('*')
           .eq('phone_num', user.phoneNumber);
+      print("data are: $data");
+      if (mounted) {
+        setState(() {
+          playerUuid = data[0]['member_uuid'];
+        });
+      }
+    }
+    if (mounted) {
       setState(() {
-        playerUuid = data[0]['member_uuid'];
+        _loading = false;
       });
     }
-    setState(() {
-      _loading = false;
-    });
   }
 
   fetchData() async {
     data = await supabase
         .from('team_captain')
         .select("team_uuid")
-        .eq("member_uuid", _auth.currentUser!.uid);
+        .eq("member_uuid", playerUuid);
     dataTeams = await supabase
         .from('registered_team')
         .select('team_name')
