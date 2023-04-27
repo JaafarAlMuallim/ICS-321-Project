@@ -13,7 +13,12 @@ router.route("/")
 router.route("/:id")
     .get(wrapAsync(teams.index))
 
-router.post("/:id/changeCaptain/:id", wrapAsync(teams.changeCaptain))
+router.route("/:id/changeCaptain/:id").post(wrapAsync(teams.changeCaptain))
+
+router.route("/:id/approve/:id")
+    .post(wrapAsync(teams.approveTeam))
+router.route("/:id/decline/:id")
+    .post(wrapAsync(teams.declineTeam))
 
     // .post(isLoggedIn, upload.array("image"), validateCamp, wrapAsync(camp.createCamp));
 // .post(upload.array("image"), (req, res) => {

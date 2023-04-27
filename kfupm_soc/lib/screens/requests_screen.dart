@@ -25,8 +25,6 @@ class RequestsScreen extends StatefulWidget {
 
 class _RequestsScreenState extends State<RequestsScreen> {
   @override
-
-  // TODO show history of requests??
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

@@ -2,10 +2,9 @@
     <h1>Requests</h1>
     <% if(players.length == 0){ %>
 
-        <div class="my-3"><h2>No Join Team Requests Yet</h2></div>
+        <div class="my-3"><h2>No Players -> Team Requests Yet</h2></div>
     <% } else { %>
         <% for(let player of players){ %>
-
             <div class="card mb-3">
                 <div class="row">
                     <div class="col-md-4">
@@ -17,10 +16,39 @@
                                 <%= player.member.name %> Has Requested To Join <%= player.registered_team.team_name %> In Position <%=player.position%> With Jersey Number <%= player.jersey_no%>
                             </h3>
                             <p>
-                                <form class="d-inline" action="/requests/<%=player.member_uuid%>" method="POST">
+                                <form class="d-inline" action="/approve/<%=player.member_uuid%>" method="POST">
                                     <Button class="btn btn-success">Approve</Button>
                                 </form>
-                                <form class="d-inline" action="/requests/<%=player.member_uuid%>?_method=DELETE" method="POST">
+                                <form class="d-inline" action="/decline/<%=player.member_uuid%>" method="POST">
+                                    <Button class="btn btn-danger">Decline</Button>
+                                </form>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    <% } %>
+    <% if(teams.length == 0){ %>
+
+        <div class="my-3"><h2>No Team -> Tournament Requests Yet</h2></div>
+    <% } else { %>
+        <% for(let team of teams){ %>
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                <%= team.registered_team.team_name %> Has Requested To Join <%= team.tournament.tr_name %>
+                            </h3>
+                            <p>
+                                <form class="d-inline" action="/teams/<%=team.team_uuid%>/approve/<%=team.tr_id%>" method="POST">
+                                    <Button class="btn btn-success">Approve</Button>
+                                </form>
+                                <form class="d-inline" action="/teams/<%=team.team_uuid%>/decline/<%=team.tr_id%>" method="POST">
                                     <Button class="btn btn-danger">Decline</Button>
                                 </form>
                             </p>

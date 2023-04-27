@@ -77,10 +77,15 @@ class _TournamentScreenState extends State<TournamentScreen> {
   }
 
   fetchData() async {
-    data = await supabase.from('tournament').select();
-    setState(() {
-      _loading = false;
-    });
+    data = await supabase
+        .from('tournament')
+        .select()
+        .order('start_date', ascending: true);
+    if (mounted) {
+      setState(() {
+        _loading = false;
+      });
+    }
   }
 
   @override

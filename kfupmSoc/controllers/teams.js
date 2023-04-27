@@ -80,6 +80,41 @@ module.exports.changeCaptain = async (req, res) => {
         .upsert({team_uuid: teamId, member_uuid: id})
         .select()
     }
-    res.redirect(`/teams/${teamId}`)
-    
+    res.redirect(`/teams/${teamId}`)   
+}
+
+module.exports.approveTeam = async (req, res, next) => {
+    const trId = req.originalUrl.split('/')[req.originalUrl.split('/').length - 1];
+    const id = req.originalUrl.split('/')[2];
+    const { data: team, error } = await supabase
+    .from('team')
+    .update({'approved' : 'true'})
+    .eq('team_uuid', id).eq('tr_id', trId);
+
+    // get name of the tournament
+    const {data: tournament, error1} = await supabase
+    .from('tournament')
+    .select('*')
+    .eq('tr_id', trId);
+    req.flash(`success', 'Team Successfully Approved in Joining ${tournament[0].tr_name}`);
+    res.redirect('/requests');
+}
+// decline method
+module.exports.declineTeam = async (req, res, next) => {
+    const trId = req.originalUrl.split('/')[req.originalUrl.split('/').length - 1];
+    const id = req.originalUrl.split('/')[2];
+    const { data: team, error } = await supabase
+    .from('team')
+    .update({'approved' : 'false'})
+    .eq('team_uuid', id).eq('tr_id', trId);
+
+    // get name of the tournament
+    const {data: tournament, error1} = await supabase
+    .from('tournament')
+    .select('tr_name')
+    .eq('tr_id', trId);
+
+
+    req.flash(`success', 'Team Declined From Joining ${tournament[0].tr_name}`);
+    res.redirect('/requests');
 }

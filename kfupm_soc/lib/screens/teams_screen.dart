@@ -22,7 +22,6 @@ class _TeamScreenState extends State<TeamScreen> {
     setState(() {
       _loading = true;
     });
-    // TODO team name instead of id
     List<Widget> cards = [];
     for (dynamic doc in data) {
       cards.add(
@@ -44,7 +43,7 @@ class _TeamScreenState extends State<TeamScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                 child: Text(
-                  'Team ${doc['team_id']}',
+                  'Team ${doc['registered_team']['team_name']}',
                   style: Style.h3,
                 ),
               ),
@@ -87,7 +86,7 @@ class _TeamScreenState extends State<TeamScreen> {
   }
 
   fetchData() async {
-    data = await supabase.from('team').select();
+    data = await supabase.from('team').select('*, registered_team(*)');
     setState(() {
       _loading = false;
     });

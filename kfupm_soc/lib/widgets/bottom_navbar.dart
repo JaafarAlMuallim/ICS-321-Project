@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/constants/app_theme.dart';
 import 'package:kfupm_soc/constants/styles.dart';
@@ -8,7 +8,7 @@ import 'package:kfupm_soc/screens/stats_screen.dart';
 import 'package:kfupm_soc/screens/teams_screen.dart';
 import 'package:kfupm_soc/screens/tournaments_screen.dart';
 
-final _auth = FirebaseAuth.instance;
+// final _auth = FirebaseAuth.instance;
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});

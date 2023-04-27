@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/constants/app_theme.dart';
 import 'package:kfupm_soc/constants/styles.dart';
+import 'package:kfupm_soc/screens/match_info_screen.dart';
 import 'package:kfupm_soc/screens/participated_screen.dart';
-import 'package:kfupm_soc/screens/tournaments_screen.dart';
 import 'package:kfupm_soc/widgets/bottom_navbar.dart';
 import 'package:kfupm_soc/widgets/custom_bubble.dart';
 import 'package:kfupm_soc/widgets/custom_card.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+final supabase = Supabase.instance.client;
 
 class TournamentInfoScreen extends StatefulWidget {
   const TournamentInfoScreen({super.key, required this.tournamentId});
@@ -21,7 +24,6 @@ class _TournamentInfoScreenState extends State<TournamentInfoScreen> {
   List<dynamic> teamsData = [];
   List<dynamic> venueData = [];
   List<dynamic> matchesData = [];
-  // TODO team name instead of id
   fetchData() async {
     teamsData = await supabase
         .from('team')
@@ -37,9 +39,9 @@ class _TournamentInfoScreenState extends State<TournamentInfoScreen> {
     matchesData = await supabase
         .from('match_details')
         .select(
-            '*, match_played(*, referee (*), member:player_of_match(*)), asst_referee (*)')
-        .eq('tr_id', widget.tournamentId);
-
+            '*, match_played:match_uuid(*, referee (*), member:player_of_match(*)), asst_referee (*)')
+        .eq('tr_id', widget.tournamentId)
+        .order('play_date', ascending: true);
     // get match uuid in a list
     List matchUuids = [];
     for (dynamic match in matchesData) {
@@ -92,14 +94,14 @@ class _TournamentInfoScreenState extends State<TournamentInfoScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
               child: Text(
-                match['match_played']['play_date'],
+                match['play_date'],
                 style: Style.h3,
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
               child: Text(
-                'Team ${matches[increment][0]['registered_team']['team_name']} VS Team ${matches[increment][1]['registered_name']['team_name']}',
+                'Team ${matches[increment][0]['registered_team']['team_name']} VS Team ${matches[increment][1]['registered_team']['team_name']}',
                 style: Style.kSubtitleStyle,
               ),
             ),
@@ -147,7 +149,13 @@ class _TournamentInfoScreenState extends State<TournamentInfoScreen> {
             ),
           ],
         ),
-        onPress: () {},
+        onPress: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MatchInfoScreen(matchUuid: match['match_uuid'])));
+        },
         height: 580,
       ));
       increment++;
@@ -190,6 +198,7 @@ class _TournamentInfoScreenState extends State<TournamentInfoScreen> {
                         'Show Participated Teams',
                         style: Style.kTextStyle,
                       )),
+                      color: Colors.blue.shade400,
                       onPress: () {
                         Navigator.push(
                             context,

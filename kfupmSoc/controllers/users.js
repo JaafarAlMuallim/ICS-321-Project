@@ -124,13 +124,18 @@ module.exports.renderRequests = async(req, res) => {
     .from('player')
     .select('*, registered_team(*, team(*)), member(*)')
     .eq('approved', 'pending');
-    console.log(players);
-    res.render("users/requests", {players});
-    // res.render('/', {players});
+
+    // get teams where their approved status is pending
+    const {data:teams, errorTeams} = await supabase
+    .from('team').select('*, registered_team(*), tournament(*)')
+    .eq('approved', 'pending')
+    res.render("users/requests", {players, teams});
+
+
 }
 
 
-module.exports.approved = async(req, res) => {
+module.exports.approvedMember = async(req, res) => {
     const {id} = req.params;
     const { data: player, error } = await supabase
     .from('player')
@@ -141,7 +146,7 @@ module.exports.approved = async(req, res) => {
     res.redirect('/requests');
 }
 
-module.exports.decline = async(req, res) => {
+module.exports.declineMember = async(req, res) => {
     const {id} = req.params;
     const { data: player, error } = await supabase
     .from('player')
