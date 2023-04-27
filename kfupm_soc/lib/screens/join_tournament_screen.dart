@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as fire;
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/screens/login_screen.dart';
+import 'package:kfupm_soc/screens/request_history_screen.dart';
 import 'package:kfupm_soc/screens/requests_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../Core/fade_animation.dart';
@@ -27,23 +28,44 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
 
   TextEditingController teamController = TextEditingController();
   TextEditingController tournamentController = TextEditingController();
+  List<dynamic> userData = [];
   List<dynamic> data = [];
   List<dynamic> dataTeams = [];
   List<dynamic> dataTournaments = [];
   String? selectedTeam;
   String? selectedTournament;
   bool _loading = true;
-
   String playerUuid = '';
-  getUser() async {
+
+  fetchData() async {
     fire.User? user = _auth.currentUser;
     if (user != null) {
-      data = await supabase
+      userData = await supabase
           .from('member')
           .select('*')
           .eq('phone_num', user.phoneNumber);
+
       setState(() {
-        playerUuid = data[0]['member_uuid'];
+        playerUuid = userData[0]['member_uuid'];
+      });
+      data = await supabase
+          .from('team_captain')
+          .select("*")
+          .eq("member_uuid", playerUuid);
+      List<String> teamUuids = [];
+      for (dynamic team in data) {
+        teamUuids.add(team['team_uuid']);
+      }
+      List<dynamic> resTeam = await supabase
+          .from('registered_team')
+          .select('team_name')
+          .in_('team_uuid', teamUuids);
+      setState(() {
+        dataTeams = resTeam;
+      });
+      List<dynamic> resTour = await supabase.from('tournament').select('*');
+      setState(() {
+        dataTournaments = resTour;
       });
     }
     setState(() {
@@ -51,35 +73,50 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
     });
   }
 
-  fetchData() async {
-    data = await supabase
-        .from('team_captain')
-        .select("team_uuid")
-        .eq("member_uuid", _auth.currentUser!.uid);
-    dataTeams = await supabase
-        .from('registered_team')
-        .select('team_name')
-        .in_('team_uuid', data);
-    dataTournaments = await supabase.from('tournament').select('tr_name');
-  }
-
   @override
   void initState() {
-    getUser();
     fetchData();
     super.initState();
   }
 
   // Check if user is authenticated.
-  insertData(String trId, String teamUuid) async {
-    // await supabase.from("player").insert({
-    //   'member_uuid': memberUuid,
-    //   'tr_id': trId,
-    //   'position': position,
-    //   'jersey_no': jerseyNo,
-    //   'approved': false
-    // });
-    // TODO insert in team with default value of no group (make it nullable) and integers should be 0 approved is pending
+  Future<bool> insertData(String trName, String teamName) async {
+    List<dynamic> teams = await supabase
+        .from('registered_team')
+        .select()
+        .eq('team_name', teamName);
+
+    List<dynamic> tournaments =
+        await supabase.from('tournament').select().eq('tr_name', trName);
+
+    List<dynamic> record = await supabase
+        .from('team')
+        .select('*')
+        .eq('team_uuid', teams[0]['team_uuid'])
+        .eq('tr_id', tournaments[0]['tr_id']);
+    if (record.isNotEmpty) {
+      return false;
+    } else {
+      List<dynamic> counter = await supabase.from('team').select('team_id');
+
+      await supabase.from('team').insert({
+        'team_uuid': teams[0]['team_uuid'],
+        'tr_id': tournaments[0]['tr_id'],
+        'team_group': null,
+        'match_played': 0,
+        'won': 0,
+        'draw': 0,
+        'lost': 0,
+        'goal_for': 0,
+        'goal_against': 0,
+        'goal_diff': 0,
+        'group_position': 0,
+        'position': 0,
+        'team_id': counter.length + 1 | 0,
+        'approved': 'pending'
+      });
+      return true;
+    }
   }
 
   @override
@@ -163,58 +200,41 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
                                       ),
                                       width: 300,
                                       height: 50,
-                                      // TODO fix bug on cant select
-                                      child: FormField(builder:
-                                          (FormFieldState<String> state) {
-                                        return TextField(
-                                          decoration: InputDecoration(
-                                            labelText: 'Choose team',
-                                            border: const OutlineInputBorder(),
-                                            suffixIcon: DropdownButtonFormField(
-                                              value: selectedTeam,
-                                              onChanged: (newValue) {
-                                                setState(() {
-                                                  selectedTeam = newValue;
-                                                });
-                                              },
-                                              items: dataTeams.map<
-                                                      DropdownMenuItem<String>>(
-                                                  (dynamic value) {
-                                                return DropdownMenuItem<String>(
-                                                  value:
-                                                      value['registered_team']
-                                                          ['team_name'],
-                                                  child: Text(
-                                                    value['registered_team']
-                                                        ['team_name'],
-                                                    style: const TextStyle(
-                                                        fontSize: 16),
-                                                  ),
-                                                );
-                                              }).toList(),
+                                      child: FormField(
+                                        builder:
+                                            (FormFieldState<String> state) {
+                                          return TextField(
+                                            decoration: InputDecoration(
+                                              labelText: 'Choose team',
+                                              border:
+                                                  const OutlineInputBorder(),
+                                              suffixIcon:
+                                                  DropdownButtonFormField(
+                                                value: selectedTeam,
+                                                onChanged: (newValue) {
+                                                  setState(() {
+                                                    selectedTeam = newValue;
+                                                  });
+                                                },
+                                                items: dataTeams.map<
+                                                        DropdownMenuItem<
+                                                            String>>(
+                                                    (dynamic value) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: value['team_name'],
+                                                    child: Text(
+                                                      value['team_name'],
+                                                      style: const TextStyle(
+                                                          fontSize: 16),
+                                                    ),
+                                                  );
+                                                }).toList(),
+                                              ),
                                             ),
-                                            // TODO dropdown menu builder
-                                            // suffixIcon: DropdownButtonFormField(
-                                            //   value: selectedTournament,
-                                            //   onChanged: (newValue) {
-                                            //     setState(() {
-                                            //       selectedTournament = newValue;
-                                            //     });
-                                            //   },
-                                            //   items: data.map<DropdownMenuItem<dynamic>>(
-                                            //       (dynamic value) {
-                                            //     return DropdownMenuItem<dynamic>(
-                                            //       value: value,
-                                            //       child: Text(
-                                            //         value as String,
-                                            //         style: const TextStyle(fontSize: 16),
-                                            //       ),
-                                            //     );
-                                            //   }).toList(),
-                                            // ),
-                                          ),
-                                        );
-                                      }),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(height: 20),
@@ -241,15 +261,13 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
                                                 selectedTournament = newValue;
                                               });
                                             },
-                                            items: data
+                                            items: dataTournaments
                                                 .map<DropdownMenuItem<String>>(
                                                     (dynamic value) {
                                               return DropdownMenuItem<String>(
-                                                value: value['tournament']
-                                                    ['tr_name'],
+                                                value: value['tr_name'],
                                                 child: Text(
-                                                  value['tournament']
-                                                      ['tr_name'],
+                                                  value['tr_name'],
                                                   style: const TextStyle(
                                                       fontSize: 16),
                                                 ),
@@ -264,7 +282,7 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
                                   FadeAnimation(
                                     delay: 1,
                                     child: TextButton(
-                                      onPressed: () {
+                                      onPressed: () async {
                                         if (_auth.currentUser == null) {
                                           Navigator.push(
                                             context,
@@ -277,29 +295,36 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
                                               context,
                                               'You need to be logged In before Joining a team',
                                               '',
-                                              '',
+                                              () {},
                                               Colors.red);
                                         } else {
-                                          insertData(selectedTeam!,
-                                              selectedTournament!);
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const RequestsScreen(),
-                                            ),
-                                          );
-                                          ShowSnackBar.showSnackbar(
-                                              context,
-                                              'Request sent successfully',
-                                              '',
-                                              '',
-                                              Colors.green[700]);
+                                          bool inserted = await insertData(
+                                              selectedTournament!,
+                                              selectedTeam!);
+                                          if (inserted) {
+                                            if (!mounted) {
+                                              return;
+                                            }
+                                            Navigator.popAndPushNamed(context,
+                                                RequestHistoryScreen.id);
+                                            ShowSnackBar.showSnackbar(
+                                                context,
+                                                'Request sent successfully',
+                                                '',
+                                                () {},
+                                                Colors.green[700]);
+                                          } else {
+                                            if (!mounted) {
+                                              return;
+                                            }
+                                            ShowSnackBar.showSnackbar(
+                                                context,
+                                                'Request already sent',
+                                                '',
+                                                () {},
+                                                Colors.orange[700]);
+                                          }
                                         }
-                                        // insertData();
-                                        // print("button pressed");
-
-                                        // TODO no empty blocks
                                       },
                                       style: TextButton.styleFrom(
                                         backgroundColor:
@@ -343,11 +368,7 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
                 child: AppBar(
                   leading: IconButton(
                     onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return const RequestsScreen();
-                      }));
+                      Navigator.popAndPushNamed(context, RequestsScreen.id);
                     },
                     icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
                   ),

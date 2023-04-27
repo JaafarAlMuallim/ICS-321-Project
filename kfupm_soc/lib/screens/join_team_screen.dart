@@ -162,7 +162,6 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
                                       ),
                                       width: 300,
                                       height: 50,
-                                      // TODO fix bug on cant select
                                       child: FormField(
                                         builder:
                                             (FormFieldState<String> state) {
@@ -302,17 +301,13 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
                                               () {},
                                               Colors.red);
                                         } else {
-                                          print(selectedTeam!);
-                                          print(selectedPosition!);
-                                          print(jerseyNumberController.text);
                                           insertData(
                                               selectedTeam!,
                                               selectedPosition!,
                                               int.parse(
                                                   jerseyNumberController.text));
-                                          // TODO Change to history screen
                                           Navigator.popAndPushNamed(
-                                              context, RequestsScreen.id);
+                                              context, RequestHistoryScreen.id);
                                           ShowSnackBar.showSnackbar(
                                               context,
                                               'Request sent successfully',

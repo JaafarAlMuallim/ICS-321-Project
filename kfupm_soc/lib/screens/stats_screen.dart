@@ -24,7 +24,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
       _loading = true;
     });
 
-    // TODO team name instead of id
     List<Widget> cards = [];
     for (dynamic doc in mvps) {
       cards.add(
@@ -66,7 +65,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 4),
                         child: Text(
-                          'Highest Number of MVPs was ${doc['coutner']} \nFrom The Player ${doc['pos']} - ${doc['jersey_no']} ${doc['name']} \nFrom Team ${doc['team_id']}',
+                          'Highest Number of MVPs was ${doc['coutner']} \nFrom The Player ${doc['pos']} - ${doc['jersey_no']} ${doc['name']} \nFrom ${doc['team_name']}',
                           style: Style.h3.copyWith(fontSize: 22),
                         ),
                       ),
@@ -117,7 +116,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 4),
                         child: Text(
-                          'Highest Number of goals was ${doc['counter']} \nFrom The Player ${doc['pos']} - ${doc['jersey_no']} - ${doc['name']} \nFrom Team ${doc['team_id']}',
+                          'Highest Number of goals was ${doc['counter']} \nFrom The Player ${doc['pos']} - ${doc['jersey_no']} - ${doc['name']} \nFrom ${doc['team_name']}',
                           style: Style.h3.copyWith(fontSize: 22),
                         ),
                       ),
@@ -164,7 +163,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           children: [
                             TextSpan(
                               text:
-                                  '${card['pos']} - ${card['jersey_no']} - ${card['name']} of team ${card['team_id']} got ',
+                                  '${card['pos']} - ${card['jersey_no']} - ${card['name']} of ${card['team_name']} got ',
                               style: Style.h3.copyWith(fontSize: 22),
                             ),
                             const WidgetSpan(

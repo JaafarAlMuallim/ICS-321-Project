@@ -4,6 +4,7 @@ import 'package:kfupm_soc/constants/app_theme.dart';
 import 'package:kfupm_soc/constants/styles.dart';
 import 'package:kfupm_soc/screens/tournaments_screen.dart';
 import 'package:kfupm_soc/widgets/bottom_navbar.dart';
+import 'package:kfupm_soc/widgets/custom_bubble.dart';
 import 'package:kfupm_soc/widgets/custom_card.dart';
 
 final _auth = fire.FirebaseAuth.instance;
@@ -19,33 +20,40 @@ class RequestHistoryScreen extends StatefulWidget {
 class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
   bool _loading = true;
   List<dynamic> playersData = [];
+  List<dynamic> usersData = [];
+  List<dynamic> teamsData = [];
   List<dynamic> data = [];
   String playerUuid = '';
-  getUser() async {
-    fire.User? user = _auth.currentUser;
-    if (user != null) {
-      data = await supabase
-          .from('member')
-          .select('*')
-          .eq('phone_num', user.phoneNumber);
-      setState(() {
-        playerUuid = data[0]['member_uuid'];
-      });
-    }
-    setState(() {
-      _loading = false;
-    });
-  }
-
+  fire.User? user = _auth.currentUser;
   fetchData() async {
-    // get all players from players table where approved = 'true'
+    usersData = await supabase
+        .from('member')
+        .select('*')
+        .eq('phone_num', user!.phoneNumber);
+
+    setState(() {
+      data = usersData;
+      playerUuid = data[0]['member_uuid'];
+    });
+
     playersData = await supabase
         .from('player')
-        .select('*, member(*), registered_team(*)')
+        .select('*, member(*), registered_team(*, team(*))')
         .eq('member_uuid', playerUuid);
 
+    // for loop to get team uuids
+    List teamUuids = [];
+    for (dynamic player in playersData) {
+      teamUuids.add(player['registered_team']['team_uuid']);
+    }
+    List<dynamic> resTeams = await supabase
+        .from('team')
+        .select('*, registered_team(*), tournament(*)')
+        .in_('team_uuid', teamUuids);
     if (mounted) {
       setState(() {
+        teamsData = resTeams;
+        usersData = playersData;
         _loading = false;
       });
     }
@@ -56,7 +64,6 @@ class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
       _loading = true;
     });
     List<Widget> cards = [];
-    int increment = 0;
     for (dynamic request in playersData) {
       cards.add(CustomCard(
         containerContent: Column(
@@ -71,41 +78,94 @@ class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
               child: Text(
-                'Team ${request['registered_team']['team_name']}',
+                '${request['registered_team']['team_name']}',
                 style: Style.h3,
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
               child: Text(
-                'Player ${request['member']['name']} In Position ${request['pos']} - ${request['jersey_no']}',
+                'Player ${request['member']['name']} In Position ${request['position']} - ${request['jersey_no']}',
                 style: Style.kSubtitleStyle,
               ),
             ),
-            // TODO make it as bubble and change color according to pending - orange, declined - red, approved - green
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-              child: Text(
-                'Status: ${request['approved']}',
-                style: Style.kSubtitleStyle,
+              child: CustomBubble(
+                containerContent: Center(
+                  child: Text(
+                    'Status: ${request['approved'] == 'true' ? 'Approved' : request['approved'] == 'false' ? 'Rejected' : 'Pending'}',
+                    style: Style.kSubtitleStyle,
+                  ),
+                ),
+                onPress: () {},
+                color: request['approved'] == 'true'
+                    ? Colors.green.shade700
+                    : request['approved'] == 'false'
+                        ? Colors.red
+                        : Colors.orange.shade700,
               ),
             ),
           ],
         ),
         onPress: () {},
-        height: 330,
+        height: 460,
       ));
-      increment++;
     }
-    setState(() {
-      _loading = false;
-    });
+    for (dynamic request in teamsData) {
+      cards.add(CustomCard(
+        containerContent: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: SizedBox.fromSize(
+                child: Image.asset('assets/images/welcomebkg.jpg'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+              child: Text(
+                '${request['registered_team']['team_name']}',
+                style: Style.h3,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+              child: Text(
+                'Team member requested to join ${request['tournament']['tr_name']}',
+                style: Style.kSubtitleStyle,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+              child: CustomBubble(
+                containerContent: Center(
+                  child: Text(
+                    'Status: ${request['approved'] == 'true' ? 'Approved' : request['approved'] == 'false' ? 'Rejected' : 'Pending'}',
+                    style: Style.kSubtitleStyle,
+                  ),
+                ),
+                onPress: () {},
+                color: request['approved'] == 'true'
+                    ? Colors.green.shade700
+                    : request['approved'] == 'false'
+                        ? Colors.red
+                        : Colors.orange.shade700,
+              ),
+            ),
+          ],
+        ),
+        onPress: () {},
+        height: 460,
+      ));
+    }
+
     return cards;
   }
 
   @override
   void initState() {
-    getUser();
     fetchData();
     super.initState();
   }

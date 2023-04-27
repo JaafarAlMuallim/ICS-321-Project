@@ -18,8 +18,9 @@ router.route("/login")
 router.route('/requests')
     .get(wrapAsync(user.renderRequests))
 
-router.route('/requests/:id')
-    .post(wrapAsync(user.approved))
+router.route('/approve/:id')
+    .post(wrapAsync(user.approved));
+router.route('/decline/:id')
     .post(wrapAsync(user.decline))
 router.get('/logout', user.logout);
 

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:kfupm_soc/screens/Login_screen.dart';
 import 'package:kfupm_soc/screens/join_team_screen.dart';
 import 'package:kfupm_soc/screens/join_tournament_screen.dart';
-import 'package:kfupm_soc/screens/match_info_screen.dart';
 import 'package:kfupm_soc/screens/matches_screen.dart';
 import 'package:kfupm_soc/screens/otp_screen.dart';
 import 'package:kfupm_soc/screens/profile_screen.dart';
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
         //     const TournamentInfoScreen(tournamentId: 'x'),
         TeamScreen.id: (context) => const TeamScreen(),
         MatchesScreen.id: (context) => const MatchesScreen(),
-        MatchInfoScreen.id: (context) => const MatchInfoScreen(),
         ProfileScreen.id: (context) => const ProfileScreen(),
         RequestsScreen.id: (context) => const RequestsScreen(),
         StatsticsScreen.id: (context) => const StatsticsScreen(),

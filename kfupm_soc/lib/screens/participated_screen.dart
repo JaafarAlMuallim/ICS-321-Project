@@ -20,11 +20,11 @@ class _ParticipatedScreenState extends State<ParticipatedScreen> {
   List<dynamic> captainsData = [];
   List<dynamic> coachesData = [];
   List<dynamic> playersData = [];
-// TODO team name instead of id
+
   fetchData() async {
     teamsData = await supabase
         .from('team')
-        .select()
+        .select('*, registered_team(*)')
         .eq('tr_id', widget.tournamentId)
         .order('team_id', ascending: true);
     List teamUuids = [];
@@ -114,7 +114,7 @@ class _ParticipatedScreenState extends State<ParticipatedScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
               child: Text(
-                'Team ${team['team_id']}',
+                'Team ${team['registered_team']['team_name']}',
                 style: Style.h3,
               ),
             ),

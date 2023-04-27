@@ -45,7 +45,7 @@ module.exports.index = async (req, res) => {
     const {data: cards, errorCard} = await supabase
         .from('player_booked').
         select(`*, member(*, player(*, registered_team(*, team(*))))`)
-        .eq('match_no', id);
+        .eq('booking_time', id);
         
         const goalsArray = [];
         goals.forEach(goal => {

@@ -134,7 +134,11 @@ app.use("/statistics", stats);
 app.use("/tournaments", tournaments);
 app.use("/teams", teams);
 app.use("/requests", users);
+app.use("/approve/:id", users);
+app.use("/decline/:id", users);
 app.use("/teams/:id/changeCaptain", teams);
+app.use("/teams/:id/approve", teams);
+app.use("/teams/:id/decline", teams);
 app.use("/tournaments/:id/matches", matches);
 app.use("/tournaments/:id/teams", teams);
 
