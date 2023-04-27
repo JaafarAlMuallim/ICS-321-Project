@@ -20,9 +20,10 @@
                             <p>
                                 <a href="/tournaments/<%= tournament.tr_id%>">View <%= tournament.tr_name%></a>
                                 <% if(currentUser){ %>
-                                    <% if(currentUser.admin_id == tournament.adminstrator){ %>
+                                    <% if(currentUser.admin_id == tournament.admin_id){ %>
                                         <hr>
-                                        <a class="card-link btn btn-info" href="/tournaments/<%=tournament.tr_id %>/edit">Edit</a>
+                                        <a class="card-link btn btn-info mx-1" href="/tournaments/<%=tournament.tr_id %>/edit">Edit</a>
+                                        <a class="card-link btn btn-warning mx-2" href="/tournaments/<%=tournament.tr_id %>/groups">Modify Group Stage Teams</a>
                                         <form class="d-inline" action="/tournaments/<%= tournament.tr_id %>?_method=DELETE" method="POST">
                                             <Button class="btn btn-danger">Delete</Button>
                                         </form>

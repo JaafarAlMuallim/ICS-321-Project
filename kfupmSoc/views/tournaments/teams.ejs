@@ -11,11 +11,11 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">
-                               Team <%= team.team_id %>
+                            <%= team.registered_team.team_name %>
                             </h5>
 
                             <p>
-                                <a href="/tournaments/<%= id %>/teams/<%=team.team_uuid%>">View Team <%= team.team_id%></a>
+                                <a href="/teams/<%=team.team_uuid%>">View <%= team.registered_team.team_name%></a>
                             </p>
                         </div>
                     </div>

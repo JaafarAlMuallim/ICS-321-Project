@@ -15,6 +15,12 @@ router.route("/login")
     .get(user.renderLogin)
     .post(wrapAsync(user.userLogin));
 
+router.route('/requests')
+    .get(wrapAsync(user.renderRequests))
+
+router.route('/requests/:id')
+    .post(wrapAsync(user.approved))
+    .post(wrapAsync(user.decline))
 router.get('/logout', user.logout);
 
 module.exports = router;

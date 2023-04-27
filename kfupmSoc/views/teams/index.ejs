@@ -1,6 +1,8 @@
 <% layout("layouts/boilerplate") %>
 
-    <h1>Team <%= team.team_id %></h1>
+    <div class="my-2">
+        <h1><%= team.registered_team.team_name %></h1>
+    </div>
     <!-- check if coaches -->
     <% if(coaches.length == 0){ %>
     <h2>No Coaches are registered in this team yet</h2>
@@ -15,7 +17,7 @@
                     <div class="col-md-8">
                         <div class="card-body">
                           <h5>
-                            <%= coach.coach.coach_name  %>
+                            <%= coach.member.name  %>
                           </h5>
                         </div>
                     </div>
@@ -23,7 +25,7 @@
             </div>
             <% } %>
         <% } %>
-        <% if(captainsArray.length == 0){ %>
+        <% if(captains.length == 0){ %>
             <div class="card mb-3">
                 <div class="row">
                     <div class="col-md-4">
@@ -36,13 +38,31 @@
                           No registered Captain for this team yet
                           </h5>
                         </div>
-                        <a class="card-link btn btn-info" href="/tournaments/<%= team.tr_id %>/teams/<%= team.team_uuid %>/captain">Specify Team Captain</a>
+                        <div class="dropdown">
+                            <button onclick="myFunction()" class="dropbtn">Specify Team Captain</button>
+                            <div class="dropdown">
+                                <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Choose Captain
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <% if(playersData.length == 0){ %>
+                                        <a href="#">No Players</a>
+                                    <% } else {%>
+                                        <% for(player of playersData){ %>
+                                            <form action="/teams/<%= team.team_uuid %>/changeCaptain/<%= player.member_uuid %>" method="POST">
+                                                <li><button class="dropdown-item" type="submit"> <%= player.position %> - <%= player.jersey_no %> - <%= player.member.name %></a></li>
+                                            </form>    
+                                        <% } %>
+                                    <% } %>
+                                </ul>
+                              </div>
+                          </div>
                     </div>
                 </div>
             </div>
         <% } else { %>
             <h3>Captain</h3>
-            <% for(let captain of captainsArray){ %>
+            <% for(let captain of captains){ %>
                 <div class="card mb-3">
                     <div class="row">
                         <div class="col-md-4">
@@ -52,20 +72,35 @@
                             <div class="card-body">
                               <h5>
                                 <i class="fa-regular fa-c"></i> &nbsp; &nbsp;
-                                <%= captain.player_name  %>
+                                <%= captain.member.player[0].position %> - <%= captain.member.player[0].jersey_no  %> - <%= captain.member.name  %>
                               </h5>
                             </div>
-                            <a class="card-link btn btn-info" href="/tournaments/<%= team.tr_id %>/teams/<%= team.team_uuid %>/captain">Change Team Captain</a>
+                            <div class="dropdown">
+                                <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Choose Captain
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <% if(playersData.length == 0){ %>
+                                        <a href="#">No Players</a>
+                                    <% } else {%>
+                                        <% for(player of playersData){ %>
+                                            <form action="/teams/<%= team.team_uuid %>/changeCaptain/<%= player.member_uuid %>" method="post">
+                                                <li><button class="dropdown-item" type="submit"> <%= player.position %> - <%= player.jersey_no %> - <%= player.member.name %></a></li>
+                                            </form>    
+                                        <% } %>
+                                    <% } %>
+                                </ul>
+                              </div>
                         </div>
                     </div>
                 </div>
                 <% } %>
         <% } %>
-    <% if(players.length == 0){ %>
+    <% if(playersData.length == 0){ %>
         <h2>No Players are registered in this team yet</h2>
     <% } else { %>
         <h3>Players</h3>
-        <% for(let player of players){ %>
+        <% for(let player of playersData){ %>
             <div class="card mb-3">
                 <div class="row">
                     <div class="col-md-4">
@@ -74,7 +109,7 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">
-                            <%= player.jersey_no  %>&nbsp; &nbsp; <%= player.player_name %>
+                                <%=player.position%> - <%=player.jersey_no%> - <%=player.member.name%>
                             </h5>
                         </div>
                     </div>

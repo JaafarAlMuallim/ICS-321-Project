@@ -34,7 +34,7 @@ module.exports.isAdmin = async (req, res, next) => {
         .from('tournament')
         .select('*')
         .eq('tr_id', id);
-    if (tournament[0].adminstrator != req.session.user.admin_id) {
+    if (tournament[0].admin_id != req.session.user.admin_id) {
         req.flash("error", "You Do Not Have Premission To Do That");
         return res.redirect(`/tournaments/${id}`)
     }

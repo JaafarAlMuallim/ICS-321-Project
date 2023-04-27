@@ -5,18 +5,25 @@
                     <div class="card-header new">
                             <p class="card-text d-inline fs-4">
                                 <strong>
-                                    Team <%= teamOne.player.team.team_id %>
+                                    <a href="/teams/<%= teams[0].registered_team.team_uuid %>">
+                                        <%= teams[0].registered_team.team_name %>
+                                    </a>
                                 </strong>
                             </p>
             </div>
 
             <div class="card-header fw-normal fs-4">
+                <% let haveCoach1 = false %>
+                <% let haveCoach2 = false %>
+                <% let haveCaptain1 = false %>
+                <% let haveCaptain2 = false %>
+
                 <% if(goalsArray){ %>
                     <% for(let goal of goalsArray){ %>
-                        <% if(goal.player.team.team_uuid == teamOne.player.team.team_uuid){%>
+                        <% if(goal.member.player[0].registered_team.team_uuid == teams[0].team_uuid){%>
                             <i>
                                 <i class="fa-regular fa-futbol"></i>
-                               <%=goal.goal_time%> <%=goal.player.player_name%>
+                               <%=goal.goal_time%> <%=goal.member.name%>
                             </i><br>
                         <%} else { %>
                             <i>
@@ -34,14 +41,14 @@
                 <hr>
                 <% if(cardsArray){ %>
                     <% for(let card of cardsArray){ %>
-                        <% if(card.player.team_tr == teamOne.player.team_tr){ %>
+                        <% if(card.member.player[0].registered_team.team_uuid == teams[0].team_uuid){ %>
                             <i>
                             <% if(card.sentOff == 'N'){ %>
                                 <i class="fa-regular fa-copy" style="color:yellow;"></i>
                                 <% } else { %>
                                 <i class="fa-regular fa-copy" style="color:red;"></i>
                             <% } %>
-                            <%=card.player.player_name%><br>
+                            <%=card.member[0].name%><br>
                         </i>
                         <% } else { %>
                             <i>
@@ -58,14 +65,15 @@
                     
                 <hr>
                     <% for(let coach of coaches){ %>
-                        <% if(coach.team_uuid == teamOne.player.team.team_uuid){ %>
+                        <% if(coach.team_uuid == teams[0].team_uuid){ %>
+                            <% haveCoach1 = true %>
                         <i>
                             <i class="fa-solid fa-people-roof"></i>
-                            <%=coach.coach.coach_name%>
+                            <%=coach.member.name%>
                         </i>
                         <br>
                         <%} else {%>
-                            <% if(coach == coaches[coaches.length - 1]){ %>                            
+                            <% if(coach == coaches[coaches.length - 1] && !haveCoach1){ %>                            
                             <i>
                                 <i class="fa-solid fa-people-roof"></i>
                                 No Coach(es) in this team
@@ -76,13 +84,14 @@
                     <% } %>
                 <hr>
                     <% for(let captain of captains){ %>
-                        <% if(captain.player.team.team_uuid == teamOne.player.team.team_uuid){ %>
+                        <% if(captain.member.player[0].registered_team.team_uuid == teams[0].team_uuid){ %>
+                            <% haveCaptain1 = true %>
                             <i>
-                            <i class="fa-solid fa-people-roof"></i>
-                            <%=captain.player.player_name%><br>
+                            <i class="fa-regular fa-c"></i> &nbsp;
+                            <%=captain.member.name%><br>
                             </i>
                         <%} else { %>
-                            <% if(captain == captains[captains.length - 1]){ %>
+                            <% if(captain == captains[captains.length - 1] && !haveCaptain1){ %>
                                 <i>
                                     <i class="fa-solid fa-people-roof"></i>
                                     No Captain in this team
@@ -90,11 +99,6 @@
                              <% } %>
                         <% } %>
                     <% } %>
-                <hr>
-                <i>
-                    <i class="fa-solid fa-hands"></i>
-                    <%=teamOne.player.player_name%><br>
-                </i>
                 <hr>
                 <table class="table table-bordered table-hover table-striped-columns">
                     <thead>
@@ -110,13 +114,13 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="col"><%=teamOne.player.team.team_group%></th>
-                        <th scope="col"><%=teamOne.player.team.group_position%></th>
-                        <th scope="col"><%=teamOne.player.team.won%></th>
-                        <th scope="col"><%=teamOne.player.team.draw%></th>
-                        <th scope="col"><%=teamOne.player.team.lost%></th>
-                        <th scope="col"><%=teamOne.player.team.goal_for%> / <%=teamOne.player.team.goal_against%></th>
-                        <th scope="col"><%=teamOne.player.team.points%></th>
+                        <th scope="col"><%=teams[0].team_group%></th>
+                        <th scope="col"><%=teams[0].group_position%></th>
+                        <th scope="col"><%=teams[0].won%></th>
+                        <th scope="col"><%=teams[0].draw%></th>
+                        <th scope="col"><%=teams[0].lost%></th>
+                        <th scope="col"><%=teams[0].goal_for%> / <%=teams[0].goal_against%></th>
+                        <th scope="col"><%=teams[0].points%></th>
                       </tr>
                     </tbody>
                   </table>
@@ -128,7 +132,9 @@
                     <div class="card-header new">
                             <p class="card-text d-inline fs-4">
                                 <strong>
-                                    Team <%= teamTwo.player.team.team_id %>
+                                    <a href="/teams/<%= teams[1].registered_team.team_uuid %>">
+                                        <%= teams[1].registered_team.team_name %>
+                                    </a>
                                 </strong>
                             </p>
             </div>
@@ -136,10 +142,10 @@
             <div class="card-header fw-normal fs-4">
                 <% if(goalsArray){ %>
                     <% for(let goal of goalsArray){ %>
-                        <% if(goal.player.team.team_uuid == teamTwo.player.team.team_uuid){%>
+                        <% if(goal.member.player[0].registered_team.team_uuid == teams[1].team_uuid){%>
                             <i>
                                 <i class="fa-regular fa-futbol"></i>
-                                <%=goal.goal_time%>  <%=goal.player.player_name%>
+                                <%=goal.goal_time%>  <%=goal.member.name%>
                             </i><br>
                         <%} else { %>
                             <i>
@@ -157,14 +163,14 @@
                 <hr>
                 <% if(cardsArray){ %>
                     <% for(let card of cardsArray){ %>
-                        <% if(card.player.team_tr == teamTwo.player.team_tr){ %>
+                        <% if(card.member.player[0].registered_team.team_uuid == teams[1].team_uuid){ %>
                             <i>
                             <% if(card.sentOff == 'N'){ %>
                                 <i class="fa-regular fa-copy" style="color:yellow;"></i>
                                 <% } else { %>
                                 <i class="fa-regular fa-copy" style="color:red;"></i>
                             <% } %>
-                            <%=card.player.player_name%><br>
+                            <%=card.member.name%><br>
                         </i>
                         <% } else { %>
                             <i>
@@ -181,14 +187,15 @@
                     
                 <hr>
                     <% for(let coach of coaches){ %>
-                        <% if(coach.team_uuid == teamTwo.player.team.team_uuid){ %>
+                        <% if(coach.team_uuid == teams[1].team_uuid){ %>
+                            <% haveCoach2 = true %>
                         <i>
                             <i class="fa-solid fa-people-roof"></i>
-                            <%=coach.coach.coach_name%>
+                            <%=coach.member.name%>
                         </i>
                         <br>
                         <%} else {%>
-                            <% if(coach == coaches[coaches.length - 1]){ %>                            
+                            <% if(coach == coaches[coaches.length - 1] && !haveCoach2 ){ %>                            
                             <i>
                                 <i class="fa-solid fa-people-roof"></i>
                                 No Coach(es) in this team
@@ -199,13 +206,14 @@
                     <% } %>
                 <hr>
                     <% for(let captain of captains){ %>
-                        <% if(captain.player.team.team_uuid == teamTwo.player.team.team_uuid){ %>
+                        <% if(captain.member.player[0].registered_team.team_uuid == teams[1].team_uuid){ %>
+                            <% haveCaptain2 = true; %>
                             <i>
-                            <i class="fa-solid fa-people-roof"></i>
-                            <%=captain.player.player_name%><br>
+                            <i class="fa-regular fa-c"></i> &nbsp;
+                            <%=captain.member.name%><br>
                             </i>
                         <%} else { %>
-                            <% if(captain == captains[captains.length - 1]){ %>
+                            <% if(captain == captains[captains.length - 1] && !haveCaptain2){ %>
                                 <i>
                                     <i class="fa-solid fa-people-roof"></i>
                                     No Captain in this team
@@ -213,11 +221,6 @@
                              <% } %>
                         <% } %>
                     <% } %>
-                <hr>
-                <i>
-                    <i class="fa-solid fa-hands"></i>
-                    <%=teamTwo.player.player_name%><br>
-                </i>
                 <hr>
                 <table class="table table-bordered table-hover table-striped-columns">
                     <thead>
@@ -233,13 +236,13 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="col"><%=teamTwo.player.team.team_group%></th>
-                        <th scope="col"><%=teamTwo.player.team.group_position%></th>
-                        <th scope="col"><%=teamTwo.player.team.won%></th>
-                        <th scope="col"><%=teamTwo.player.team.draw%></th>
-                        <th scope="col"><%=teamTwo.player.team.lost%></th>
-                        <th scope="col"><%=teamTwo.player.team.goal_for%> / <%=teamTwo.player.team.goal_against%></th>
-                        <th scope="col"><%=teamTwo.player.team.points%></th>
+                        <th scope="col"><%=teams[1].team_group%></th>
+                        <th scope="col"><%=teams[1].group_position%></th>
+                        <th scope="col"><%=teams[1].won%></th>
+                        <th scope="col"><%=teams[1].draw%></th>
+                        <th scope="col"><%=teams[1].lost%></th>
+                        <th scope="col"><%=teams[1].goal_for%> / <%=teams[1].goal_against%></th>
+                        <th scope="col"><%=teams[1].points%></th>
                       </tr>
                     </tbody>
                   </table>

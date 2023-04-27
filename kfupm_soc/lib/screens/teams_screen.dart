@@ -22,6 +22,7 @@ class _TeamScreenState extends State<TeamScreen> {
     setState(() {
       _loading = true;
     });
+    // TODO team name instead of id
     List<Widget> cards = [];
     for (dynamic doc in data) {
       cards.add(

@@ -13,6 +13,7 @@ const { initializeApp } = require("firebase/app");
 const { getFirestore, collection, doc, getDoc, setDoc, getDocs } = require( "firebase/firestore");
 const {getAuth, signInWithPhoneNumber, RecaptchaVerifier} = require('firebase/auth');
 const {firestoreAutoId} = require('../public/js/generateID.js');
+const { request } = require("express");
 
 
 const firebaseConfig = {
@@ -41,26 +42,27 @@ module.exports.register = async (req, res) => {
         } else {
             phoneNum = '0'+phonenumber.slice(3);
         }
-        await setDoc(doc(db, 'Admins', firestoreAutoId()), {
-            admin_id : docSnap.size + 1,
+
+        const { data: user, errorInsertion } = await supabase
+        .from('admin')
+        .insert({ admin_fname: fname, admin_lname: lname, phone_num: phoneNum || phonenumber }).select();
+
+        await setDoc(doc(db, 'Admins', user[0].admin_id), {
+            admin_id : user[0].admin_id,
             admin_fname: fname,
             admin_lname: lname,
             phoneNum: phoneNum || phonenumber,
         })
-            const { errorInsertion } = await supabase
-            .from('admin')
-            .insert({ admin_id: docSnap.size+1, admin_fname: fname, admin_lname: lname, phone_num: phoneNum || phonenumber });
             
             if (errorInsertion) {
-                console.log(errorInsertion.message);
                 req.flash("error", errorInsertion.message);
                 res.redirect("/register");
             } else {
                 req.session.user = {
-                    admin_id: docSnap.size+1,
+                    admin_id: user.admin_id,
                     admin_fname: fname,
                     admin_lname: lname,
-                    phoneNum: phoneNum || phonenumber,
+                    phone_num: phoneNum || phonenumber,
                 }
    
                 req.flash("success", "Verified!, Welcome to KFUPMSOC");
@@ -116,3 +118,36 @@ module.exports.logout = async(req, res) => {
         req.flash("success", "See You Next Time");
         res.redirect('/login');
     }
+
+module.exports.renderRequests = async(req, res) => {
+    const { data: players, error } = await supabase
+    .from('player')
+    .select('*, registered_team(*, team(*)), member(*)')
+    .eq('approved', 'pending');
+    // res.render("users/requests", {requests});
+    res.render("users/requests", {players});
+    // res.render('/', {players});
+}
+
+
+module.exports.approved = async(req, res) => {
+    const {id} = req.params;
+    const { data: player, error } = await supabase
+    .from('player')
+    .update({'approved' : 'approved'})
+    .eq('member_uuid', id);
+
+    req.flash('success', 'Player Successfully Approved in His Team');
+    res.redirect('/requests');
+}
+
+module.exports.decline = async(req, res) => {
+    const {id} = req.params;
+    const { data: player, error } = await supabase
+    .from('player')
+    .update({'approved': 'declined'})
+    .eq('member_uuid', id);
+
+    req.flash('success', 'Player Declined From Joining Team');
+    res.redirect('/requests');
+}

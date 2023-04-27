@@ -1,0 +1,48 @@
+<% layout("layouts/boilerplate") %>
+
+    <% for(team of teams){ %>
+        <% if(team.approved){ %>
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-title my-3">
+                            <h2><%= team.registered_team.team_name %></h2>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered table-hover table-striped-columns">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Group</th>
+                                    <th scope="col"><i class="fa-solid fa-ranking-star"></i></th>
+                                    <th scope="col">W</th>
+                                    <th scope="col">D</th>
+                                    <th scope="col">L</th>
+                                    <th scope="col">+/-</th>
+                                    <th scope="col">Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="col"><%=team.team_group%></th>
+                                    <th scope="col"><%=team.group_position%></th>
+                                    <th scope="col"><%=team.won%></th>
+                                    <th scope="col"><%=team.draw%></th>
+                                    <th scope="col"><%=team.lost%></th>
+                                    <th scope="col"><%=team.goal_for%> / <%=team.goal_against%></th>
+                                    <th scope="col"><%=team.points%></th>
+                                  </tr>
+                                </tbody>
+                              </table>
+                        </div>
+                        <a class="card-link btn btn-info" href="/teams/<%= team.team_uuid %>">Show players</a>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    <% } %>
+  
+                            
+

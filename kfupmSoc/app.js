@@ -14,6 +14,7 @@ const tournaments = require("./routes/tournaments");
 const matches = require("./routes/matches");
 const teams = require("./routes/teams");
 const users = require("./routes/users");
+const stats = require("./routes/stats");
 const AppError = require("./utils/error");
 const secret = process.env.SECRET || "thisshouldbebettersecreet";
 
@@ -129,7 +130,11 @@ onAuthStateChanged(auth, (user) => {
 });
 
 app.use("/", users);
+app.use("/statistics", stats);
 app.use("/tournaments", tournaments);
+app.use("/teams", teams);
+app.use("/requests", users);
+app.use("/teams/:id/changeCaptain", teams);
 app.use("/tournaments/:id/matches", matches);
 app.use("/tournaments/:id/teams", teams);
 
