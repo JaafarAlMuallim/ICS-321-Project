@@ -133,31 +133,38 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
                             ),
                             width: 300,
                             height: 50,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                labelText: 'Choose team',
-                                hintText: 'Choose team',
-                                border: const OutlineInputBorder(),
-                                suffixIcon: DropdownButtonFormField(
-                                  value: selectedTeam,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedTeam = newValue;
-                                    });
-                                  },
-                                  items: data.map<DropdownMenuItem<String>>(
-                                      (dynamic value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value['registered_team']
-                                          ['team_name'],
-                                      child: Text(
-                                        value['registered_team']['team_name'],
-                                        style: const TextStyle(fontSize: 16),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
+                            // TODO fix bug on cant select
+                            child: FormField(
+                              builder: (FormFieldState<String> state) {
+                                return TextField(
+                                  decoration: InputDecoration(
+                                    labelText: 'Choose team',
+                                    hintText: 'Choose team',
+                                    border: const OutlineInputBorder(),
+                                    suffixIcon: DropdownButtonFormField(
+                                      value: selectedTeam,
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          selectedTeam = newValue;
+                                        });
+                                      },
+                                      items: data.map<DropdownMenuItem<String>>(
+                                          (dynamic value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value['registered_team']
+                                              ['team_name'],
+                                          child: Text(
+                                            value['registered_team']
+                                                ['team_name'],
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),

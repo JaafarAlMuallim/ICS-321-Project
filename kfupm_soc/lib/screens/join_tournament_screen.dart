@@ -1,11 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kfupm_soc/screens/login_screen.dart';
 import 'package:kfupm_soc/screens/requests_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../Core/fade_animation.dart';
+import 'package:kfupm_soc/widgets/snackbar.dart';
 
 final supabase = Supabase.instance.client;
+final _auth = FirebaseAuth.instance;
 
 class JoinTournamentScreen extends StatefulWidget {
   const JoinTournamentScreen({super.key});
@@ -21,15 +25,26 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
   Color deaible = Colors.grey;
   Color backgroundColor = const Color.fromARGB(255, 26, 37, 48);
 
-  TextEditingController positionController = TextEditingController();
-  TextEditingController jerseyNumberController = TextEditingController();
+  TextEditingController teamController = TextEditingController();
   TextEditingController tournamentController = TextEditingController();
   List<dynamic> data = [];
-  // List<String> pos = ['GK', 'DF', 'MF', 'FD'];
-  int? selectedTournament;
+  List<dynamic> dataTeams = [];
+  List<dynamic> dataTournaments = [];
+  String? selectedTeam;
+  String? selectedTournament;
 
   fetchData() async {
-    data = await supabase.from('tournament').select('*');
+    data = await supabase
+        .from('team_captain')
+        .select("team_uuid")
+        .eq("member_uuid", _auth.currentUser!.uid);
+    dataTeams = await supabase
+        .from('registered_team')
+        .select('team_name')
+        .in_('team_uuid', data);
+    print('data teams are: $dataTeams');
+    dataTournaments = await supabase.from('tournament').select('tr_name');
+    print('data teams are: $dataTournaments');
   }
 
   @override
@@ -39,7 +54,7 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
   }
 
   // Check if user is authenticated.
-  insertData(String trId, String position, int jerseyNo) async {
+  insertData(String trId, String team_uuid) async {
     // await supabase.from("player").insert({
     //   'member_uuid': memberUuid,
     //   'tr_id': trId,
@@ -106,7 +121,7 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
                         FadeAnimation(
                           delay: 1,
                           child: Text(
-                            'Choose tournament',
+                            'Choose your team, and the tournament you want to join',
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.9),
                               letterSpacing: 0.5,
@@ -126,30 +141,92 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
                             ),
                             width: 300,
                             height: 50,
+                            // TODO fix bug on cant select
+                            child: FormField(
+                                builder: (FormFieldState<String> state) {
+                              return TextField(
+                                decoration: InputDecoration(
+                                  labelText: 'Choose team',
+                                  border: const OutlineInputBorder(),
+                                  suffixIcon: DropdownButtonFormField(
+                                    value: selectedTeam,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        selectedTeam = newValue;
+                                      });
+                                    },
+                                    items: dataTeams
+                                        .map<DropdownMenuItem<String>>(
+                                            (dynamic value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value['registered_team']
+                                            ['team_name'],
+                                        child: Text(
+                                          value['registered_team']['team_name'],
+                                          style: const TextStyle(fontSize: 16),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                  // TODO dropdown menu builder
+                                  // suffixIcon: DropdownButtonFormField(
+                                  //   value: selectedTournament,
+                                  //   onChanged: (newValue) {
+                                  //     setState(() {
+                                  //       selectedTournament = newValue;
+                                  //     });
+                                  //   },
+                                  //   items: data.map<DropdownMenuItem<dynamic>>(
+                                  //       (dynamic value) {
+                                  //     return DropdownMenuItem<dynamic>(
+                                  //       value: value,
+                                  //       child: Text(
+                                  //         value as String,
+                                  //         style: const TextStyle(fontSize: 16),
+                                  //       ),
+                                  //     );
+                                  //   }).toList(),
+                                  // ),
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        FadeAnimation(
+                          delay: 1,
+                          child: Container(
+                            padding: const EdgeInsets.all(5.0),
+                            decoration: BoxDecoration(
+                              color: backgroundColor,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(12.0),
+                              ),
+                            ),
+                            width: 300,
+                            height: 50,
                             child: TextField(
                               decoration: InputDecoration(
                                 labelText: 'Choose tournament',
-                                hintText: 'Choose tournament',
                                 border: const OutlineInputBorder(),
-                                // TODO dropdown menu builder
-                                // suffixIcon: DropdownButtonFormField(
-                                //   value: selectedTournament,
-                                //   onChanged: (newValue) {
-                                //     setState(() {
-                                //       selectedTournament = newValue;
-                                //     });
-                                //   },
-                                //   items: data.map<DropdownMenuItem<dynamic>>(
-                                //       (dynamic value) {
-                                //     return DropdownMenuItem<dynamic>(
-                                //       value: value,
-                                //       child: Text(
-                                //         value as String,
-                                //         style: const TextStyle(fontSize: 16),
-                                //       ),
-                                //     );
-                                //   }).toList(),
-                                // ),
+                                suffixIcon: DropdownButtonFormField(
+                                  value: selectedTournament,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedTournament = newValue;
+                                    });
+                                  },
+                                  items: data.map<DropdownMenuItem<String>>(
+                                      (dynamic value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value['tournament']['tr_name'],
+                                      child: Text(
+                                        value['tournament']['tr_name'],
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
                             ),
                           ),
@@ -159,7 +236,38 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
                           delay: 1,
                           child: TextButton(
                             onPressed: () {
+                              if (_auth.currentUser == null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginScreen(),
+                                  ),
+                                );
+                                ShowSnackBar.showSnackbar(
+                                    context,
+                                    'You need to be logged In before Joining a team',
+                                    '',
+                                    '',
+                                    Colors.red);
+                              } else {
+                                insertData(selectedTeam!, selectedTournament!);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const RequestsScreen(),
+                                  ),
+                                );
+                                ShowSnackBar.showSnackbar(
+                                    context,
+                                    'Request sent successfully',
+                                    '',
+                                    '',
+                                    Colors.green[700]);
+                              }
                               // insertData();
+                              // print("button pressed");
+
                               // TODO no empty blocks
                             },
                             style: TextButton.styleFrom(
