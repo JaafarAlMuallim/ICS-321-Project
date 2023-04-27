@@ -204,9 +204,7 @@ class _OTPScreenState extends State<OTPScreen> {
                               FadeAnimation(
                                   delay: 1.4,
                                   child: TextButton(
-                                      onPressed: () {
-                                        //TODO Let the program send a code and make it unavailable for 30 seconds
-                                      },
+                                      onPressed: () {},
                                       child: Text(
                                         "Send code",
                                         style: Style.h4.copyWith(

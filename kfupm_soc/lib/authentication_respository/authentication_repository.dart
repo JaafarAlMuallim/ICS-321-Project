@@ -66,7 +66,6 @@ class AuthenticationRepository {
         Navigator.pushNamed(context, LoginScreen.id);
       }, Style.containerColor);
     } else {
-      // TODO add info to supabase
       insertData(name, phoneNum, kfupmId, bdate);
       // flutter sign up with phone number
 

@@ -42,9 +42,7 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
         .from('registered_team')
         .select('team_name')
         .in_('team_uuid', data);
-    print('data teams are: $dataTeams');
     dataTournaments = await supabase.from('tournament').select('tr_name');
-    print('data teams are: $dataTournaments');
   }
 
   @override
@@ -54,7 +52,7 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
   }
 
   // Check if user is authenticated.
-  insertData(String trId, String team_uuid) async {
+  insertData(String trId, String teamUuid) async {
     // await supabase.from("player").insert({
     //   'member_uuid': memberUuid,
     //   'tr_id': trId,

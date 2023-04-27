@@ -40,7 +40,6 @@ class _TournamentInfoScreenState extends State<TournamentInfoScreen> {
             '*, match_played(*, referee (*), member:player_of_match(*)), asst_referee (*)')
         .eq('tr_id', widget.tournamentId);
 
-    print(matchesData);
     // get match uuid in a list
     List matchUuids = [];
     for (dynamic match in matchesData) {
