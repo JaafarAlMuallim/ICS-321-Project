@@ -3,7 +3,80 @@
     <div class="my-2">
         <h1><%= team.registered_team.team_name %></h1>
     </div>
-    <!-- check if coaches -->
+    <h3>Manager</h3>
+    <% if(manager.length == 0){ %>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                      <h5>
+                        No manager is registered in this team yet
+                      </h5>
+                      <div class="dropdown">
+                        <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Choose Manager
+                        </button>
+                        <ul class="dropdown-menu">
+                            <% if(playersData.length == 0){ %>
+                                <a href="#">No Players</a>
+                            <% } else {%>
+                                <% for(player of playersData){ %>
+                                    <form action="/teams/<%= team.team_uuid %>/changeManager/<%= player.member_uuid %>" method="post">
+                                        <li><button class="dropdown-item" type="submit"><%= player.member.name %></a></li>
+                                    </form>    
+                                <% } %>
+                            <% } %>
+                        </ul>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } else { %>
+        <% for(let mgr of manager){ %>
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                          <h5>
+                            <%= mgr.member.name  %>
+                          </h5>
+                          <br>
+                          <h5>
+                            KFUPM ID: <%= mgr.member.kfupm_id  %>
+                          </h5>
+                          <h5>
+                            Phone Number: <%= mgr.member.phone_num  %>
+                          </h5>
+                          <div class="dropdown">
+                            <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Choose Manager
+                            </button>
+                            <ul class="dropdown-menu">
+                                <% if(playersData.length == 0){ %>
+                                    <a href="#">No Players</a>
+                                <% } else {%>
+                                    <% for(player of playersData){ %>
+                                        <form action="/teams/<%= team.team_uuid %>/changeManager/<%= player.member_uuid %>" method="post">
+                                            <li><button class="dropdown-item" type="submit"><%= player.member.name %></a></li>
+                                        </form>    
+                                    <% } %>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <% } %>
+        <% } %>
+        <h3>Coaches</h3>
     <% if(coaches.length == 0){ %>
         <div class="card mb-3">
             <div class="row">
@@ -15,12 +88,28 @@
                       <h5>
                         No Coaches are registered in this team yet
                       </h5>
+                      <div class="dropdown">
+                        <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Choose Coach
+                        </button>
+                        <ul class="dropdown-menu">
+                            <% if(playersData.length == 0){ %>
+                                <a href="#">No Coaches Available</a>
+                            <% } else {%>
+                                <% for(player of playersData){ %>
+                                    <form action="/teams/<%= team.team_uuid %>/changeCoach/<%= player.member_uuid %>" method="post">
+                                        <li><button class="dropdown-item" type="submit"><%= player.member.name %></a></li>
+                                    </form>    
+                                <% } %>
+                            <% } %>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     <% } else { %>
-        <h3>Coaches</h3>
+       
         <% for(let coach of coaches){ %>
             <div class="card mb-3">
                 <div class="row">
@@ -32,12 +121,36 @@
                           <h5>
                             <%= coach.member.name  %>
                           </h5>
+                          <h5>
+                            KFUPM ID: <%= coach.member.kfupm_id  %>
+                          </h5>
+                          <h5>
+                           Phone Number: <%= coach.member.phone_num  %>
+                          </h5>
+                          <div class="dropdown">
+                            <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Choose Coach
+                            </button>
+                            <ul class="dropdown-menu">
+                                <% if(playersData.length == 0){ %>
+                                    <a href="#">No Coaches Available</a>
+                                <% } else {%>
+                                    <% for(player of playersData){ %>
+                                        <form action="/teams/<%= team.team_uuid %>/changeCoach/<%= player.member_uuid %>" method="post">
+                                            <li><button class="dropdown-item" type="submit"><%= player.member.name %></a></li>
+                                        </form>    
+                                    <% } %>
+                                <% } %>
+                            </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <% } %>
         <% } %>
+
+        <h3>Captain</h3>
         <% if(captains.length == 0){ %>
             <div class="card mb-3">
                 <div class="row">
@@ -71,7 +184,7 @@
                 </div>
             </div>
         <% } else { %>
-            <h3>Captain</h3>
+          
             <% for(let captain of captains){ %>
                 <div class="card mb-3">
                     <div class="row">
@@ -83,6 +196,12 @@
                               <h5>
                                 <i class="fa-regular fa-c"></i> &nbsp; &nbsp;
                                 <%= captain.member.player[0].position %> - <%= captain.member.player[0].jersey_no  %> - <%= captain.member.name  %>
+                              </h5>
+                              <h5>
+                                KFUPM ID: <%= captain.member.kfupm_id  %>
+                              </h5>
+                              <h5>
+                               Phone Number: <%= captain.member.phone_num  %>
                               </h5>
                             </div>
                             <div class="dropdown">
@@ -135,6 +254,12 @@
                             <h5 class="card-title">
                                 <%=player.position%> - <%=player.jersey_no%> - <%=player.member.name%>
                             </h5>
+                            <h5>
+                                KFUPM ID: <%= player.member.kfupm_id  %>
+                              </h5>
+                              <h5>
+                               Phone Number: <%= player.member.phone_num  %>
+                              </h5>
                         </div>
                     </div>
                 </div>

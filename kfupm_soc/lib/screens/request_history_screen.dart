@@ -123,13 +123,16 @@ class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
                 child: Image.asset('assets/images/welcomebkg.jpg'),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-              child: Text(
-                '${request['registered_team']['team_name']}',
-                style: Style.h3,
-              ),
-            ),
+            teamsData.isNotEmpty
+                ? Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    child: Text(
+                      '${request['registered_team']['team_name']}',
+                      style: Style.h3,
+                    ),
+                  )
+                : const SizedBox(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
               child: Text(

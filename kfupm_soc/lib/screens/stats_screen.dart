@@ -65,7 +65,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 4),
                         child: Text(
-                          'Highest Number of MVPs was ${doc['coutner']} \nFrom The Player ${doc['pos']} - ${doc['jersey_no']} ${doc['name']} \nFrom ${doc['team_name']}',
+                          'Highest Number of MVPs was ${doc['counter']} \nFrom The Player ${doc['pos']} - ${doc['jersey_no']} ${doc['name']} \nFrom ${doc['team_name']}',
                           style: Style.h3.copyWith(fontSize: 22),
                         ),
                       ),

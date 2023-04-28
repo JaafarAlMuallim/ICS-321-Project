@@ -22,11 +22,13 @@ module.exports.index = async (req, res) => {
         .order('team_id', {ascending: true});
 
     const team = teamsData[0];
-    console.log(team);
     const teamUuids = [];
     for (let team of teamsData) {
       teamUuids.push(team['team_uuid']);
     }
+
+    const {data: manager} = await supabase.from('registered_team').select('*, member:created_by(*)').eq('team_uuid', id);
+    console.log(manager);
     // get team captains
     const {data: captainsData} = await supabase
         .from('team_captain')
@@ -58,7 +60,7 @@ module.exports.index = async (req, res) => {
                 coaches.push(coach);
               }
             }
-    res.render('teams/index', {team, captains, coaches, playersData})
+    res.render('teams/index', {team, captains, coaches, playersData, manager})
     }
 
 module.exports.changeCaptain = async (req, res) => {
@@ -117,4 +119,43 @@ module.exports.declineTeam = async (req, res, next) => {
 
     req.flash(`success', 'Team Declined From Joining ${tournament[0].tr_name}`);
     res.redirect('/requests');
+}
+
+module.exports.changeManager = async (req, res) => {
+    const {id} = req.params;
+    const teamId = req.originalUrl.split('/')[2];
+    const {data:exists, error1} = await supabase.from('registered_team').select().eq('team_uuid', teamId);
+    if(exists.length > 0){
+        const {data, error} = await supabase
+        .from('registered_team')   
+        .update({created_by: id})
+        .eq('team_uuid', teamId)
+        .select()
+    }else{
+        const {data, error} = await supabase
+        .from('registered_team')
+        .upsert({team_uuid: teamId, created_by: id})
+        .select()
+    }
+    res.redirect(`/teams/${teamId}`)   
+}
+
+module.exports.changeCoach = async (req, res) => {
+    const {id} = req.params;
+    const teamId = req.originalUrl.split('/')[2];
+    const {data:exists, error1} = await supabase.from('team_coach').select().eq('team_uuid', teamId);
+    
+    if(exists.length > 0){
+        const {data, error} = await supabase
+        .from('team_coach')   
+        .update({member_uuid: id})
+        .eq('team_uuid', teamId)
+        .select()
+    }else{
+        const {data, error} = await supabase
+        .from('team_coach')
+        .upsert({team_uuid: teamId, member_uuid: id})
+        .select()
+    }
+    res.redirect(`/teams/${teamId}`)   
 }
