@@ -562,13 +562,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
                 ),
           ],
         ),
-        onPress: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      MatchInfoScreen(matchUuid: match['match_uuid'])));
-        },
+        onPress: () {},
         height: 710,
       ));
       setState(() {

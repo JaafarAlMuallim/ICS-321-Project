@@ -319,7 +319,7 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
                                             }
                                             ShowSnackBar.showSnackbar(
                                                 context,
-                                                'Request already sent',
+                                                'Request already sent or already joined',
                                                 '',
                                                 () {},
                                                 Colors.orange[700]);

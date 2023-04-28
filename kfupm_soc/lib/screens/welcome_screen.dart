@@ -142,16 +142,16 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     title: 'Guest',
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: Roundedbutton(
-                    color: Colors.blue.shade900,
-                    onPressed: (() {
-                      Navigator.pushNamed(context, OTPScreen.id);
-                    }),
-                    title: ' Test',
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(14.0),
+                //   child: Roundedbutton(
+                //     color: Colors.blue.shade900,
+                //     onPressed: (() {
+                //       Navigator.pushNamed(context, OTPScreen.id);
+                //     }),
+                //     title: ' Test',
+                //   ),
+                // ),
               ],
             ),
           ),

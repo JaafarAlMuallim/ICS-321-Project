@@ -128,6 +128,7 @@ class _ParticipatedScreenState extends State<ParticipatedScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
               child: Text(
+                // TODO check null safety
                 'Coach ${coaches[increment]['member']['name']}',
                 style: Style.kSubtitleStyle,
               ),

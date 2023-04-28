@@ -197,9 +197,11 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
     goals = await supabase.rpc('count_goals');
     redCards = await supabase.rpc('get_cards');
 
-    setState(() {
-      _loading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _loading = false;
+      });
+    }
   }
 
   @override
