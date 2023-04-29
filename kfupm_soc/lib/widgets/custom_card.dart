@@ -17,13 +17,13 @@ class CustomCard extends StatelessWidget {
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.blue.shade600,
+          color: Color.fromARGB(255, 0, 179, 255).withOpacity(0.45),
           borderRadius: const BorderRadius.all(
             Radius.circular(30),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.blue.withOpacity(0.5),
+              color: Color.fromARGB(255, 48, 67, 69).withOpacity(0.3),
               offset: const Offset(0, 3),
               blurRadius: 7,
               spreadRadius: 5,

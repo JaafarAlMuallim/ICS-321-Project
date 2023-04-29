@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as fire;
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/screens/Login_screen.dart';
+import 'package:kfupm_soc/screens/profile_screen.dart';
 import 'package:kfupm_soc/screens/request_history_screen.dart';
 import 'package:kfupm_soc/screens/requests_screen.dart';
 import 'package:kfupm_soc/widgets/snackbar.dart';
@@ -63,18 +64,11 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
     super.initState();
   }
 
-  insertData(String teamName, String position, int jerseyNo) async {
-    List<dynamic> teams = await supabase
-        .from('registered_team')
-        .select()
-        .eq('team_name', teamName);
-
-    await supabase.from("player").insert({
-      'member_uuid': playerUuid,
-      'team_uuid': teams[0]['team_uuid'],
-      'position': position,
-      'jersey_no': jerseyNo,
-      'approved': 'pending'
+  insertData(String teamName) async {
+    await supabase.from("registered_team").insert({
+      'created_by': playerUuid,
+      'team_name': teamName,
+      'approved': "pending"
     });
   }
 
@@ -142,7 +136,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                                   FadeAnimation(
                                     delay: 1,
                                     child: Text(
-                                      'Choose team, position, and jersey number',
+                                      'Enter the team name',
                                       style: TextStyle(
                                         color: Colors.white.withOpacity(0.9),
                                         letterSpacing: 0.5,
@@ -163,9 +157,9 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                                       width: 300,
                                       height: 50,
                                       child: TextField(
-                                        controller: jerseyNumberController,
+                                        controller: teamController,
                                         decoration: const InputDecoration(
-                                          hintText: 'Jersey Number',
+                                          hintText: 'Team Name',
                                           hintStyle: TextStyle(
                                             fontSize: 14,
                                           ),
@@ -175,7 +169,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                                           ),
                                           enabledBorder: InputBorder.none,
                                         ),
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: TextInputType.name,
                                         style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
@@ -206,13 +200,9 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                                               () {},
                                               Colors.red);
                                         } else {
-                                          insertData(
-                                              selectedTeam!,
-                                              selectedPosition!,
-                                              int.parse(
-                                                  jerseyNumberController.text));
+                                          insertData(teamController.text);
                                           Navigator.popAndPushNamed(
-                                              context, RequestHistoryScreen.id);
+                                              context, ProfileScreen.id);
                                           ShowSnackBar.showSnackbar(
                                               context,
                                               'Request sent successfully',
@@ -235,7 +225,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                                         ),
                                       ),
                                       child: const Text(
-                                        'Join',
+                                        'Create',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16.0,

@@ -108,12 +108,15 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
         cardsArr.add(card);
       }
     }
+
     for (dynamic penalty in penaltyShootout) {
+      print("penalty is: $penalty");
       if (penalty['member']['player'][0]['registered_team']['team_uuid'] ==
               teams[0]['team_uuid'] &&
           penalty['member']['player'][0]['registered_team']['team'][0]
                   ['tr_id'] ==
               teams[0]['tr_id']) {
+        print(1);
         penaltiesArr.add(penalty);
       } else if (penalty['member']['player'][0]['registered_team']
                   ['team_uuid'] ==
@@ -121,6 +124,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
           penalty['member']['player'][0]['registered_team']['team'][0]
                   ['tr_id'] ==
               teams[1]['tr_id']) {
+        print(2);
         penaltiesArr.add(penalty);
       }
     }
@@ -176,8 +180,10 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
               children: [
                 WidgetSpan(
                   child: Icon(
-                    Icons.arrow_circle_down_sharp,
-                    color: penGoal ? Colors.green : Colors.red,
+                    penGoal
+                        ? Icons.sports_soccer_sharp
+                        : Icons.front_hand_outlined,
+                    color: Colors.black,
                   ),
                 ),
                 TextSpan(
@@ -204,7 +210,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: " ${pen['penalty_gk']['member']['name']}",
+                  text: " ${pen['penalty_gk'][0]['member']['name']}",
                   style: Style.h3.copyWith(fontSize: 22),
                 ),
               ],
@@ -213,24 +219,26 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
         );
       } else if (pen['member']['player'][0]['registered_team']['team_uuid'] ==
           teams[1]['team_uuid']) {
-        subTimes.add(
+        penTimes.add(
           RichText(
             text: TextSpan(
               children: [
                 TextSpan(
-                    text: "${pen['time_in_out']}' ",
+                    text: "${pen['penalty_time']}' ",
                     style: Style.h3.copyWith(fontSize: 22)),
                 WidgetSpan(
                   child: Icon(
-                    Icons.arrow_circle_down_sharp,
-                    color: pen ? Colors.green : Colors.red,
+                    penGoal
+                        ? Icons.sports_soccer_sharp
+                        : Icons.front_hand_outlined,
+                    color: Colors.black,
                   ),
                 ),
               ],
             ),
           ),
         );
-        subsTeam2.add(
+        penTeam2.add(
           RichText(
             text: TextSpan(
               children: [
@@ -242,12 +250,12 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
             ),
           ),
         );
-        subsTeam1.add(
+        penTeam1.add(
           RichText(
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: " ${pen['penalty_gk']['member']['name']}",
+                  text: " ${pen['penalty_gk'][0]['member']['name']}",
                   style: Style.h3.copyWith(fontSize: 22),
                 ),
               ],
