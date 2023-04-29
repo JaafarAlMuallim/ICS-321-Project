@@ -159,3 +159,44 @@ module.exports.changeCoach = async (req, res) => {
     }
     res.redirect(`/teams/${teamId}`)   
 }
+
+// approveCaoch
+module.exports.approveCoach = async (req, res, next) => {
+    const memberId = req.originalUrl.split('/')[req.originalUrl.split('/').length - 1];
+    const id = req.originalUrl.split('/')[2];
+    const {data:exists, error1} = await supabase.from('team_coach').select().eq('team_uuid', id);
+    
+    if(exists.length > 0){
+        await supabase
+        .from('team_coach')   
+        .delete()
+        .eq('team_uuid', id).eq('approved', 'pending').eq('member_uuid', memberId)
+        .select()
+        await supabase
+        .from('team_coach')   
+        .update({member_uuid: memberId})
+        .eq('team_uuid', id).eq('approved', 'true');
+    }
+
+    const { data: coach, error } = await supabase
+    .from('team_coach')
+    .select('*, member(*), registered_team(*)')
+    .eq('memeber_uuid', memberId).eq('team_uuid', id);
+
+
+    req.flash(`success', '${coach[0].member.name} Successfully Approved in Joining ${coach[0].registered_team.name}`);
+    res.redirect('/requests');
+}
+
+// declineCoach
+module.exports.declineCoach = async (req, res, next) => {
+    const memberId = req.originalUrl.split('/')[req.originalUrl.split('/').length - 1];
+    const id = req.originalUrl.split('/')[2];
+    const { data: coach, error } = await supabase
+    .from('team_coach')
+    .update({'approved' : 'false'})
+    .eq('member_uuid', memberId).eq('team_uuid', id).select('*, member(*), registered_team(*)');
+
+    req.flash(`success', '${coach[0].member.name} Declined in Joining ${coach[0].registered_team.name}`);
+    res.redirect('/requests');
+}

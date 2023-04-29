@@ -21,4 +21,8 @@ router.route("/:id/approve/:id")
     .post(wrapAsync(teams.approveTeam))
 router.route("/:id/decline/:id")
     .post(wrapAsync(teams.declineTeam))
+router.route("/:id/approveCoach/:id")
+    .post(wrapAsync(teams.approveCoach))
+router.route("/:id/declineCoach/:id")
+    .post(wrapAsync(teams.declineCoach))
 module.exports = router;

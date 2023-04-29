@@ -1,9 +1,9 @@
 <% layout("layouts/boilerplate") %>
     <h1>Requests</h1>
     <% if(players.length == 0){ %>
-
-        <div class="my-3"><h2>No Players -> Team Requests Yet</h2></div>
+        <div class="my-3"><h3>No Players -> Team Requests Yet</h3></div>
     <% } else { %>
+        <div class="my-3"><h3>Players -> Team Requests</h3></div>
         <% for(let player of players){ %>
             <div class="card mb-3">
                 <div class="row">
@@ -30,10 +30,10 @@
         <% } %>
     <% } %>
     <% if(teams.length == 0){ %>
-
-        <div class="my-3"><h2>No Team -> Tournament Requests Yet</h2></div>
+        <div class="my-3"><h3>No Team -> Tournament Requests Yet</h3></div>
     <% } else { %>
         <% for(let team of teams){ %>
+            <div class="my-3"><h3>Team -> Tournament Requests</h3></div>
             <div class="card mb-3">
                 <div class="row">
                     <div class="col-md-4">
@@ -49,6 +49,35 @@
                                     <Button class="btn btn-success">Approve</Button>
                                 </form>
                                 <form class="d-inline" action="/teams/<%=team.team_uuid%>/decline/<%=team.tr_id%>" method="POST">
+                                    <Button class="btn btn-danger">Decline</Button>
+                                </form>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    <% } %>
+    <% if(coaches.length == 0){ %>
+        <div class="my-3"><h2>Coach -> Team Requests Yet</h2></div>  
+    <% } else { %>
+        <% for(let coach of coaches){ %>
+            <div class="my-3"><h3>Coach -> Team Requests Yet</h3></div>
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                <%= coach.member.name %> Has Requested To Join As a Coach in <%= coach.registered_team.team_name %>
+                            </h3>
+                            <p>
+                                <form class="d-inline" action="/teams/<%=coach.team_uuid%>/approveCoach/<%=coach.member_uuid%>" method="POST">
+                                    <Button class="btn btn-success">Approve</Button>
+                                </form>
+                                <form class="d-inline" action="/teams/<%=coach.team_uuid%>/declineCoach/<%=coach.member_uuid%>" method="POST">
                                     <Button class="btn btn-danger">Decline</Button>
                                 </form>
                             </p>
