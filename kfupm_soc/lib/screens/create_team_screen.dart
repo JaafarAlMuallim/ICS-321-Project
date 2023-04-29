@@ -256,7 +256,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                       Navigator.pop(context);
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
-                        return const RequestsScreen();
+                        return const ProfileScreen();
                       }));
                     },
                     icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
