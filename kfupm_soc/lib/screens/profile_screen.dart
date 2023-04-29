@@ -6,7 +6,9 @@ import 'package:kfupm_soc/constants/app_theme.dart';
 import 'package:kfupm_soc/constants/styles.dart';
 import 'package:kfupm_soc/screens/welcome_screen.dart';
 import 'package:kfupm_soc/widgets/bottom_navbar.dart';
+import 'package:kfupm_soc/widgets/rounded_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:kfupm_soc/screens/create_team_screen.dart';
 
 final supabase = Supabase.instance.client;
 
@@ -141,6 +143,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           const SizedBox(
                             height: 50,
+                          ),
+                          const SizedBox(height: 20),
+                          FadeAnimation(
+                            delay: 1,
+                            child: Container(
+                              padding: const EdgeInsets.all(5.0),
+                              width: 300,
+                              height: 100,
+                              child: Roundedbutton(
+                                color: Colors.blue.shade900,
+                                onPressed: (() {
+                                  Navigator.pushNamed(
+                                      context, CreateTeamScreen.id);
+                                }),
+                                title: 'Create Team',
+                              ),
+                            ),
                           ),
                         ]),
                       ),
