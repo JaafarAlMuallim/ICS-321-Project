@@ -118,29 +118,37 @@ class _ParticipatedScreenState extends State<ParticipatedScreen> {
                 style: Style.h3,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-              child: Text(
-                'Captain ${captains[increment]['member']['name']}',
-                style: Style.kSubtitleStyle,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-              child: Text(
-                // TODO check null safety
-                'Coach ${coaches[increment]['member']['name']}',
-                style: Style.kSubtitleStyle,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                children: playersWidget[increment],
-              ),
-            ),
+            captains.isNotEmpty
+                ? Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                    child: Text(
+                      'Captain ${captains[increment]['member']['name']}',
+                      style: Style.kSubtitleStyle,
+                    ),
+                  )
+                : const SizedBox(),
+            coaches.isNotEmpty
+                ? Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                    child: Text(
+                      'Coach ${coaches[increment]['member']['name']}',
+                      style: Style.kSubtitleStyle,
+                    ),
+                  )
+                : const SizedBox(),
+            playersWidget.isNotEmpty
+                ? Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                    child: ListView(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      children: playersWidget[increment],
+                    ),
+                  )
+                : const SizedBox(),
           ],
         ),
         onPress: () {},

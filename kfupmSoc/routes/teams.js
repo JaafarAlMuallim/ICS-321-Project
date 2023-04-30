@@ -13,19 +13,16 @@ router.route("/")
 router.route("/:id")
     .get(wrapAsync(teams.index))
 
-router.route("/:id/changeCaptain/:id").post(wrapAsync(teams.changeCaptain))
+router.route("/:id/changeCaptain/:id").post(wrapAsync(teams.changeCaptain));
+router.route("/:id/changeManager/:id").post(wrapAsync(teams.changeManager));
+router.route("/:id/changeCoach/:id").post(wrapAsync(teams.changeCoach));
 
 router.route("/:id/approve/:id")
     .post(wrapAsync(teams.approveTeam))
 router.route("/:id/decline/:id")
     .post(wrapAsync(teams.declineTeam))
-
-    // .post(isLoggedIn, upload.array("image"), validateCamp, wrapAsync(camp.createCamp));
-// .post(upload.array("image"), (req, res) => {
-//     console.log(req.body, req.files);
-//     res.send("NOICE???");
-// });
-// TODO GET WITH LOGGED IN
-// router.get("/new", isLoggedIn, tournament.new);
-// router.get("/tournaments/:id/matches/new", matches.new);
+router.route("/:id/approveCoach/:id")
+    .post(wrapAsync(teams.approveCoach))
+router.route("/:id/declineCoach/:id")
+    .post(wrapAsync(teams.declineCoach))
 module.exports = router;

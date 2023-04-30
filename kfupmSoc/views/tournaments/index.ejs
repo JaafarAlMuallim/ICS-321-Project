@@ -22,8 +22,13 @@
                                 <% if(currentUser){ %>
                                     <% if(currentUser.admin_id == tournament.admin_id){ %>
                                         <hr>
-                                        <a class="card-link btn btn-info mx-1" href="/tournaments/<%=tournament.tr_id %>/edit">Edit</a>
+                                        <% if(!tournament.initiated){ %>
+                                        <form class="d-inline" action="/tournaments/<%=tournament.tr_id %>/initiate" method="POST">
+                                            <button class="card-link btn btn-success mx-1">Start Tournament</button>
+                                        </form>
                                         <a class="card-link btn btn-warning mx-2" href="/tournaments/<%=tournament.tr_id %>/groups">Modify Group Stage Teams</a>
+                                        <% } %>
+                                        <a class="card-link btn btn-info mx-1" href="/tournaments/<%=tournament.tr_id %>/edit">Edit</a>
                                         <form class="d-inline" action="/tournaments/<%= tournament.tr_id %>?_method=DELETE" method="POST">
                                             <Button class="btn btn-danger">Delete</Button>
                                         </form>

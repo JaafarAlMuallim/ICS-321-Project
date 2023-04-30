@@ -19,9 +19,9 @@ router.route('/requests')
     .get(wrapAsync(user.renderRequests))
 
 router.route('/approve/:id')
-    .post(wrapAsync(user.approved));
+    .post(wrapAsync(user.approvedMember));
 router.route('/decline/:id')
-    .post(wrapAsync(user.decline))
+    .post(wrapAsync(user.declineMember))
 router.get('/logout', user.logout);
 
 module.exports = router;

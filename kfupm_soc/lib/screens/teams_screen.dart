@@ -23,7 +23,45 @@ class _TeamScreenState extends State<TeamScreen> {
       _loading = true;
     });
     List<Widget> cards = [];
+
     for (dynamic doc in data) {
+      Widget groupCol;
+      Widget playedCol;
+      Widget wonCol;
+      Widget drawCol;
+      Widget lostCol;
+      Widget pointsCol;
+      Widget goalsCol;
+      groupCol = Column(children: [
+        Text('Group', style: Style.h3.copyWith(fontSize: 14)),
+        Text('${doc['team_group'] ?? 'XX'}',
+            style: Style.h3.copyWith(fontSize: 14))
+      ]);
+      playedCol = Column(children: [
+        Text('Played', style: Style.h3.copyWith(fontSize: 14)),
+        Text('${doc['match_played']}', style: Style.h3.copyWith(fontSize: 14))
+      ]);
+      wonCol = Column(children: [
+        Text('Won', style: Style.h3.copyWith(fontSize: 14)),
+        Text('${doc['won']}')
+      ]);
+      drawCol = Column(children: [
+        Text('Draw', style: Style.h3.copyWith(fontSize: 14)),
+        Text('${doc['draw']}', style: Style.h3.copyWith(fontSize: 14))
+      ]);
+      lostCol = Column(children: [
+        Text('Lost', style: Style.h3.copyWith(fontSize: 14)),
+        Text('${doc['lost']}', style: Style.h3.copyWith(fontSize: 14))
+      ]);
+      pointsCol = Column(children: [
+        Text('Points', style: Style.h3.copyWith(fontSize: 14)),
+        Text('${doc['points']}', style: Style.h3.copyWith(fontSize: 14))
+      ]);
+      goalsCol = Column(children: [
+        Text('Goals +/-', style: Style.h3.copyWith(fontSize: 14)),
+        Text('${doc['goal_for']}/${doc['goal_against']}',
+            style: Style.h3.copyWith(fontSize: 14))
+      ]);
       cards.add(
         CustomCard(
           containerContent:
@@ -37,43 +75,64 @@ class _TeamScreenState extends State<TeamScreen> {
                 ),
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
             FadeAnimation(
               delay: 0.8,
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                 child: Text(
-                  'Team ${doc['registered_team']['team_name']}',
+                  '${doc['registered_team']['team_name']}',
                   style: Style.h3,
                 ),
               ),
             ),
-            // TODO Table view
+            const SizedBox(
+              height: 20,
+            ),
             FadeAnimation(
               delay: 0.8,
               child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Column(
+                  child: Row(
                     children: [
-                      Text(
-                        'Group ${doc['team_group']}',
-                        style: Style.kSubtitleStyle,
+                      groupCol,
+                      const VerticalDivider(
+                        color: Colors.orange,
                       ),
-                      Text(
-                        'Played - W - D - L \n  ${doc['match_played']} - ${doc['won']} - ${doc['draw']} - ${doc['lost']} ||| - Points ${doc['points']}',
-                        style: Style.kSubtitleStyle,
+                      playedCol,
+                      const VerticalDivider(
+                        color: Colors.black,
                       ),
-                      Text(
-                        'Goals +/- \n \t\t${doc['goal_for']}/${doc['goal_against']}',
-                        style: Style.kSubtitleStyle,
+                      wonCol,
+                      const VerticalDivider(
+                        color: Colors.black,
                       ),
+                      drawCol,
+                      const VerticalDivider(
+                        color: Colors.black,
+                      ),
+                      lostCol,
+                      const VerticalDivider(
+                        color: Colors.black,
+                      ),
+                      goalsCol,
+                      const VerticalDivider(
+                        color: Colors.black,
+                      ),
+                      pointsCol,
                     ],
                   )),
             ),
           ]),
           onPress: () {
-            Navigator.pushNamed(context, TeamInfoScreen.id,
-                arguments: doc['team_uuid']);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        TeamInfoScreen(teamUuid: doc['team_uuid'])));
           },
           height: 430,
         ),

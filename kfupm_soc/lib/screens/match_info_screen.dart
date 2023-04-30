@@ -404,29 +404,32 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
                 style: Style.h3,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    '${teams[0]['registered_team']['team_name']}',
-                    style: Style.kSubtitleStyle,
-                    textAlign: TextAlign.justify,
-                  ),
-                  const Text(
-                    'VS',
-                    style: Style.kSubtitleStyle,
-                    textAlign: TextAlign.justify,
-                  ),
-                  Text(
-                    '${teams[1]['registered_team']['team_name']}',
-                    style: Style.kSubtitleStyle,
-                    textAlign: TextAlign.justify,
-                  ),
-                ],
-              ),
-            ),
+            teams.isNotEmpty
+                ? Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          '${teams[0]['registered_team']['team_name']}',
+                          style: Style.kSubtitleStyle,
+                          textAlign: TextAlign.justify,
+                        ),
+                        const Text(
+                          'VS',
+                          style: Style.kSubtitleStyle,
+                          textAlign: TextAlign.justify,
+                        ),
+                        Text(
+                          '${teams[1]['registered_team']['team_name']}',
+                          style: Style.kSubtitleStyle,
+                          textAlign: TextAlign.justify,
+                        ),
+                      ],
+                    ),
+                  )
+                : const SizedBox(),
             Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
@@ -531,35 +534,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
                             child: Column(children: captainTeam2),
                           ),
                         ],
-                      )
-                // : Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       Text(
-                //         captains[0]['team_uuid'] == teams[0]['team_uuid']
-                //             ? '${captains[0]['member']['name']}'
-                //             : captains[1]['team_uuid'] ==
-                //                     teams[0]['team_uuid']
-                //                 ? '${captains[1]['member']['name']}'
-                //                 : 'No Captain',
-                //         style: Style.kSubtitleStyle,
-                //       ),
-                //       const Text(
-                //         'Captains',
-                //         style: Style.kSubtitleStyle,
-                //       ),
-                //       Text(
-                //         captains[0]['team_uuid'] == teams[1]['team_uuid']
-                //             ? '${captains[0]['member']['name']}'
-                //             : captains[0]['team_uuid'] ==
-                //                     teams[1]['team_uuid']
-                //                 ? '${captains[0]['member']['name']}'
-                //                 : 'No Captain',
-                //         style: Style.kSubtitleStyle,
-                //       ),
-                //     ],
-                //   ),
-                ),
+                      )),
           ],
         ),
         onPress: () {},
