@@ -143,15 +143,49 @@ module.exports.showGroups = async (req, res, next) => {
     // fetch all teams from supabase and pass it to the view
     const { data: teams, errorCounter, status } = await supabase
         .from("team")
-        .select('*, registered_team(*)')
+        .select('*, registered_team(*)').eq('tr_id', id)
     res.render('tournaments/groups', { id, teams })
 }
 module.exports.createGroups = async (req, res, next) => {
     const { id } = req.params;
-    // const { data: teams, errorCounter, status } = await supabase
-    //     .from("team")
-    //     .select()
-    // res.render('tournaments/groups', {id,teams})
+    console.log(req.body);
+    const data = req.body;
+
+    const {data: aGroup} = await supabase.from('registered_team').select().in('team_name', data.arrayA).eq('tr_id', id);
+    const {data: bGroup} = await supabase.from('registered_team').select().in('team_name', data.arrayB).eq('tr_id', id);
+    const {data: cGroup} = await supabase.from('registered_team').select().in('team_name', data.arrayC).eq('tr_id', id);
+    const {data: dGroup} = await supabase.from('registered_team').select().in('team_name', data.arrayD).eq('tr_id', id);
+    // update the group from team table
+    const { data: teams, errorCounter, status } = await supabase
+        .from("team")
+        .update([
+            { team_group: 'A' },
+        ]).in('team_uuid', aGroup.map(team => team.team_uuid));
+    const { data: teams1, errorCounter1, status1 } = await supabase
+        .from("team")
+        .update([
+            { team_group: 'B' },
+        ]).in('team_uuid', bGroup.map(team => team.team_uuid));
+    const { data: teams2, errorCounter2, status2 } = await supabase
+        .from("team")
+        .update([
+            { team_group: 'C' },
+        ]).in('team_uuid', cGroup.map(team => team.team_uuid));
+    const { data: teams3, errorCounter3, status3 } = await supabase
+        .from("team")
+        .update([
+            { team_group: 'D' },
+        ]).in('team_uuid', dGroup.map(team => team.team_uuid));
+
+        supabase
+        .channel('any')
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'team' }, payload => {
+          console.log('Change received!', payload)
+        })
+        .subscribe()
+
+
+        req.flash("success", "Successfully Created Tournament Groups and Shuffled Match")
     res.redirect('/tournaments/id')
 }
 module.exports.showTeams = async (req, res, next) => {

@@ -127,19 +127,29 @@ submitButton.onclick = function(){
         arrayC,
         arrayD
       });
-   
-xhr.onreadystatechange = function() {
-  if (xhr.readyState === XMLHttpRequest.DONE) {
-    if (xhr.status === 200) {
-      const responseData = JSON.parse(xhr.responseText);
-      // Handle the response data
-    } else {
-      console.log('Error:', xhr.status);
-    }
-  }
-};
-
-xhr.open("POST", `/tournaments/${id}/groups`);
-xhr.setRequestHeader("Content-Type", "application/json;") 
-xhr.send(JSON.stringify(body));
+      console.log(body);
+      
+      fetch(`/tournaments/${id}/groups`, {
+        method: 'POST',
+        body: body,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      // .then(response => response.json())
+      // .then(data => console.log(data))
+      // .catch(error => console.error(error));
+// xhr.onreadystatechange = function() {
+//   if (xhr.readyState === XMLHttpRequest.DONE) {
+//     if (xhr.status === 200) {
+//       const responseData = JSON.parse(xhr.responseText);
+//       // Handle the response data
+//     } else {
+//       console.log('Error:', xhr.status);
+//     }
+//   }
+// };
+// xhr.open("POST", `/tournaments/${id}/groups`);
+// xhr.setRequestHeader("Content-Type", "application/json;") 
+// xhr.send(JSON.stringify(body));
 }
