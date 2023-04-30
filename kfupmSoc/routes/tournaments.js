@@ -21,6 +21,8 @@ router.route("/:id")
 router.route("/:id/groups")
         .get(tournaments.showGroups)
         .post(tournaments.createGroups);
+        
+router.route('/:id/initiate').post(wrapAsync(tournaments.initiate))
 
 router.get("/:id/teams/", wrapAsync(tournaments.showTeams));
 

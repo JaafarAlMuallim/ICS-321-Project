@@ -1,6 +1,7 @@
 const droppables = document.querySelectorAll('.droppable');
 const draggables = document.querySelectorAll('.draggable');
 const body = document.querySelector('.body');
+const myForm = document.querySelector('#myForm');
 const transitionTime = 500;
 let dragging;
 let cloned;
@@ -93,7 +94,8 @@ const groupA = document.querySelector("#A");
 const groupB = document.querySelector("#B");
 const groupC = document.querySelector("#C");
 const groupD = document.querySelector("#D");
-submitButton.onclick = function(){
+submitButton.onclick = function(e){
+    e.preventDefault();
     const teamsA = groupA.children;
     const teamsB = groupB.children;
     const teamsC = groupC.children;
@@ -120,14 +122,13 @@ submitButton.onclick = function(){
     }
     const url = document.URL.split('/');
     const id = url[url.length - 2];
-    const xhr = new XMLHttpRequest();
+    // const xhr = new XMLHttpRequest();
     const body = JSON.stringify({
         arrayA, 
         arrayB,
         arrayC,
         arrayD
       });
-      console.log(body);
       
       fetch(`/tournaments/${id}/groups`, {
         method: 'POST',
@@ -135,21 +136,10 @@ submitButton.onclick = function(){
         headers: {
           'Content-Type': 'application/json'
         }
-      })
-      // .then(response => response.json())
-      // .then(data => console.log(data))
-      // .catch(error => console.error(error));
-// xhr.onreadystatechange = function() {
-//   if (xhr.readyState === XMLHttpRequest.DONE) {
-//     if (xhr.status === 200) {
-//       const responseData = JSON.parse(xhr.responseText);
-//       // Handle the response data
-//     } else {
-//       console.log('Error:', xhr.status);
-//     }
-//   }
-// };
-// xhr.open("POST", `/tournaments/${id}/groups`);
-// xhr.setRequestHeader("Content-Type", "application/json;") 
-// xhr.send(JSON.stringify(body));
-}
+      }).then(res => {
+        window.location.href = "/tournaments";
+      }).catch(error => {
+        window.location.href = "/tournaments";
+      }
+        )
+  }

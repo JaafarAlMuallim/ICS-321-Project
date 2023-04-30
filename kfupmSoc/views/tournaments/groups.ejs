@@ -1,10 +1,11 @@
 <% layout("layouts/boilerplate") %>
     
 <div class="header">
-
+<form id='myForm' action="/tournaments/<%= id %>/groups" method="POST">
     <div class="my-3">
-            <button id="submitbtn" class="btn btn-success">Submit Groups</button>
+        <button id="submitbtn" class="btn btn-success">Submit Groups</button>
     </div>
+</form>
     <h3 style="display: inline;">All Teams</h3>
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
     <h3 style="display: inline;">Group A</h3>
@@ -79,4 +80,3 @@
 
 </div>
 <script src="/js/groups.js"></script>
-<!-- <script type="javascript" src="/js/createGroups.js"></script> -->

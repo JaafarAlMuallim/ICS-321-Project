@@ -28,7 +28,6 @@ module.exports.index = async (req, res) => {
     }
 
     const {data: manager} = await supabase.from('registered_team').select('*, member:created_by(*)').eq('team_uuid', id);
-    console.log(manager);
     // get team captains
     const {data: captainsData} = await supabase
         .from('team_captain')

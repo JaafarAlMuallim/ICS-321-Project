@@ -20,17 +20,24 @@
                         <div class="card-body">
                             <h5 class="card-title">
                                Match Number is <%= match.match_played.match_id %> <br>
-                               On <%= match.match_played.play_date%> <br> 
-                               Ended with score <%= match.match_played.goal_score %>
+                               On <%= match.play_date%> <br> 
+                               <% if(match.status == 'in-progress'){ %>
+                                Match In Progress
+                                <% } else {%>
+                                    Ended with score <%= match.match_played.goal_score %>
+                                    <% } %>
                             </h5>
                             <p class="card-text">
                                 Referee is <%= match.match_played.referee.referee_name %>
                                 Assistant is <%= match.asst_referee.asst_ref_name %>
                             </p>
                             <p class="card-text">
-                                Player of the match is <%= match.match_played.member.name %> <br>
+                                <% if(match.status == 'in-progress'){ %>
+                                    Player of the match will be decided after the match
+                                    <% } else {%>
+                                        Player of the match is <%= match.match_played.member.name %> <br>
+                                        <% } %>
                             </p>
-                            
                             <p class="card-text">
                                 <%= matches[increment][0].registered_team.team_name %> VS <%= matches[increment][1].registered_team.team_name %> <br>
                             </p>
