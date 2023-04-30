@@ -22,6 +22,7 @@ class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
   List<dynamic> playersData = [];
   List<dynamic> usersData = [];
   List<dynamic> teamsData = [];
+  List<dynamic> coachesData = [];
   List<dynamic> data = [];
   String playerUuid = '';
   fire.User? user = _auth.currentUser;
@@ -50,8 +51,13 @@ class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
         .from('team')
         .select('*, registered_team(*), tournament(*)')
         .in_('team_uuid', teamUuids);
+    List<dynamic> resCoaches = await supabase
+        .from('team_coach')
+        .select('*, registered_team(*)')
+        .eq('member_uuid', playerUuid);
     if (mounted) {
       setState(() {
+        coachesData = resCoaches;
         teamsData = resTeams;
         usersData = playersData;
         _loading = false;
@@ -123,17 +129,71 @@ class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
                 child: Image.asset('assets/images/welcomebkg.jpg'),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-              child: Text(
-                '${request['registered_team']['team_name']}',
-                style: Style.h3,
-              ),
-            ),
+            teamsData.isNotEmpty
+                ? Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    child: Text(
+                      '${request['registered_team']['team_name']}',
+                      style: Style.h3,
+                    ),
+                  )
+                : const SizedBox(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
               child: Text(
                 'Team member requested to join ${request['tournament']['tr_name']}',
+                style: Style.kSubtitleStyle,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+              child: CustomBubble(
+                containerContent: Center(
+                  child: Text(
+                    'Status: ${request['approved'] == 'true' ? 'Approved' : request['approved'] == 'false' ? 'Rejected' : 'Pending'}',
+                    style: Style.kSubtitleStyle,
+                  ),
+                ),
+                onPress: () {},
+                color: request['approved'] == 'true'
+                    ? Colors.green.shade700
+                    : request['approved'] == 'false'
+                        ? Colors.red
+                        : Colors.orange.shade700,
+              ),
+            ),
+          ],
+        ),
+        onPress: () {},
+        height: 460,
+      ));
+    }
+    for (dynamic request in coachesData) {
+      cards.add(CustomCard(
+        containerContent: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: SizedBox.fromSize(
+                child: Image.asset('assets/images/welcomebkg.jpg'),
+              ),
+            ),
+            coachesData.isNotEmpty
+                ? Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    child: Text(
+                      '${request['registered_team']['team_name']}',
+                      style: Style.h3,
+                    ),
+                  )
+                : const SizedBox(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+              child: Text(
+                'Request to Coach ${request['registered_team']['team_name']}',
                 style: Style.kSubtitleStyle,
               ),
             ),

@@ -10,15 +10,15 @@ import '../Core/fade_animation.dart';
 final supabase = Supabase.instance.client;
 final _auth = fire.FirebaseAuth.instance;
 
-class JoinTeamScreen extends StatefulWidget {
-  const JoinTeamScreen({super.key});
-  static const String id = 'joinTeam_screen';
+class PlayerJoinTeamScreen extends StatefulWidget {
+  const PlayerJoinTeamScreen({super.key});
+  static const String id = 'player_joinTeam_screen';
 
   @override
-  State<JoinTeamScreen> createState() => _JoinTeamScreenState();
+  State<PlayerJoinTeamScreen> createState() => _PlayerJoinTeamScreenState();
 }
 
-class _JoinTeamScreenState extends State<JoinTeamScreen> {
+class _PlayerJoinTeamScreenState extends State<PlayerJoinTeamScreen> {
   Color enabled = const Color.fromARGB(255, 56, 76, 89);
   Color enabledtxt = Colors.white;
   Color deaible = Colors.grey;
@@ -37,12 +37,12 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
   getUser() async {
     fire.User? user = _auth.currentUser;
     if (user != null) {
-      data = await supabase
+      List<dynamic> userInfo = await supabase
           .from('member')
           .select('*')
           .eq('phone_num', user.phoneNumber);
       setState(() {
-        playerUuid = data[0]['member_uuid'];
+        playerUuid = userInfo[0]['member_uuid'];
       });
     }
   }
@@ -69,7 +69,7 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
         .select()
         .eq('team_name', teamName);
 
-    await supabase.from("player").insert({
+    await supabase.from("player").upsert({
       'member_uuid': playerUuid,
       'team_uuid': teams[0]['team_uuid'],
       'position': position,
@@ -78,7 +78,6 @@ class _JoinTeamScreenState extends State<JoinTeamScreen> {
     });
   }
 
-// TODO Join As Coach Player??
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:kfupm_soc/Core/fade_animation.dart';
 import 'package:kfupm_soc/constants/app_theme.dart';
 import 'package:kfupm_soc/constants/styles.dart';
-import 'package:kfupm_soc/screens/join_team_screen.dart';
+import 'package:kfupm_soc/screens/coach_join_team_screen.dart';
+import 'package:kfupm_soc/screens/player_join_team_screen.dart';
 import 'package:kfupm_soc/screens/join_tournament_screen.dart';
 import 'package:kfupm_soc/screens/login_screen.dart';
 import 'package:kfupm_soc/screens/request_history_screen.dart';
@@ -101,7 +102,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                     color: Colors.blue.shade800,
                     onPressed: () {
                       if (_auth.currentUser != null) {
-                        Navigator.pushNamed(context, JoinTeamScreen.id);
+                        Navigator.pushNamed(context, PlayerJoinTeamScreen.id);
                       } else {
                         Navigator.popAndPushNamed(context, LoginScreen.id);
                         ShowSnackBar.showSnackbar(
@@ -110,7 +111,26 @@ class _RequestsScreenState extends State<RequestsScreen> {
                         }, Colors.orange[700]);
                       }
                     },
-                    title: '+ Join team',
+                    title: '+ Join Team As Player',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Roundedbutton(
+                    color: Colors.blue.shade800,
+                    onPressed: () {
+                      if (_auth.currentUser != null) {
+                        Navigator.pushNamed(context, CoachJoinTeamScreen.id);
+                      } else {
+                        Navigator.popAndPushNamed(context, LoginScreen.id);
+                        ShowSnackBar.showSnackbar(
+                            context, "Login to join team as coach", "Login",
+                            () {
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        }, Colors.orange[700]);
+                      }
+                    },
+                    title: '+ Join Team As Coach',
                   ),
                 ),
                 Padding(

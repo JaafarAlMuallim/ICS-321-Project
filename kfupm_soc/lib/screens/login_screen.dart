@@ -186,11 +186,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           onTap: () {
-                            Navigator.pop(context);
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              return const RegisterScreen();
-                            }));
+                            Navigator.popAndPushNamed(
+                                context, RegisterScreen.id);
                           },
                         ),
                       ],

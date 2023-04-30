@@ -1,12 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:kfupm_soc/screens/Login_screen.dart';
 import 'package:kfupm_soc/screens/create_team_screen.dart';
-import 'package:kfupm_soc/screens/join_team_screen.dart';
-import 'package:kfupm_soc/screens/join_tournament_screen.dart';
 import 'package:kfupm_soc/screens/matches_screen.dart';
 import 'package:kfupm_soc/screens/my_teams_screen.dart';
+import 'package:kfupm_soc/screens/coach_join_team_screen.dart';
+import 'package:kfupm_soc/screens/player_join_team_screen.dart';
 import 'package:kfupm_soc/screens/otp_screen.dart';
 import 'package:kfupm_soc/screens/profile_screen.dart';
 import 'package:kfupm_soc/screens/register_screen.dart';
@@ -33,15 +32,14 @@ class MyApp extends StatelessWidget {
         // TournamentInfoScreen.id: (context) =>
         //     const TournamentInfoScreen(tournamentId: 'x'),
         TeamScreen.id: (context) => const TeamScreen(),
-        MatchesScreen.id: (context) => const MatchesScreen(),
         ProfileScreen.id: (context) => const ProfileScreen(),
         RequestsScreen.id: (context) => const RequestsScreen(),
         StatsticsScreen.id: (context) => const StatsticsScreen(),
-        JoinTeamScreen.id: (context) => const JoinTeamScreen(),
-        JoinTournamentScreen.id: (context) => const JoinTournamentScreen(),
         RequestHistoryScreen.id: (context) => const RequestHistoryScreen(),
         CreateTeamScreen.id: (context) => const CreateTeamScreen(),
         MyTeamsScreen.id: (context) => const MyTeamsScreen()
+        PlayerJoinTeamScreen.id: (context) => const PlayerJoinTeamScreen(),
+        CoachJoinTeamScreen.id: (context) => const CoachJoinTeamScreen(),
       },
       initialRoute: FirebaseAuth.instance.currentUser == null
           ? WelcomeScreen.id

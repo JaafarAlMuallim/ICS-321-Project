@@ -29,7 +29,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
+  font-size: 1.5rem;
   color: black;
   background-color: rgba(240, 240, 240, 0.7);
   transition: var(--transitionTime);
