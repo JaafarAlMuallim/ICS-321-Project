@@ -761,29 +761,30 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
               color: Colors.black,
             ),
             Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-                child: captains.isEmpty
-                    ? const Center(child: Text('No Captains in both teams'))
-                    : Row(
-                        children: [
-                          Expanded(
-                            child: Column(children: captainTeam1),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+              child: captains.isEmpty
+                  ? const Center(child: Text('No Captains in both teams'))
+                  : Row(
+                      children: [
+                        Expanded(
+                          child: Column(children: captainTeam1),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                'Captains',
+                                style: Style.h3.copyWith(fontSize: 22),
+                              )
+                            ],
                           ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Captains',
-                                  style: Style.h3.copyWith(fontSize: 22),
-                                )
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(children: captainTeam2),
-                          ),
-                        ],
+                        ),
+                        Expanded(
+                          child: Column(children: captainTeam2),
+                        ),
+                      ],
+                    ),
+            ),
           ],
         ),
         onPress: () {},
