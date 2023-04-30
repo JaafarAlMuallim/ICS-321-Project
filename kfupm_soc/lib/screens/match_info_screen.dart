@@ -59,7 +59,8 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
     subs = await supabase
         .from('player_in_out')
         .select('*, member(*, player(*, registered_team(*, team(*))))')
-        .eq('match_no', widget.matchUuid);
+        .eq('match_no', widget.matchUuid)
+        .order('time_in_out', ascending: true);
 
     goals = await supabase
         .from('goal_details')
@@ -73,19 +74,12 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
         .eq('match_no', widget.matchUuid)
         .order('booking_time', ascending: true);
 
-    for (dynamic goal in goals) {
-      if (goal['member']['player'][0]['registered_team']['team_uuid'] ==
-              teams[0]['team_uuid'] &&
-          goal['member']['player'][0]['registered_team']['team'][0]['tr_id'] ==
-              teams[0]['tr_id']) {
-        goalsArr.add(goal);
-      } else if (goal['member']['player'][0]['registered_team']['team_uuid'] ==
-              teams[1]['team_uuid'] &&
-          goal['member']['player'][0]['registered_team']['team'][0]['tr_id'] ==
-              teams[1]['tr_id']) {
-        goalsArr.add(goal);
-      }
-    }
+    penaltyShootout = await supabase
+        .from("penalty_shootout")
+        .select(
+            '*, penalty_gk(*, member(*)), member(*, player(*, registered_team(*, team(*))))')
+        .eq('match_no', widget.matchUuid)
+        .order('penalty_time', ascending: true);
 
     for (dynamic goal in goals) {
       if (goal['member']['player'][0]['registered_team']['team_uuid'] ==
@@ -100,6 +94,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
         goalsArr.add(goal);
       }
     }
+
     for (dynamic card in cards) {
       if (card['member']['player'][0]['registered_team']['team_uuid'] ==
               teams[0]['team_uuid'] &&
@@ -113,12 +108,15 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
         cardsArr.add(card);
       }
     }
+
     for (dynamic penalty in penaltyShootout) {
+      print("penalty is: $penalty");
       if (penalty['member']['player'][0]['registered_team']['team_uuid'] ==
               teams[0]['team_uuid'] &&
           penalty['member']['player'][0]['registered_team']['team'][0]
                   ['tr_id'] ==
               teams[0]['tr_id']) {
+        print(1);
         penaltiesArr.add(penalty);
       } else if (penalty['member']['player'][0]['registered_team']
                   ['team_uuid'] ==
@@ -126,6 +124,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
           penalty['member']['player'][0]['registered_team']['team'][0]
                   ['tr_id'] ==
               teams[1]['tr_id']) {
+        print(2);
         penaltiesArr.add(penalty);
       }
     }
@@ -161,8 +160,205 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
     List<Widget> cardsTeam1 = [];
     List<Widget> cardsTeam2 = [];
     List<Widget> cardTimes = [];
+    List<Widget> subsTeam1 = [];
+    List<Widget> subsTeam2 = [];
+    List<Widget> subTimes = [];
+    List<Widget> penTeam1 = [];
+    List<Widget> penTeam2 = [];
+    List<Widget> penTimes = [];
 
-    for (int i = 0; i < goalsArr.length / 2; i++) {
+    for (int i = 0; i < penaltiesArr.length; i++) {
+      dynamic pen = penaltiesArr[i];
+
+      bool penGoal = pen['score_goal'] == 'Y';
+
+      if (pen['member']['player'][0]['registered_team']['team_uuid'] ==
+          teams[0]['team_uuid']) {
+        penTimes.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                WidgetSpan(
+                  child: Icon(
+                    penGoal
+                        ? Icons.sports_soccer_sharp
+                        : Icons.front_hand_outlined,
+                    color: Colors.black,
+                  ),
+                ),
+                TextSpan(
+                    text: " ${pen['penalty_time']}'",
+                    style: Style.h3.copyWith(fontSize: 22))
+              ],
+            ),
+          ),
+        );
+        penTeam1.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: " ${pen['member']['name']}",
+                  style: Style.h3.copyWith(fontSize: 22),
+                ),
+              ],
+            ),
+          ),
+        );
+        penTeam2.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: " ${pen['penalty_gk'][0]['member']['name']}",
+                  style: Style.h3.copyWith(fontSize: 22),
+                ),
+              ],
+            ),
+          ),
+        );
+      } else if (pen['member']['player'][0]['registered_team']['team_uuid'] ==
+          teams[1]['team_uuid']) {
+        penTimes.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                    text: "${pen['penalty_time']}' ",
+                    style: Style.h3.copyWith(fontSize: 22)),
+                WidgetSpan(
+                  child: Icon(
+                    penGoal
+                        ? Icons.sports_soccer_sharp
+                        : Icons.front_hand_outlined,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+        penTeam2.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: " ${pen['member']['name']}",
+                  style: Style.h3.copyWith(fontSize: 22),
+                ),
+              ],
+            ),
+          ),
+        );
+        penTeam1.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: " ${pen['penalty_gk'][0]['member']['name']}",
+                  style: Style.h3.copyWith(fontSize: 22),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+
+    for (int i = 0; i < subsArray.length; i++) {
+      dynamic sub = subsArray[i];
+
+      bool subIn = sub['in_out'] == 'I';
+
+      if (sub['member']['player'][0]['registered_team']['team_uuid'] ==
+          teams[0]['team_uuid']) {
+        subTimes.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                WidgetSpan(
+                  child: Icon(
+                    Icons.arrow_circle_down_sharp,
+                    color: subIn ? Colors.green : Colors.red,
+                  ),
+                ),
+                TextSpan(
+                    text: " ${sub['time_in_out']}'",
+                    style: Style.h3.copyWith(fontSize: 22))
+              ],
+            ),
+          ),
+        );
+        subsTeam1.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: " ${sub['member']['name']}",
+                  style: Style.h3.copyWith(fontSize: 22),
+                ),
+              ],
+            ),
+          ),
+        );
+        subsTeam2.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: " - ",
+                  style: Style.h3.copyWith(fontSize: 22),
+                ),
+              ],
+            ),
+          ),
+        );
+      } else if (sub['member']['player'][0]['registered_team']['team_uuid'] ==
+          teams[1]['team_uuid']) {
+        subTimes.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                    text: "${sub['time_in_out']}' ",
+                    style: Style.h3.copyWith(fontSize: 22)),
+                WidgetSpan(
+                  child: Icon(
+                    Icons.arrow_circle_down_sharp,
+                    color: subIn ? Colors.green : Colors.red,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+        subsTeam2.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: " ${sub['member']['name']}",
+                  style: Style.h3.copyWith(fontSize: 22),
+                ),
+              ],
+            ),
+          ),
+        );
+        subsTeam1.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: " - ",
+                  style: Style.h3.copyWith(fontSize: 22),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+    for (int i = 0; i < goalsArr.length; i++) {
       dynamic goal = goalsArr[i];
       if (goal['member']['player'][0]['registered_team']['team_uuid'] ==
           teams[0]['team_uuid']) {
@@ -326,6 +522,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
       List<Widget> coachTeam2 = [];
       List<Widget> captainTeam1 = [];
       List<Widget> captainTeam2 = [];
+
       for (int i = 0; i < coaches.length; i++) {
         if (coaches[i]['team_uuid'] == teams[0]['team_uuid']) {
           coachTeam1.add(
@@ -360,6 +557,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
           );
         }
       }
+
       if (coachTeam1.isEmpty) {
         coachTeam1.add(Text(
           'No Coach',
@@ -459,6 +657,58 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
             Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                child: subsArray.isEmpty
+                    ? const Center(child: Text('No Substitutes in this match'))
+                    : Row(
+                        children: [
+                          Expanded(
+                              child: Column(
+                            children: subsTeam1,
+                          )),
+                          Expanded(
+                              child: Column(
+                            children: subTimes,
+                          )),
+                          Expanded(
+                              child: Column(
+                            children: subsTeam2,
+                          )),
+                        ],
+                      )),
+            const Divider(
+              height: 12,
+              thickness: 2,
+              color: Colors.black,
+            ),
+            Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                child: penaltiesArr.isEmpty
+                    ? const Center(child: Text('No Penalties in this match'))
+                    : Row(
+                        children: [
+                          Expanded(
+                              child: Column(
+                            children: penTeam1,
+                          )),
+                          Expanded(
+                              child: Column(
+                            children: penTimes,
+                          )),
+                          Expanded(
+                              child: Column(
+                            children: penTeam2,
+                          )),
+                        ],
+                      )),
+            const Divider(
+              height: 12,
+              thickness: 2,
+              color: Colors.black,
+            ),
+            Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                 child: cardsArr.isEmpty
                     ? const Center(
                         child: Text('No Yellow / Red Cards in this match'))
@@ -514,7 +764,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                 child: captains.isEmpty
-                    ? const Center(child: Text('No Coaches in both teams'))
+                    ? const Center(child: Text('No Captains in both teams'))
                     : Row(
                         children: [
                           Expanded(
@@ -534,11 +784,10 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
                             child: Column(children: captainTeam2),
                           ),
                         ],
-                      )),
           ],
         ),
         onPress: () {},
-        height: 710,
+        height: 790,
       ));
       setState(() {
         _loading = false;

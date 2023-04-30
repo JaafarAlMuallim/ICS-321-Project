@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:kfupm_soc/Core/fade_animation.dart';
 import 'package:kfupm_soc/constants/app_theme.dart';
 import 'package:kfupm_soc/constants/styles.dart';
+import 'package:kfupm_soc/screens/my_teams_screen.dart';
 import 'package:kfupm_soc/screens/welcome_screen.dart';
 import 'package:kfupm_soc/widgets/bottom_navbar.dart';
+import 'package:kfupm_soc/widgets/rounded_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:kfupm_soc/screens/create_team_screen.dart';
 
 final supabase = Supabase.instance.client;
 
@@ -124,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                           const Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(1.0),
                             child: CircleAvatar(
                               backgroundImage:
                                   AssetImage('assets/images/default.png'),
@@ -140,7 +143,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: Style.h3,
                           ),
                           const SizedBox(
-                            height: 50,
+                            height: 40,
+                          ),
+                          FadeAnimation(
+                            delay: 1,
+                            child: Container(
+                              padding: const EdgeInsets.all(5.0),
+                              width: 300,
+                              height: 100,
+                              child: Roundedbutton(
+                                color: Colors.blue.shade600,
+                                onPressed: (() {
+                                  Navigator.pushNamed(
+                                      context, CreateTeamScreen.id);
+                                }),
+                                title: 'Create Team',
+                              ),
+                            ),
+                          ),
+                          FadeAnimation(
+                            delay: 1,
+                            child: Container(
+                              padding: const EdgeInsets.all(5.0),
+                              width: 300,
+                              height: 100,
+                              child: Roundedbutton(
+                                color: Colors.blue.shade900,
+                                onPressed: (() {
+                                  Navigator.pushNamed(
+                                      context, MyTeamsScreen.id);
+                                }),
+                                title: 'My Teams',
+                              ),
+                            ),
                           ),
                         ]),
                       ),
