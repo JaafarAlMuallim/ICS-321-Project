@@ -47,7 +47,33 @@
                                 Audience <%= match.match_played.audience%> / <%= venues[increment].aud_capacity %>
                             </p>
                             <p>
-                                <a href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>">View Statstics</a>
+                                <a class="btn btn-primary" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>">View Statstics</a>
+                                <% if( match.status == 'in-progress'){ %>
+                                    <div class="dropdown my-3">
+                                        <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                          Choose MVP
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <% if(playersData.length == 0){ %>
+                                                <a href="#">No Players</a>
+                                            <% } else {%>
+                                                <% for(player of playersData){ %>
+                                                    <form action="/teams/<%= player.team.team_uuid %>/changeManager/<%= player.member_uuid %>" method="post">
+                                                        <li><button class="dropdown-item" type="submit"><%= player.member.name %></a></li>
+                                                    </form>    
+                                                <% } %>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                <button class="btn btn-info" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>">Update Audience Number</button>
+                                <button class="btn btn-info" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/cards">Add Cards</button>
+                                <button class="btn btn-info" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/penalties">Add Penalties</button>
+                                <button class="btn btn-info" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/goals">Add Goals</button>
+                                <button class="btn btn-info" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/subs">Add new subsituation</button>
+                                <form class="my-3" action="" method="post">
+                                    <button class="btn btn-warning" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>">End Game</button>
+                                </form>
+                                <% } %>
                             </p>
                             
                         </div>

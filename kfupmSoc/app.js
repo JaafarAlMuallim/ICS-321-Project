@@ -143,6 +143,10 @@ app.use("/teams/:id/approve", teams);
 app.use("/teams/:id/decline", teams);
 app.use("/tournaments/:id/initiate", tournaments);
 app.use("/tournaments/:id/matches", matches);
+app.use("/tournaments/:id/matches/:id/goals", matches);
+app.use("/tournaments/:id/matches/:id/cards", matches);
+app.use("/tournaments/:id/matches/:id/subs", matches);
+app.use("/tournaments/:id/matches/:id/penalties", matches);
 app.use("/tournaments/:id/teams", teams);
 
 app.get("/", (req, res) => {

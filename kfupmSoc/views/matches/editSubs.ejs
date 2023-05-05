@@ -1,0 +1,61 @@
+<% layout("layouts/boilerplate") %>
+<div class="container d-flex justify-content-center align-items-center mt-3">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow mb-5">
+                <img crossorigin="anonymous" src="/images/football.jpeg"
+                alt="" class="card-img-top">
+                <h5 class="card-title mt-3 ms-3">New Subsituation</h5>
+                <div class="card-body">
+                    <form action="method=PUT" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
+                        <div class="my-3"> 
+                            <div class="dropdown my-3">
+                                <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  IN Player
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <% if(playersData.length == 0){ %>
+                                        <a href="#">No Players</a>
+                                    <% } else {%>
+                                        <% for(player of playersData){ %>
+                                                <li><button class="dropdown-item" id="player"><%= player.member.name %></a></li>  
+                                        <% } %>
+                                    <% } %>
+                                </ul>
+                            </div>
+                            <div class="dropdown my-3">
+                                <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  OUT Player
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <% if(playersData.length == 0){ %>
+                                        <a href="#">No Players</a>
+                                    <% } else {%>
+                                        <% for(player of playersData){ %>
+                                                <li><button class="dropdown-item" id="player"><%= player.member.name %></a></li>  
+                                        <% } %>
+                                    <% } %>
+                                </ul>
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div>
+                            <div class="my-3"> <label for="sub" class="form-label">Sub Time</label>
+                                <input class="form-control" type="number" name="sub" id="sub"
+                                placeholder="" autofocus required maxlength="3" min="0">
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                            <div class="my-3 d-grid gap-2">
+                                    <button type="button" class="btn btn-success">Update Match Subsituation</button> 
+                                </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

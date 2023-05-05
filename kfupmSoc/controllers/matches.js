@@ -1,9 +1,3 @@
-// const Campground = require("../models/campground");
-// const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding")
-// const mapboxToken = process.env.MAPBOX_TOKEN;
-// const geocoder = mbxGeocoding({ accessToken: mapboxToken });
-// const { cloudinary } = require("../cloudinary");
-
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
@@ -95,49 +89,22 @@ module.exports.new = (req, res) => {
     res.render("tournaments/new")
 }
 
-module.exports.createTournament = async (req, res, next) => {
-    // const geoData = await geocoder.forwardGeocode({
-    //     query: req.body.campground.location,
-    //     limit: 1
-    // }).send();
-    // const camp = new Campground(req.body.campground);
-    // camp.geometry = geoData.body.features[0].geometry;
-    // camp.images = req.files.map(file => ({ url: file.path, filename: file.filename }));
-    // camp.author = req.user._id;
-    // await camp.save();
-    // req.flash("success", "Successfully Added The Camp");
-    // res.redirect(`campgrounds/${camp._id}`);
-}
-// TODO FINISH IT
-module.exports.showTournament = async (req, res, next) => {
 
-    // const match = await 
-    // const camp = await Campground.findById(req.params.id).populate({
-    //     path: "reviews",
-    //     populate: "author",
-    // }).populate("author");
-    // if (!camp) {
-    //     req.flash("error", "Cannot Find That Campground");
-    //     return res.redirect("/campgrounds")
-    // }
-    // res.render("campgrounds/show", { camp })
-}
 
-module.exports.deleteTournament = async (req, res, next) => {
-    // const deleted = await Campground.findByIdAndDelete(req.params.id);
-    // req.flash("success", "Successfully Deleted The Camp");
-    // res.redirect("/campgrounds");
-}
-module.exports.editTournament = async (req, res, next) => {
-    // const camp = await Campground.findById(req.params.id);
+module.exports.editMatchStats = async (req, res, next) => {
+    const { id } = req.params;
 
-    // if (!camp) {
-    //     req.flash("error", "Cannot Find That Campground");
-    //     return res.redirect("/campgrounds")
-    // }
-    // res.render("campgrounds/edit", { camp })
-}
-module.exports.updateTournament = async (req, res, next) => {
+    const { data: matches, error } = await supabase
+        .from('match_played')
+        .select('*').eq('match_uuid',id);
+        ;
+    if (error) {
+        req.flash("error", error.message);
+        res.redirect("/tournaments");
+        return;
+    }
+    const match = match[0]
+    res.render('matches/edit', { match });
     // if (!req.body.campground) throw new AppError("Invalid Data", 400);
     // const { id } = req.params;
     // console.log(req.body);
@@ -154,4 +121,77 @@ module.exports.updateTournament = async (req, res, next) => {
     // }
     // req.flash("success", "Successfully Updated The Camp");
     // res.redirect(`/campgrounds/${id}`);
+}
+
+module.exports.editGoals = async (req, res, next) => {
+    const {id} = req.params;
+
+    const {data: teams, error} = await supabase
+        .from('match_details')
+        .select(`*`).eq('match_uuid', id);
+
+      // put the teams uuids in an array
+      const teamsUuids = [teams[0].team_one, teams[0].team_two];
+      // get the playersData of the teams
+      const {data: playersData, errorPlayers} = await supabase
+          .from('player')
+          .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
+
+
+        console.log(playersData)
+    
+    res.render('matches/editGoals', {teams, playersData});
+}
+module.exports.editCards = async (req, res, next) => {
+    const {id} = req.params;
+
+    const {data: teams, error} = await supabase
+        .from('match_details')
+        .select(`*`).eq('match_uuid', id);
+
+
+      // put the teams uuids in an array
+      const teamsUuids = [teams[0].team_one, teams[0].team_two];
+      // get the playersData of the teams
+      const {data: playersData, errorPlayers} = await supabase
+          .from('player')
+          .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
+
+    res.render('matches/editCards', {teams, playersData});
+}
+
+module.exports.editSubs = async (req, res, next) => {
+    const {id} = req.params;
+
+    const {data: teams, error} = await supabase
+        .from('match_details')
+        .select(`*`).eq('match_uuid', id);
+
+    // put the teams uuids in an array
+    const teamsUuids = [teams[0].team_one, teams[0].team_two];
+    // get the playersData of the teams
+    const {data: playersData, errorPlayers} = await supabase
+    .from('player')
+    .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
+
+
+    res.render('matches/editSubs', {teams, playersData});
+}
+
+module.exports.editPenalties = async (req, res, next) => {
+    const {id} = req.params;
+
+    const {data: teams, error} = await supabase
+        .from('match_details')
+        .select(`*`).eq('match_uuid', id);
+
+    // put the teams uuids in an array
+    const teamsUuids = [teams[0].team_one, teams[0].team_two];
+    // get the playersData of the teams
+    const {data: playersData, errorPlayers} = await supabase
+    .from('player')
+    .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
+
+
+    res.render('matches/editPenalties', {teams, playersData});
 }
