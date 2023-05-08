@@ -9,5 +9,6 @@ module.exports.index = async (req, res)  =>  {
     const {data: mvps} = await supabase.rpc('count_mvps');
     const {data: goals} = await supabase.rpc('count_goals');
     const {data: cards} = await supabase.rpc('get_cards');
+    console.log(cards);
     res.render("stats/index", {mvps, goals, cards});
 }
