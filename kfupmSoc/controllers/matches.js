@@ -136,9 +136,6 @@ module.exports.editGoals = async (req, res, next) => {
       const {data: playersData, errorPlayers} = await supabase
           .from('player')
           .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
-
-
-        console.log(playersData)
     
     res.render('matches/editGoals', {teams, playersData});
 }
@@ -181,6 +178,15 @@ module.exports.editSubs = async (req, res, next) => {
 module.exports.editPenalties = async (req, res, next) => {
     const {id} = req.params;
 
+    // get the tournament id from url
+    const tournamentId = req.originalUrl.split('/')[2];
+    // get the tournament data
+    const {data: tournament, trError} = await supabase.from('tournament').select().eq('tr_id', tournamentId);
+
+    // get the match from the id
+    const {data: match, matchError} = await supabase
+        .from('match_played')
+        .select('*').eq('match_uuid',id);
     const {data: teams, error} = await supabase
         .from('match_details')
         .select(`*`).eq('match_uuid', id);
@@ -192,6 +198,35 @@ module.exports.editPenalties = async (req, res, next) => {
     .from('player')
     .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
 
+    res.render('matches/editPenalties', {teams, playersData, tournament, match});
+}
 
-    res.render('matches/editPenalties', {teams, playersData});
+module.exports.updatePenalties = async (req, res, next) =>{
+    const {id} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+
+    // get the penalties with the id
+    const {data: penalties, error} = await supabase
+        .from('penalty_shootout')
+        .select(`*`).eq('match_no', id);
+
+    const counter = penalties ? penalties.length : 0;
+    const goalkeeperId = req.body.goalkeeper;
+    const scorerId = req.body.scorer;
+    const goalTime = req.body.goal;
+    const scored = req.body.scored == 'on' ? 'Y': 'N';
+
+    const {data: penalty, penaltyError} = await supabase
+        .from('penalty_shootout')
+        .insert({match_no: id, shooter_id: scorerId, score_goal: scored, kick_no_ingame: counter+1, penalty_time: goalTime}).select();
+
+
+    const {data: penaltyGk, penaltyGkError} = await supabase
+        .from('penalty_gk')
+        .insert({match_no: id, member_id: goalkeeperId, kick_uuid: penalty[0].kick_uuid})
+
+        // req flash
+        req.flash("success", "Successfully Updated Match Penalties");
+    res.redirect(`/tournaments/${tournamentId}`);
+
 }

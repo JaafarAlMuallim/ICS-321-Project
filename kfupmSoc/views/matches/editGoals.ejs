@@ -7,7 +7,7 @@
                     alt="" class="card-img-top">
                     <h5 class="card-title mt-3 ms-3">New Goal!!</h5>
                     <div class="card-body">
-                        <form action="method=PUT" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
+                        <form action="/tournaments/<%= tournament[0].tr_id %>/matches/<%= match[0].match_id %>/goals" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
                             <div class="my-3"> <label for="scorer" class="form-label">Scorer</label>
                                 <div name="scorer" class="dropdown my-3" id="scorer">
                                     <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

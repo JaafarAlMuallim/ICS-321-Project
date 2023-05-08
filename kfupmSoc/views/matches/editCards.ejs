@@ -7,7 +7,7 @@
                 alt="" class="card-img-top">
                 <h5 class="card-title mt-3 ms-3">New Card</h5>
                 <div class="card-body">
-                    <form action="method=PUT" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
+                    <form action="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_id %>/cards" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
                         <div class="my-3"> 
                             <div class="dropdown my-3">
                                 <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -18,7 +18,7 @@
                                         <a href="#">No Players</a>
                                     <% } else {%>
                                         <% for(player of playersData){ %>
-                                                <li><button class="dropdown-item" id="player"><%= player.member.name %></a></li>  
+                                                <li><button class="dropdown-item" id="player"><%= player.member.name %></button></li>  
                                         <% } %>
                                     <% } %>
                                 </ul>

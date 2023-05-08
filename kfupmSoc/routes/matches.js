@@ -5,6 +5,7 @@ const matches = require("../controllers/matches");
 
 const wrapAsync = require("../utils/wrapAsync");
 const AppError = require("../utils/error");
+const { isLoggedIn, isAdmin } = require("../middleware");
 
 
 // const { isLoggedIn, isAuthor, validateCamp } = require("../middleware");
@@ -13,15 +14,24 @@ router.route("/:id")
 
 router.route("/:id/goals")
     .get(wrapAsync(matches.editGoals))
-
-router.route("/:id/cards")
+    // .post(isLoggedIn, isAdmin, wrapAsync(matches.updateGoals))
+    .post(wrapAsync(matches.updateGoals))
+    
+    router.route("/:id/cards")
     .get(wrapAsync(matches.editCards))
+    // .post(isLoggedIn, isAdmin, wrapAsync(matches.updateCards))
+    .post(wrapAsync(matches.updateCards))
 
-router.route("/:id/subs")
+    
+    router.route("/:id/subs")
     .get(wrapAsync(matches.editSubs))
-
-router.route("/:id/penalties")
+    // .post(isLoggedIn, isAdmin, wrapAsync(matches.updateSubs))
+    .post(wrapAsync(matches.updateSubs))
+    
+    router.route("/:id/penalties")
     .get(wrapAsync(matches.editPenalties))
+    // .post(isLoggedIn, isAdmin, wrapAsync(matches.updatePenalties))
+    .post(wrapAsync(matches.updatePenalties))
 
     // .post(wrapAsync())
     // .post(isLoggedIn, upload.array("image"), validateCamp, wrapAsync(camp.createCamp));

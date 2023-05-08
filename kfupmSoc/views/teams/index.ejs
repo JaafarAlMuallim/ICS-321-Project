@@ -25,7 +25,7 @@
                             <% } else {%>
                                 <% for(player of playersData){ %>
                                     <form action="/teams/<%= team.team_uuid %>/changeManager/<%= player.member_uuid %>" method="post">
-                                        <li><button class="dropdown-item" type="submit"><%= player.member.name %></a></li>
+                                        <li><button class="dropdown-item" type="submit"><%= player.member.name %></button></li>
                                     </form>    
                                 <% } %>
                             <% } %>

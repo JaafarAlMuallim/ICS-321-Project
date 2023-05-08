@@ -7,51 +7,51 @@
                 alt="" class="card-img-top">
                 <h5 class="card-title mt-3 ms-3">New Penalty</h5>
                 <div class="card-body">
-                    <form action="method=PUT" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
+                    <form action="/tournaments/<%= tournament[0].tr_id %>/matches/<%= match[0].match_uuid %>/penalties" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
                         <div class="my-3"> 
-                            <div class="dropdown my-3">
-                                <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                  Shooter
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <% if(playersData.length == 0){ %>
-                                        <a href="#">No Players</a>
-                                    <% } else {%>
-                                        <% for(player of playersData){ %>
-                                                <li><button class="dropdown-item" id="player"><%= player.member.name %></a></li>  
-                                        <% } %>
+                            <select class="form-select" name="scorer">
+                                <option selected href="#">No Scorer selected</option>
+                                <% if(playersData.length == 0){ %>
+                                <% } else {%>
+                                    <% for(player of playersData){ %>
+                                        <option value="<%= player.member_uuid %>">
+                                            <li><button type="button" class="dropdown-item" id="player"><%= player.member.name %></button></li>  
+                                        </option>
                                     <% } %>
-                                </ul>
+                                <% } %>
+                              </select> 
                             </div>
-                            <div class="dropdown my-3">
-                                <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                 Goalkeeper
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <% if(playersData.length == 0){ %>
-                                        <a href="#">No Players</a>
-                                    <% } else {%>
-                                        <% for(player of playersData){ %>
-                                                <li><button class="dropdown-item" id="player"><%= player.member.name %></a></li>  
-                                        <% } %>
+                        <div>
+                            <select class="form-select" name="goalkeeper">
+                                <option selected href="#">No Goal Keeper selected</option>
+                                <% if(playersData.length == 0){ %>
+                                <% } else {%>
+                                    <% for(player of playersData){ %>
+                                        <option value="<%= player.member_uuid %>">
+                                            <li><button type="button" class="dropdown-item" id="player"><%= player.member.name %></button></li>  
+                                        </option>
                                     <% } %>
-                                </ul>
-                            </div>
+                                <% } %>
+                              </select>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
                         <div>
                             <div class="my-3"> <label for="goal" class="form-label">Penalty Time</label>
-                                <input class="form-control" type="number" name="goal" id="goal"
+                                <input class="form-control px-3" type="number" name="goal" id="goal"
                                 placeholder="" autofocus required maxlength="3">
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
                             </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="switch" name="scored">
+                                <label class="form-check-label" for="switch">Scored</label>
+                              </div>
                             <div class="my-3 d-grid gap-2">
-                                    <button type="button" class="btn btn-success">Update Match Penalties</button> 
-                                </div>
+                                    <button type="submit" class="btn btn-success">Update Match Penalties</button> 
+                            </div>
                         </div>
                     </form>
                 </div>

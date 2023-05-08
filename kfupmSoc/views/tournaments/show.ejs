@@ -65,11 +65,18 @@
                                             <% } %>
                                         </ul>
                                     </div>
-                                <button class="btn btn-info" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>">Update Audience Number</button>
-                                <button class="btn btn-info" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/cards">Add Cards</button>
-                                <button class="btn btn-info" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/penalties">Add Penalties</button>
-                                <button class="btn btn-info" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/goals">Add Goals</button>
-                                <button class="btn btn-info" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/subs">Add new subsituation</button>
+                                    <div class="dropdown my-3">
+                                        <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                          Update
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                                <a class="btn btn-info dropdown-items" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/audience">Update Audience Number</a>
+                                                <a class="btn btn-info dropdown-items my-2" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/cards">Add Cards</a>
+                                                <a class="btn btn-info dropdown-items my-2" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/penalties">Add Penalties</a>
+                                                <a class="btn btn-info dropdown-items my-2" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/goals">Add Goals</a>
+                                                <a class="btn btn-info dropdown-items my-2" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/subs">Add new subsituation</a>
+                                        </ul>
+                                    </div>
                                 <form class="my-3" action="" method="post">
                                     <button class="btn btn-warning" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>">End Game</button>
                                 </form>
