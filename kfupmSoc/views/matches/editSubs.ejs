@@ -5,7 +5,7 @@
             <div class="card shadow mb-5">
                 <img crossorigin="anonymous" src="/images/football.jpeg"
                 alt="" class="card-img-top">
-                <h5 class="card-title mt-3 ms-3">New Penalty</h5>
+                <h5 class="card-title mt-3 ms-3">New Subsitution</h5>
                 <div class="card-body">
                     <form action="/tournaments/<%= tournament[0].tr_id %>/matches/<%= match[0].match_uuid %>/subs" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
                         <div class="my-3"> 
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div>
-                            <div class="my-3"> <label for="sub" class="form-label">Subsituation Time</label>
+                            <div class="my-3"> <label for="sub" class="form-label">Subsitution Time</label>
                                 <input class="form-control px-3" type="number" name="sub" id="sub"
                                 placeholder="" autofocus required maxlength="3">
                                 <div class="valid-feedback">
@@ -46,7 +46,7 @@
                                 </div>
                             </div>
                             <div class="my-3 d-grid gap-2">
-                                    <button type="submit" class="btn btn-success">Update Match Penalties</button> 
+                                    <button type="submit" class="btn btn-success">Update Match Subsitution</button> 
                             </div>
                         </div>
                     </form>
