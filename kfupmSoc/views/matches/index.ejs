@@ -43,12 +43,12 @@
                     <% for(let card of cardsArray){ %>
                         <% if(card.member.player[0].registered_team.team_uuid == teams[0].team_uuid){ %>
                             <i>
-                            <% if(card.sentOff == 'N'){ %>
-                                <i class="fa-regular fa-copy" style="color:yellow;"></i>
+                            <% if(card.sent_off == 'N'){ %>
+                                <i class="fa-regular fa-copy" style="color:#caca23;"></i>
                                 <% } else { %>
                                 <i class="fa-regular fa-copy" style="color:red;"></i>
                             <% } %>
-                            <%=card.member[0].name%><br>
+                            <%=card.member.name%><br>
                         </i>
                         <% } else { %>
                             <i>

@@ -6,12 +6,12 @@ const client = require('@supabase/supabase-js');
 const supabaseUrl = process.env.SUPABASE_URL;
 
 const supabaseKey = process.env.SUPABASE_KEY;
-// var supabase;
-// function connect(){
-//     supabase =  client.createClient(supabaseUrl, supabaseKey);
-// }
+var supabase;
+function connect(){
+    supabase =  client.createClient('https://ovjfjgtuhzwbqzjlbzex.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92amZqZ3R1aHp3YnF6amxiemV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODIxODM2NzEsImV4cCI6MTk5Nzc1OTY3MX0.avFViqQymYP_5DwOzpmrkouqCZ9-mke3vhfeiZhc9Ak');
+}
 
-// connect();
+connect();
 
 const { initializeApp } = require("firebase/app");
 const { getFirestore, collection, doc, getDoc, setDoc, getDocs } = require( "firebase/firestore");
@@ -51,12 +51,22 @@ async function getAllFire(){
                 
             })}
 async function getAllSupa(){
-    const { data:counter, errorCounter, status } = await supabase
-	.from("admin")
-	.select("*") 
+    // const { data:counter, errorCounter, status } = await supabase
+	// .from("admin")
+	// .select("*") 
+    
 
-	console.log(counter.length);
-            };
+    // get all data from penalty shootout
+    // const {data: penalties, error} = await supabase
+    // .from('penalty_shootout')
+    // .select(`*`);
+
+    // const {data: penalty, penaltyError} = await supabase.from('penalty_shootout').insert({}).select();
+    // console.log(penalties);
+    // console.log(penalty);
+    // console.log(penaltyError);
+
+};
 
 getAllSupa();
 

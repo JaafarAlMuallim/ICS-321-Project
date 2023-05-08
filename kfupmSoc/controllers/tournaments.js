@@ -43,7 +43,7 @@ module.exports.showTournament = async (req, res, next) => {
 
     const tournament = tournaments[0];
     const { data: teamsData } =
-        await supabase.from('team').select('*, registered_team (*)');
+        await supabase.from('team').select('*, registered_team (*)').eq('tr_id', id);
     const teamUuids = [];
     for (let team of teamsData) {
         teamUuids.push(team.team_uuid);
@@ -80,12 +80,15 @@ module.exports.showTournament = async (req, res, next) => {
               }
             }
           }
-
+    const { data: playersData, err } = await supabase
+        .from('player')
+        .select('*, member:member_uuid(*), team:team_uuid(*)')
+        .in('team_uuid', teamUuids);
     if (!teamsData) {
         req.flash("error", "Cannot Find Tournament!");
         return res.redirect("/tournaments");
     }
-    res.render("tournaments/show", { teamsData, matchesData, venues, tournament, matches});
+    res.render("tournaments/show", { playersData, teamsData, matchesData, venues, tournament, matches});
 }
 
 module.exports.deleteTournament = async (req, res, next) => {
@@ -107,8 +110,7 @@ module.exports.editTournament = async (req, res, next) => {
 
     const { data: tournaments, error } = await supabase
         .from('tournament')
-        .select('*')
-        ;
+        .select('*').eq('tr_id', id);
     if (error) {
         req.flash("error", error.message);
         res.redirect("/tournaments");

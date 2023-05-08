@@ -1,9 +1,3 @@
-// const Campground = require("../models/campground");
-// const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding")
-// const mapboxToken = process.env.MAPBOX_TOKEN;
-// const geocoder = mbxGeocoding({ accessToken: mapboxToken });
-// const { cloudinary } = require("../cloudinary");
-
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
@@ -45,7 +39,7 @@ module.exports.index = async (req, res) => {
     const {data: cards, errorCard} = await supabase
         .from('player_booked').
         select(`*, member(*, player(*, registered_team(*, team(*))))`)
-        .eq('booking_time', id);
+        .eq('match_no', id);
         
         const goalsArray = [];
         goals.forEach(goal => {
@@ -95,63 +89,271 @@ module.exports.new = (req, res) => {
     res.render("tournaments/new")
 }
 
-module.exports.createTournament = async (req, res, next) => {
-    // const geoData = await geocoder.forwardGeocode({
-    //     query: req.body.campground.location,
-    //     limit: 1
-    // }).send();
-    // const camp = new Campground(req.body.campground);
-    // camp.geometry = geoData.body.features[0].geometry;
-    // camp.images = req.files.map(file => ({ url: file.path, filename: file.filename }));
-    // camp.author = req.user._id;
-    // await camp.save();
-    // req.flash("success", "Successfully Added The Camp");
-    // res.redirect(`campgrounds/${camp._id}`);
-}
-// TODO FINISH IT
-module.exports.showTournament = async (req, res, next) => {
+module.exports.editGoals = async (req, res, next) => {
+    const {id} = req.params;
 
-    // const match = await 
-    // const camp = await Campground.findById(req.params.id).populate({
-    //     path: "reviews",
-    //     populate: "author",
-    // }).populate("author");
-    // if (!camp) {
-    //     req.flash("error", "Cannot Find That Campground");
-    //     return res.redirect("/campgrounds")
-    // }
-    // res.render("campgrounds/show", { camp })
+    // get the tournament id from url
+    const tournamentId = req.originalUrl.split('/')[2];
+    // get the tournament data
+    const {data: tournament, trError} = await supabase.from('tournament').select().eq('tr_id', tournamentId);
+
+    // get the match from the id
+    const {data: match, matchError} = await supabase
+        .from('match_played')
+        .select('*').eq('match_uuid',id);
+    const {data: teams, error} = await supabase
+        .from('match_details')
+        .select(`*`).eq('match_uuid', id);
+
+    // put the teams uuids in an array
+    const teamsUuids = [teams[0].team_one, teams[0].team_two];
+    // get the playersData of the teams
+    const {data: playersData, errorPlayers} = await supabase
+    .from('player')
+    .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
+
+    res.render('matches/editGoals', {teams, playersData, tournament, match});
+}
+module.exports.editCards = async (req, res, next) => {
+    const {id} = req.params;
+
+    // get the tournament id from url
+    const tournamentId = req.originalUrl.split('/')[2];
+    // get the tournament data
+    const {data: tournament, trError} = await supabase.from('tournament').select().eq('tr_id', tournamentId);
+
+    // get the match from the id
+    const {data: match, matchError} = await supabase
+        .from('match_played')
+        .select('*').eq('match_uuid',id);
+    const {data: teams, error} = await supabase
+        .from('match_details')
+        .select(`*`).eq('match_uuid', id);
+
+    // put the teams uuids in an array
+    const teamsUuids = [teams[0].team_one, teams[0].team_two];
+    // get the playersData of the teams
+    const {data: playersData, errorPlayers} = await supabase
+    .from('player')
+    .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
+
+    res.render('matches/editCards', {teams, playersData, tournament, match});
 }
 
-module.exports.deleteTournament = async (req, res, next) => {
-    // const deleted = await Campground.findByIdAndDelete(req.params.id);
-    // req.flash("success", "Successfully Deleted The Camp");
-    // res.redirect("/campgrounds");
-}
-module.exports.editTournament = async (req, res, next) => {
-    // const camp = await Campground.findById(req.params.id);
+module.exports.editSubs = async (req, res, next) => {
+    const {id} = req.params;
 
-    // if (!camp) {
-    //     req.flash("error", "Cannot Find That Campground");
-    //     return res.redirect("/campgrounds")
-    // }
-    // res.render("campgrounds/edit", { camp })
-}
-module.exports.updateTournament = async (req, res, next) => {
-    // if (!req.body.campground) throw new AppError("Invalid Data", 400);
-    // const { id } = req.params;
-    // console.log(req.body);
-    // const camp = await Campground.findByIdAndUpdate(id, req.body.campground, { runValidators: true });
-    // const imgs = req.files.map(file => ({ url: file.path, filename: file.filename }));
-    // camp.images.push(...imgs);
-    // await camp.save();
+    // get the tournament id from url
+    const tournamentId = req.originalUrl.split('/')[2];
+    // get the tournament data
+    const {data: tournament, trError} = await supabase.from('tournament').select().eq('tr_id', tournamentId);
 
-    // if (req.body.deleteImages.length) {
-    //     for (let filename of req.body.deleteImages) {
-    //         await cloudinary.uploader.destroy(filename);
-    //     }
-    //     await camp.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } });
-    // }
-    // req.flash("success", "Successfully Updated The Camp");
-    // res.redirect(`/campgrounds/${id}`);
+    // get the match from the id
+    const {data: match, matchError} = await supabase
+        .from('match_played')
+        .select('*').eq('match_uuid',id);
+    const {data: teams, error} = await supabase
+        .from('match_details')
+        .select(`*`).eq('match_uuid', id);
+
+    // put the teams uuids in an array
+    const teamsUuids = [teams[0].team_one, teams[0].team_two];
+    // get the playersData of the teams
+    const {data: playersData, errorPlayers} = await supabase
+    .from('player')
+    .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
+
+    res.render('matches/editSubs', {teams, playersData, tournament, match});
 }
+
+module.exports.editPenalties = async (req, res, next) => {
+    const {id} = req.params;
+
+    // get the tournament id from url
+    const tournamentId = req.originalUrl.split('/')[2];
+    // get the tournament data
+    const {data: tournament, trError} = await supabase.from('tournament').select().eq('tr_id', tournamentId);
+
+    // get the match from the id
+    const {data: match, matchError} = await supabase
+        .from('match_played')
+        .select('*').eq('match_uuid',id);
+    const {data: teams, error} = await supabase
+        .from('match_details')
+        .select(`*`).eq('match_uuid', id);
+
+    // put the teams uuids in an array
+    const teamsUuids = [teams[0].team_one, teams[0].team_two];
+    // get the playersData of the teams
+    const {data: playersData, errorPlayers} = await supabase
+    .from('player')
+    .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
+
+    res.render('matches/editPenalties', {teams, playersData, tournament, match});
+}
+module.exports.editAudience = async (req, res, next) => {
+    const {id} = req.params;
+
+    // get the tournament id from url
+    const tournamentId = req.originalUrl.split('/')[2];
+    // get the tournament data
+    const {data: tournament, trError} = await supabase.from('tournament').select().eq('tr_id', tournamentId);
+    console.log(tournament);
+    // get the match from the id
+    const {data: match, matchError} = await supabase
+    .from('match_played')
+    .select('*, venue(*)').eq('match_uuid',id);
+
+    
+    res.render('matches/editAudience', {tournament, match});
+}
+
+module.exports.updatePenalties = async (req, res, next) =>{
+    const {id} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+
+    // get the penalties with the id
+    const {data: penalties, error} = await supabase
+        .from('penalty_shootout')
+        .select(`*`).eq('match_no', id);
+
+    const counter = penalties ? penalties.length : 0;
+    const goalkeeperId = req.body.goalkeeper;
+    const scorerId = req.body.scorer;
+    const penaltyTime = req.body.goal;
+    const scored = req.body.scored == 'on' ? 'Y': 'N';
+
+    const {data: penalty, penaltyError} = await supabase
+        .from('penalty_shootout')
+        .insert({match_no: id, shooter_id: scorerId, score_goal: scored, kick_no_ingame: counter+1, penalty_time: penaltyTime}).select();
+
+
+    const {data: penaltyGk, penaltyGkError} = await supabase
+        .from('penalty_gk')
+        .insert({match_no: id, member_id: goalkeeperId, kick_uuid: penalty[0].kick_uuid})
+
+    req.flash("success", "Successfully Updated Match Penalties");
+    res.redirect(`/tournaments/${tournamentId}`);
+}
+
+module.exports.updateSubs = async (req,res,next) => {
+    const {id} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+
+    const outPlayer = req.body.out;
+    const inPlayer = req.body.in;
+    const subTime = req.body.sub;
+    const half = subTime > 45 ? 2:1
+
+    // insert two records in player_in_out
+    const {data: subs, subsError} = await supabase.from('player_in_out').insert([{match_no:id, member_id: outPlayer, in_out: 'O', play_half: half, play_schedule: 'NT', time_in_out: subTime}, {match_no:id, member_id: inPlayer, in_out: 'I', play_half: half, play_schedule: 'NT', time_in_out: subTime}])
+
+    req.flash("success", "Successfully Updated Match Subsitutions");
+    res.redirect(`/tournaments/${tournamentId}`);
+}
+
+module.exports.updateCards = async (req, res, next) => {
+    const {id} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+
+    const bookedPlayer = req.body.booked;
+    const bookedTime = req.body.time;
+   
+    const half = bookedTime > 45 ? 2:1;
+
+    // get previous bookings of the player and in the same match
+    const {data: previousBookings, readError} = await supabase.from('player_booked').select().eq('match_no', id).eq('booked_player', bookedPlayer);
+    const counter = previousBookings.length ?? 0;
+    const redCard = req.body.sent_off == 'on' || counter >=1 ? 'Y':'N';
+
+    // insert in player_booked
+    const {data: booking, error} = await supabase.from('player_booked').insert({match_no: id, booked_player: bookedPlayer, booking_time: bookedTime, play_half: half, play_schedule: 'NT', sent_off: redCard});
+    req.flash("success", "Successfully Updated Match Bookings and Cards");
+    res.redirect(`/tournaments/${tournamentId}`);
+}
+
+module.exports.updateGoals = async (req, res, next) => {
+    const {id} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+
+    const scorer = req.body.scorer;
+    const goalTime = req.body.time;
+    const half = goalTime > 45 ? 2:1;
+
+    const {data: teams, teamsError} = await supabase.from('match_details').select('team_one, team_two').eq('match_uuid', id);
+    const teamUuids = [teams[0].team_one, teams[0].team_two]
+    const {data: player, teamError} = await supabase.from('player').select('*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)').eq('member_uuid', scorer).in('team_uuid', teamUuids);
+    const {data: match, matchError} = await supabase.from('match_played').select('goal_score').eq('match_uuid', id);
+    const currentScore = match[0].goal_score;
+    var teamOneScore = currentScore.split('-')[0]
+    var teamTwoScore = currentScore.split('-')[1]
+    if(player[0].team.team_uuid == teamUuids[0]){
+        teamOneScore++;
+    } else {
+        teamTwoScore++;
+    }
+    const {data: goal, error}  = await supabase.from('goal_details').insert({match_no: id, scorer: scorer, goal_time: goalTime, goal_half: half});
+    const {data: matchUpdate, matchUpdateError} = await supabase.from('match_played').update({goal_score: `${teamOneScore}-${teamTwoScore}`}).eq('match_uuid', id);
+    req.flash("success", "Successfully Updated Match Goals");
+    res.redirect(`/tournaments/${tournamentId}`);
+}
+
+module.exports.updateAudience = async (req, res, next) =>{
+    const {id} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+    console.log(req.body);
+    const audience = req.body.audience;
+    const {data: match, error} = await supabase.from('match_played').update({audience: audience}).eq('match_uuid', id);
+    req.flash("success", "Successfully Updated Match Audience Number");
+    res.redirect(`/tournaments/${tournamentId}`);
+} 
+
+module.exports.updateMvp = async (req, res, next) => {
+    const {id: playerId} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+    const matchId = req.originalUrl.split('/')[4];
+
+    const {data: match, error} = await supabase.from('match_played').update({player_of_match: playerId}).eq('match_uuid', matchId);
+    req.flash("success", "Successfully Updated Match Player of Match");
+    res.redirect(`/tournaments/${tournamentId}`);
+}
+
+module.exports.endMatch = async (req, res, next) => {
+    const {id} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+
+    const {data: penalties, error} = await supabase.from('penalty_shootout').select().eq('match_no', id).eq('score_goal', 'Y');
+
+    const {data: match, matchError} = await supabase.from('match_played').select('goal_score').eq('match_uuid', id);
+    const currentScore = match[0].goal_score;
+    var teamOne = currentScore.split('-')[0]
+    var teamTwo = currentScore.split('-')[1]    
+    // update team table by adding 3 points to the winner team in that tournament
+    const {data: teams, teamsError} = await supabase.from('match_details').select('team_one, team_two').eq('match_uuid', id);
+    const teamUuids = [teams[0].team_one, teams[0].team_two];
+    const {data: teamOneData, teamOneError} = await supabase.from('team').select().eq('team_uuid', teamUuids[0]);
+    const {data: teamTwoData, teamTwoError} = await supabase.from('team').select().eq('team_uuid', teamUuids[1]);
+
+    if(teamOne > teamTwo){
+        // get both teams data
+        const {data: winnerUpdate, winnerError} = await supabase.from('team').update({match_played:teamOneData[0].match_played+1, won:teamOneData[0].won + 1, goal_for:teamOneData[0].goal_for + teamOne, goal_against: teamOneData[0].goal_against + teamTwo, goal_diff: teamOneData[0].goal_for + teamOne - teamTwo, points: teamOneData[0].points + 3});
+        const {data: loserUpdate, loserError} = await supabase.from('team').update({match_played:teamTwoData[0].match_played+1, lost:teamTwoData[0].lost + 1, goal_for:teamTwoData[0].goal_for + teamTwo, goal_against: teamTwoData[0].goal_against + teamOne, goal_diff: teamTwoData[0].goal_for + teamTwo - teamOne});
+    } else if(teamTwo > teamOne) {
+        const {data: winnerUpdate, winnerError} = await supabase.from('team').update({match_played:teamTwoData[0].match_played+1, won:teamTwoData[0].won + 1, goal_for:teamTwoData[0].goal_for + teamTwo, goal_against: teamTwoData[0].goal_against + teamOne, goal_diff: teamTwoData[0].goal_for + teamTwo - teamOne, points: teamTwoData[0].points + 3});
+        const {data: loserUpdate, loserError} = await supabase.from('team').update({match_played:teamOneData[0].match_played+1, lost:teamOneData[0].lost + 1, goal_for:teamOneData[0].goal_for + teamOne, goal_against: teamOneData[0].goal_against + teamTwo, goal_diff: teamOneData[0].goal_for + teamOne - teamTwo});
+
+    } else {
+        const {data: teamOneUpdate, teamOneError} = await supabase.from('team').update({match_played:teamOneData[0].match_played+1, draw:teamOneData[0].draw + 1, goal_for:teamOneData[0].goal_for + teamOne, goal_against: teamOneData[0].goal_against + teamTwo, goal_diff: teamOneData[0].goal_for + teamOne - teamTwo, points: teamOneData[0].points + 1});
+        const {data: teamTwoUpdate, teamTwoError} = await supabase.from('team').update({match_played:teamTwoData[0].match_played+1, draw:teamTwoData[0].draw + 1, goal_for:teamTwoData[0].goal_for + teamTwo, goal_against: teamTwoData[0].goal_against + teamOne, goal_diff: teamTwoData[0].goal_for + teamTwo - teamOne, points: teamTwoData[0].points + 1});
+    }
+
+    const {data: teamOneGroup, teamOneGroupError} = await supabase.from('team').select().eq('group', teamOneData[0].group).order('points', {ascending: false});
+    // update all records of teamOneGroup and give them a {position:} as their index in the array
+    for(let i = 0; i < teamOneGroup.length; i++){
+        const {data: teamOneGroupUpdate, teamOneGroupUpdateError} = await supabase.from('team').update({position: i+1}).eq('team_uuid', teamOneGroup[i].team_uuid);
+    }
+    const {data: ended, error3} = await supabase.from('match_details').update({status: 'finished',goal_score: teamOne+teamTwo, win_lose: teamOne == teamTwo ? 'D':'W', penalty_score: penalties.length?? 0}).eq('match_uuid', id);
+    req.flash("success", "Successfully Ended Match");
+    res.redirect(`/tournaments/${tournamentId}`);
+}
+
