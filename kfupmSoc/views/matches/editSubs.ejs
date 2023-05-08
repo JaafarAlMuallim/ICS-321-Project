@@ -5,53 +5,49 @@
             <div class="card shadow mb-5">
                 <img crossorigin="anonymous" src="/images/football.jpeg"
                 alt="" class="card-img-top">
-                <h5 class="card-title mt-3 ms-3">New Subsituation</h5>
+                <h5 class="card-title mt-3 ms-3">New Penalty</h5>
                 <div class="card-body">
-                    <form action="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_id %>/subs" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
+                    <form action="/tournaments/<%= tournament[0].tr_id %>/matches/<%= match[0].match_uuid %>/subs" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
                         <div class="my-3"> 
-                            <div class="dropdown my-3">
-                                <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                  IN Player
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <% if(playersData.length == 0){ %>
-                                        <a href="#">No Players</a>
-                                    <% } else {%>
-                                        <% for(player of playersData){ %>
-                                                <li><button class="dropdown-item" id="player"><%= player.member.name %></a></li>  
-                                        <% } %>
+                            <select class="form-select" name="out">
+                                <option selected href="#">Select OUT player</option>
+                                <% if(playersData.length == 0){ %>
+                                <% } else {%>
+                                    <% for(player of playersData){ %>
+                                        <option value="<%= player.member_uuid %>">
+                                            <li><button type="button" class="dropdown-item" id="player"><%= player.member.name %></button></li>  
+                                        </option>
                                     <% } %>
-                                </ul>
+                                <% } %>
+                              </select> 
                             </div>
-                            <div class="dropdown my-3">
-                                <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                  OUT Player
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <% if(playersData.length == 0){ %>
-                                        <a href="#">No Players</a>
-                                    <% } else {%>
-                                        <% for(player of playersData){ %>
-                                                <li><button class="dropdown-item" id="player"><%= player.member.name %></button></li>  
-                                        <% } %>
+                        <div>
+                            <select class="form-select" name="in">
+                                <option selected href="#">Select IN Player</option>
+                                <% if(playersData.length == 0){ %>
+                                <% } else {%>
+                                    <% for(player of playersData){ %>
+                                        <option value="<%= player.member_uuid %>">
+                                            <li><button type="button" class="dropdown-item" id="player"><%= player.member.name %></button></li>  
+                                        </option>
                                     <% } %>
-                                </ul>
-                            </div>
+                                <% } %>
+                              </select>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
                         <div>
-                            <div class="my-3"> <label for="sub" class="form-label">Sub Time</label>
-                                <input class="form-control" type="number" name="sub" id="sub"
-                                placeholder="" autofocus required maxlength="3" min="0">
+                            <div class="my-3"> <label for="sub" class="form-label">Subsituation Time</label>
+                                <input class="form-control px-3" type="number" name="sub" id="sub"
+                                placeholder="" autofocus required maxlength="3">
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
                             </div>
                             <div class="my-3 d-grid gap-2">
-                                    <button type="button" class="btn btn-success">Update Match Subsituation</button> 
-                                </div>
+                                    <button type="submit" class="btn btn-success">Update Match Penalties</button> 
+                            </div>
                         </div>
                     </form>
                 </div>

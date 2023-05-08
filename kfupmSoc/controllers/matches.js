@@ -160,6 +160,15 @@ module.exports.editCards = async (req, res, next) => {
 module.exports.editSubs = async (req, res, next) => {
     const {id} = req.params;
 
+    // get the tournament id from url
+    const tournamentId = req.originalUrl.split('/')[2];
+    // get the tournament data
+    const {data: tournament, trError} = await supabase.from('tournament').select().eq('tr_id', tournamentId);
+
+    // get the match from the id
+    const {data: match, matchError} = await supabase
+        .from('match_played')
+        .select('*').eq('match_uuid',id);
     const {data: teams, error} = await supabase
         .from('match_details')
         .select(`*`).eq('match_uuid', id);
@@ -171,8 +180,7 @@ module.exports.editSubs = async (req, res, next) => {
     .from('player')
     .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
 
-
-    res.render('matches/editSubs', {teams, playersData});
+    res.render('matches/editSubs', {teams, playersData, tournament, match});
 }
 
 module.exports.editPenalties = async (req, res, next) => {
@@ -225,8 +233,38 @@ module.exports.updatePenalties = async (req, res, next) =>{
         .from('penalty_gk')
         .insert({match_no: id, member_id: goalkeeperId, kick_uuid: penalty[0].kick_uuid})
 
-        // req flash
-        req.flash("success", "Successfully Updated Match Penalties");
+    req.flash("success", "Successfully Updated Match Penalties");
     res.redirect(`/tournaments/${tournamentId}`);
+}
 
+module.exports.updateSubs = async (req,res,next) => {
+    const {id} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+
+    const outPlayer = req.body.out;
+    const inPlayer = req.body.in;
+    const subTime = req.body.sub;
+    const half = subTime > 45 ? 2:1
+
+    // insert two records in player_in_out
+    const {data: subs, subsError} = await supabase.from('player_in_out').insert([{match_no:id, member_id: outPlayer, in_out: 'O', play_half: half, play_schedule: 'NT', time_in_out: subTime}, {match_no:id, member_id: inPlayer, in_out: 'I', play_half: half, play_schedule: 'NT', time_in_out: subTime}])
+
+    req.flash("success", "Successfully Updated Match Subsituations");
+    res.redirect(`/tournaments/${tournamentId}`);
+}
+
+module.exports.updateCards = async (req, res, next) => {
+    const {id} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+
+    const bookedPlayer = req.body.booked;
+    const bookedTime = req.body.time;
+    const redCard = req.body.sent_off == 'on' ? 'Y':'N';
+    const half = bookedTime > 45 ? 2:1;
+
+    // insert in player_booked
+    const {data: booking, error} = await supabase.from('player_booked').insert({match_no: id, booked_player: bookedPlayer, booking_time: bookedTime, play_half: half, play_schedule: 'NT', sent_off: redCard});
+    
+    req.flash("success", "Successfully Updated Match Bookings and Cards");
+    res.redirect(`/tournaments/${tournamentId}`);
 }
