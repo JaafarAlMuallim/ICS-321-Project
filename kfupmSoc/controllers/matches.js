@@ -92,18 +92,27 @@ module.exports.new = (req, res) => {
 module.exports.editGoals = async (req, res, next) => {
     const {id} = req.params;
 
+    // get the tournament id from url
+    const tournamentId = req.originalUrl.split('/')[2];
+    // get the tournament data
+    const {data: tournament, trError} = await supabase.from('tournament').select().eq('tr_id', tournamentId);
+
+    // get the match from the id
+    const {data: match, matchError} = await supabase
+        .from('match_played')
+        .select('*').eq('match_uuid',id);
     const {data: teams, error} = await supabase
         .from('match_details')
         .select(`*`).eq('match_uuid', id);
 
-      // put the teams uuids in an array
-      const teamsUuids = [teams[0].team_one, teams[0].team_two];
-      // get the playersData of the teams
-      const {data: playersData, errorPlayers} = await supabase
-          .from('player')
-          .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
-    
-    res.render('matches/editGoals', {teams, playersData});
+    // put the teams uuids in an array
+    const teamsUuids = [teams[0].team_one, teams[0].team_two];
+    // get the playersData of the teams
+    const {data: playersData, errorPlayers} = await supabase
+    .from('player')
+    .select(`*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)`).in('team_uuid', teamsUuids);  
+
+    res.render('matches/editGoals', {teams, playersData, tournament, match});
 }
 module.exports.editCards = async (req, res, next) => {
     const {id} = req.params;
@@ -182,6 +191,22 @@ module.exports.editPenalties = async (req, res, next) => {
 
     res.render('matches/editPenalties', {teams, playersData, tournament, match});
 }
+module.exports.editAudience = async (req, res, next) => {
+    const {id} = req.params;
+
+    // get the tournament id from url
+    const tournamentId = req.originalUrl.split('/')[2];
+    // get the tournament data
+    const {data: tournament, trError} = await supabase.from('tournament').select().eq('tr_id', tournamentId);
+    console.log(tournament);
+    // get the match from the id
+    const {data: match, matchError} = await supabase
+    .from('match_played')
+    .select('*, venue(*)').eq('match_uuid',id);
+
+    
+    res.render('matches/editAudience', {tournament, match});
+}
 
 module.exports.updatePenalties = async (req, res, next) =>{
     const {id} = req.params;
@@ -195,12 +220,12 @@ module.exports.updatePenalties = async (req, res, next) =>{
     const counter = penalties ? penalties.length : 0;
     const goalkeeperId = req.body.goalkeeper;
     const scorerId = req.body.scorer;
-    const goalTime = req.body.goal;
+    const penaltyTime = req.body.goal;
     const scored = req.body.scored == 'on' ? 'Y': 'N';
 
     const {data: penalty, penaltyError} = await supabase
         .from('penalty_shootout')
-        .insert({match_no: id, shooter_id: scorerId, score_goal: scored, kick_no_ingame: counter+1, penalty_time: goalTime}).select();
+        .insert({match_no: id, shooter_id: scorerId, score_goal: scored, kick_no_ingame: counter+1, penalty_time: penaltyTime}).select();
 
 
     const {data: penaltyGk, penaltyGkError} = await supabase
@@ -251,9 +276,33 @@ module.exports.updateGoals = async (req, res, next) => {
     const {id} = req.params;
     const tournamentId = req.originalUrl.split('/')[2];
 
-    const bookedPlayer = req.body.booked;
-    const bookedTime = req.body.time;
-    const redCard = req.body.red == 'on' ? 'Y':'N';
-    const half = bookedTime > 45 ? 2:1;
+    const scorer = req.body.scorer;
+    const goalTime = req.body.time;
+    const half = goalTime > 45 ? 2:1;
+
+    const {data: goal, error}  = await supabase.from('goal_details').insert({match_no: id, scorer: scorer, goal_time: goalTime, goal_half: half});
+    req.flash("success", "Successfully Updated Match Goals");
+    res.redirect(`/tournaments/${tournamentId}`);
+}
+
+module.exports.updateAudience = async (req, res, next) =>{
+    const {id} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+    console.log(req.body);
+    const audience = req.body.audience;
+    const {data: match, error} = await supabase.from('match_played').update({audience: audience}).eq('match_uuid', id);
+    req.flash("success", "Successfully Updated Match Audience Number");
+    res.redirect(`/tournaments/${tournamentId}`);
+} 
+
+module.exports.updateMvp = async (req, res, next) => {
+    const {id: playerId} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+    const matchId = req.originalUrl.split('/')[4];
+
+    const {data: match, error} = await supabase.from('match_played').update({player_of_match: playerId}).eq('match_uuid', matchId);
+    req.flash("success", "Successfully Updated Match Player of Match");
+    res.redirect(`/tournaments/${tournamentId}`);
 
 }
+

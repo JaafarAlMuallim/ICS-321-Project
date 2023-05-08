@@ -22,21 +22,24 @@
                                Match Number is <%= match.match_played.match_id %> <br>
                                On <%= match.play_date%> <br> 
                                <% if(match.status == 'in-progress'){ %>
-                                Match In Progress
+                                <p>
+                                    Match In Progress
+                                    Current Score <%= match.match_played.goal_score %>
+                                </p>
                                 <% } else {%>
                                     Ended with score <%= match.match_played.goal_score %>
-                                    <% } %>
+                                <% } %>
                             </h5>
                             <p class="card-text">
                                 Referee is <%= match.match_played.referee.referee_name %>
                                 Assistant is <%= match.asst_referee.asst_ref_name %>
                             </p>
                             <p class="card-text">
-                                <% if(match.status == 'in-progress'){ %>
+                                <% if(match.match_played.player_of_match){ %>
+                                    Player of the match is <%= match.match_played.member.name %> <br>
+                                <% } else { %>
                                     Player of the match will be decided after the match
-                                    <% } else {%>
-                                        Player of the match is <%= match.match_played.member.name %> <br>
-                                        <% } %>
+                                <% } %>
                             </p>
                             <p class="card-text">
                                 <%= matches[increment][0].registered_team.team_name %> VS <%= matches[increment][1].registered_team.team_name %> <br>
@@ -58,7 +61,7 @@
                                                 <a href="#">No Players</a>
                                             <% } else {%>
                                                 <% for(player of playersData){ %>
-                                                    <form action="/teams/<%= player.team.team_uuid %>/changeManager/<%= player.member_uuid %>" method="post">
+                                                    <form action="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/mvp/<%= player.member_uuid %>" method="POST">
                                                         <li><button class="dropdown-item" type="submit"><%= player.member.name %></a></li>
                                                     </form>    
                                                 <% } %>

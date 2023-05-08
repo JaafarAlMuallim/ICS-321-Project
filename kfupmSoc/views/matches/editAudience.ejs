@@ -1,0 +1,38 @@
+<% layout("layouts/boilerplate") %>
+<div class="container d-flex justify-content-center align-items-center mt-3">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow mb-5">
+                <img crossorigin="anonymous" src="/images/football.jpeg"
+                alt="" class="card-img-top">
+                <h5 class="card-title mt-3 ms-3">Update Audience Number</h5>
+                <div class="card-body">
+                    <form action="/tournaments/<%= tournament[0].tr_id %>/matches/<%= match[0].match_uuid %>/audience" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
+                            <div class="my-1"> <label for="audience" class="form-label">Audience Number</label>
+                                <input class="form-control px-3" type="range" name="audience" id="audience"
+                                 autofocus required min="0" value="<%= match[0].audience ?? 0%>"max="<%= match[0].venue.aud_capacity%>">
+                                 <span class="my-2 badge bg-primary text-wrap fs-6" id="rangeValue"><%= match[0].audience ?? 0 %></span>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                            <div class="my-3 d-grid gap-2">
+                                    <button type="submit" class="btn btn-success">Update Audience Number</button> 
+                            </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const slider = document.getElementById("audience");
+    const sliderValue = document.getElementById("rangeValue");
+    sliderValue.innerHTML = slider.value;
+    
+    slider.oninput = function() {
+      sliderValue.innerHTML = this.value;
+    }
+  </script>
+<script src="slider.js"></script>

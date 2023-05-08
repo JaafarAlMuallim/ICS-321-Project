@@ -33,6 +33,14 @@ router.route("/:id/goals")
     // .post(isLoggedIn, isAdmin, wrapAsync(matches.updatePenalties))
     .post(wrapAsync(matches.updatePenalties))
 
+    router.route("/:id/audience")
+    .get(wrapAsync(matches.editAudience))
+    // .post(isLoggedIn, isAdmin, wrapAsync(matches.updateAudience))
+    .post(wrapAsync(matches.updateAudience))
+
+    router.route("/:id/mvp/:id")
+        // .post(isLoggedIn, isAdmin, wrapAsync(matches.updateMvp))
+        .post(wrapAsync(matches.updateMvp))
     // .post(wrapAsync())
     // .post(isLoggedIn, upload.array("image"), validateCamp, wrapAsync(camp.createCamp));
 module.exports = router;
