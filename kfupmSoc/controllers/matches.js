@@ -39,7 +39,7 @@ module.exports.index = async (req, res) => {
     const {data: cards, errorCard} = await supabase
         .from('player_booked').
         select(`*, member(*, player(*, registered_team(*, team(*))))`)
-        .eq('booking_time', id);
+        .eq('match_no', id);
         
         const goalsArray = [];
         goals.forEach(goal => {
@@ -328,7 +328,30 @@ module.exports.endMatch = async (req, res, next) => {
     const currentScore = match[0].goal_score;
     var teamOne = currentScore.split('-')[0]
     var teamTwo = currentScore.split('-')[1]    
+    // update team table by adding 3 points to the winner team in that tournament
+    const {data: teams, teamsError} = await supabase.from('match_details').select('team_one, team_two').eq('match_uuid', id);
+    const teamUuids = [teams[0].team_one, teams[0].team_two];
+    const {data: teamOneData, teamOneError} = await supabase.from('team').select().eq('team_uuid', teamUuids[0]);
+    const {data: teamTwoData, teamTwoError} = await supabase.from('team').select().eq('team_uuid', teamUuids[1]);
 
+    if(teamOne > teamTwo){
+        // get both teams data
+        const {data: winnerUpdate, winnerError} = await supabase.from('team').update({match_played:teamOneData[0].match_played+1, won:teamOneData[0].won + 1, goal_for:teamOneData[0].goal_for + teamOne, goal_against: teamOneData[0].goal_against + teamTwo, goal_diff: teamOneData[0].goal_for + teamOne - teamTwo, points: teamOneData[0].points + 3});
+        const {data: loserUpdate, loserError} = await supabase.from('team').update({match_played:teamTwoData[0].match_played+1, lost:teamTwoData[0].lost + 1, goal_for:teamTwoData[0].goal_for + teamTwo, goal_against: teamTwoData[0].goal_against + teamOne, goal_diff: teamTwoData[0].goal_for + teamTwo - teamOne});
+    } else if(teamTwo > teamOne) {
+        const {data: winnerUpdate, winnerError} = await supabase.from('team').update({match_played:teamTwoData[0].match_played+1, won:teamTwoData[0].won + 1, goal_for:teamTwoData[0].goal_for + teamTwo, goal_against: teamTwoData[0].goal_against + teamOne, goal_diff: teamTwoData[0].goal_for + teamTwo - teamOne, points: teamTwoData[0].points + 3});
+        const {data: loserUpdate, loserError} = await supabase.from('team').update({match_played:teamOneData[0].match_played+1, lost:teamOneData[0].lost + 1, goal_for:teamOneData[0].goal_for + teamOne, goal_against: teamOneData[0].goal_against + teamTwo, goal_diff: teamOneData[0].goal_for + teamOne - teamTwo});
+
+    } else {
+        const {data: teamOneUpdate, teamOneError} = await supabase.from('team').update({match_played:teamOneData[0].match_played+1, draw:teamOneData[0].draw + 1, goal_for:teamOneData[0].goal_for + teamOne, goal_against: teamOneData[0].goal_against + teamTwo, goal_diff: teamOneData[0].goal_for + teamOne - teamTwo, points: teamOneData[0].points + 1});
+        const {data: teamTwoUpdate, teamTwoError} = await supabase.from('team').update({match_played:teamTwoData[0].match_played+1, draw:teamTwoData[0].draw + 1, goal_for:teamTwoData[0].goal_for + teamTwo, goal_against: teamTwoData[0].goal_against + teamOne, goal_diff: teamTwoData[0].goal_for + teamTwo - teamOne, points: teamTwoData[0].points + 1});
+    }
+
+    const {data: teamOneGroup, teamOneGroupError} = await supabase.from('team').select().eq('group', teamOneData[0].group).order('points', {ascending: false});
+    // update all records of teamOneGroup and give them a {position:} as their index in the array
+    for(let i = 0; i < teamOneGroup.length; i++){
+        const {data: teamOneGroupUpdate, teamOneGroupUpdateError} = await supabase.from('team').update({position: i+1}).eq('team_uuid', teamOneGroup[i].team_uuid);
+    }
     const {data: ended, error3} = await supabase.from('match_details').update({status: 'finished',goal_score: teamOne+teamTwo, win_lose: teamOne == teamTwo ? 'D':'W', penalty_score: penalties.length?? 0}).eq('match_uuid', id);
     req.flash("success", "Successfully Ended Match");
     res.redirect(`/tournaments/${tournamentId}`);
