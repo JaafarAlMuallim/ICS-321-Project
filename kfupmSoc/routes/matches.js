@@ -42,5 +42,9 @@ router.route("/:id/goals")
         // .post(isLoggedIn, isAdmin, wrapAsync(matches.updateMvp))
         .post(wrapAsync(matches.updateMvp))
     // .post(wrapAsync())
+
+    router.route("/:id/end")
+        // .post(isLoggedIn, isAdmin, wrapAsync(matches.endMatch))
+        .post(wrapAsync(matches.endMatch))
     // .post(isLoggedIn, upload.array("image"), validateCamp, wrapAsync(camp.createCamp));
 module.exports = router;

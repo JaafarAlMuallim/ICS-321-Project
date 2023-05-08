@@ -9,7 +9,7 @@
                 <div class="card-body">
                     <form action="/tournaments/<%= tournament[0].tr_id %>/matches/<%= match[0].match_uuid %>/goals" method="POST" novalidate class="validated-form" enctype='application/x-www-form-urlencoded'>
                             <select class="form-select" name="scorer">
-                                <option selected href="#">Select Booked Player</option>
+                                <option selected href="#">Select Scorer</option>
                                 <% if(playersData.length == 0){ %>
                                 <% } else {%>
                                     <% for(player of playersData){ %>

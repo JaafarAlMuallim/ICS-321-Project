@@ -280,7 +280,20 @@ module.exports.updateGoals = async (req, res, next) => {
     const goalTime = req.body.time;
     const half = goalTime > 45 ? 2:1;
 
+    const {data: teams, teamsError} = await supabase.from('match_details').select('team_one, team_two').eq('match_uuid', id);
+    const teamUuids = [teams[0].team_one, teams[0].team_two]
+    const {data: player, teamError} = await supabase.from('player').select('*, team:team_uuid(*), registered_team:team_uuid(*), member:member_uuid(*)').eq('member_uuid', scorer).in('team_uuid', teamUuids);
+    const {data: match, matchError} = await supabase.from('match_played').select('goal_score').eq('match_uuid', id);
+    const currentScore = match[0].goal_score;
+    var teamOneScore = currentScore.split('-')[0]
+    var teamTwoScore = currentScore.split('-')[1]
+    if(player[0].team.team_uuid == teamUuids[0]){
+        teamOneScore++;
+    } else {
+        teamTwoScore++;
+    }
     const {data: goal, error}  = await supabase.from('goal_details').insert({match_no: id, scorer: scorer, goal_time: goalTime, goal_half: half});
+    const {data: matchUpdate, matchUpdateError} = await supabase.from('match_played').update({goal_score: `${teamOneScore}-${teamTwoScore}`}).eq('match_uuid', id);
     req.flash("success", "Successfully Updated Match Goals");
     res.redirect(`/tournaments/${tournamentId}`);
 }
@@ -303,6 +316,21 @@ module.exports.updateMvp = async (req, res, next) => {
     const {data: match, error} = await supabase.from('match_played').update({player_of_match: playerId}).eq('match_uuid', matchId);
     req.flash("success", "Successfully Updated Match Player of Match");
     res.redirect(`/tournaments/${tournamentId}`);
+}
 
+module.exports.endMatch = async (req, res, next) => {
+    const {id} = req.params;
+    const tournamentId = req.originalUrl.split('/')[2];
+
+    const {data: penalties, error} = await supabase.from('penalty_shootout').select().eq('match_no', id).eq('score_goal', 'Y');
+
+    const {data: match, matchError} = await supabase.from('match_played').select('goal_score').eq('match_uuid', id);
+    const currentScore = match[0].goal_score;
+    var teamOne = currentScore.split('-')[0]
+    var teamTwo = currentScore.split('-')[1]    
+
+    const {data: ended, error3} = await supabase.from('match_details').update({status: 'finished',goal_score: teamOne+teamTwo, win_lose: teamOne == teamTwo ? 'D':'W', penalty_score: penalties.length?? 0}).eq('match_uuid', id);
+    req.flash("success", "Successfully Ended Match");
+    res.redirect(`/tournaments/${tournamentId}`);
 }
 

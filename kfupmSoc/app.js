@@ -148,6 +148,7 @@ app.use("/tournaments/:id/matches/:id/cards", matches);
 app.use("/tournaments/:id/matches/:id/subs", matches);
 app.use("/tournaments/:id/matches/:id/penalties", matches);
 app.use("/tournaments/:id/matches/:id/mvp", matches);
+app.use("/tournaments/:id/matches/:id/end", matches);
 app.use("/tournaments/:id/teams", teams);
 
 app.get("/", (req, res) => {
