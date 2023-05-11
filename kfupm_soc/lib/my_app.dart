@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/screens/Login_screen.dart';
 import 'package:kfupm_soc/screens/create_team_screen.dart';
+import 'package:kfupm_soc/screens/join_tournament_screen.dart';
 // import 'package:kfupm_soc/screens/matches_screen.dart';
 import 'package:kfupm_soc/screens/my_teams_screen.dart';
 import 'package:kfupm_soc/screens/coach_join_team_screen.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         MyTeamsScreen.id: (context) => const MyTeamsScreen(),
         PlayerJoinTeamScreen.id: (context) => const PlayerJoinTeamScreen(),
         CoachJoinTeamScreen.id: (context) => const CoachJoinTeamScreen(),
+        JoinTournamentScreen.id: (context) => const JoinTournamentScreen(),
       },
       initialRoute: FirebaseAuth.instance.currentUser == null
           ? WelcomeScreen.id

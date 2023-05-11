@@ -4,7 +4,7 @@ import 'package:extended_phone_number_input/phone_number_input.dart';
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/Core/fade_animation.dart';
 import 'package:kfupm_soc/authentication_respository/authentication_repository.dart';
-
+import 'package:kfupm_soc/widgets/rounded_button.dart';
 import 'package:kfupm_soc/screens/register_screen.dart';
 import 'package:kfupm_soc/screens/welcome_screen.dart';
 
@@ -128,31 +128,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 20),
                         FadeAnimation(
                           delay: 1,
-                          child: TextButton(
+                          child: Roundedbutton(
                             onPressed: (() {
                               AuthenticationRepository().phoneAuth(
                                   phoneNum: phoneNum, context: context);
                             }),
-                            style: TextButton.styleFrom(
-                              backgroundColor: const Color(0xFF2697FF),
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 14.0,
-                                horizontal: 80,
-                              ),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12.0)),
-                              ),
-                            ),
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
+                            color: Colors.blue.shade600,
+                            title: 'Login',
                           ),
                         ),
                       ]),

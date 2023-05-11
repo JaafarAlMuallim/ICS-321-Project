@@ -4,6 +4,7 @@ import 'package:kfupm_soc/screens/Login_screen.dart';
 import 'package:kfupm_soc/screens/profile_screen.dart';
 import 'package:kfupm_soc/screens/request_history_screen.dart';
 import 'package:kfupm_soc/screens/requests_screen.dart';
+import 'package:kfupm_soc/widgets/rounded_button.dart';
 import 'package:kfupm_soc/widgets/snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../Core/fade_animation.dart';
@@ -183,7 +184,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                                   const SizedBox(height: 25),
                                   FadeAnimation(
                                     delay: 1,
-                                    child: TextButton(
+                                    child: Roundedbutton(
                                       onPressed: () {
                                         if (_auth.currentUser == null) {
                                           Navigator.push(
@@ -199,6 +200,13 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                                               '',
                                               () {},
                                               Colors.red);
+                                        } else if (teamController.text == "") {
+                                          ShowSnackBar.showSnackbar(
+                                              context,
+                                              'You must enter team name',
+                                              '',
+                                              () {},
+                                              Colors.red);
                                         } else {
                                           insertData(teamController.text);
                                           Navigator.popAndPushNamed(
@@ -211,28 +219,8 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                                               Colors.green[700]);
                                         }
                                       },
-                                      style: TextButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xFF2697FF),
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 14.0,
-                                          horizontal: 80,
-                                        ),
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(12.0),
-                                          ),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Create',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 0.5,
-                                        ),
-                                      ),
+                                      color: Colors.blue.shade600,
+                                      title: 'Create',
                                     ),
                                   ),
                                 ]),
