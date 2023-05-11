@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:kfupm_soc/authentication_respository/authentication_repository.dart';
 import 'package:kfupm_soc/screens/Login_screen.dart';
 import 'package:kfupm_soc/screens/welcome_screen.dart';
+import 'package:kfupm_soc/widgets/rounded_button.dart';
 
 import '../Core/fade_animation.dart';
 
@@ -257,7 +258,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(height: 25),
                         FadeAnimation(
                           delay: 1,
-                          child: TextButton(
+                          child: Roundedbutton(
                             onPressed: () {
                               AuthenticationRepository().regAuth(
                                   name: name,
@@ -266,27 +267,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   bdate: bdateController.text,
                                   context: context);
                             },
-                            style: TextButton.styleFrom(
-                              backgroundColor: const Color(0xFF2697FF),
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 14.0,
-                                horizontal: 80,
-                              ),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(12.0),
-                                ),
-                              ),
-                            ),
-                            child: const Text(
-                              'Sign Up',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
+                            color: Colors.blue.shade600,
+                            title: 'Sign up',
                           ),
                         ),
                       ]),

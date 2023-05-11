@@ -95,7 +95,7 @@ class _TeamScreenState extends State<TeamScreen> {
             FadeAnimation(
               delay: 0.8,
               child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: Row(
                     children: [
                       groupCol,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:kfupm_soc/screens/login_screen.dart';
 import 'package:kfupm_soc/screens/request_history_screen.dart';
 import 'package:kfupm_soc/screens/requests_screen.dart';
+import 'package:kfupm_soc/widgets/rounded_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../Core/fade_animation.dart';
 import 'package:kfupm_soc/widgets/snackbar.dart';
@@ -281,7 +282,7 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
                                   const SizedBox(height: 25),
                                   FadeAnimation(
                                     delay: 1,
-                                    child: TextButton(
+                                    child: Roundedbutton(
                                       onPressed: () async {
                                         if (_auth.currentUser == null) {
                                           Navigator.push(
@@ -294,6 +295,14 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
                                           ShowSnackBar.showSnackbar(
                                               context,
                                               'You need to be logged In before Joining a team',
+                                              '',
+                                              () {},
+                                              Colors.red);
+                                        } else if (selectedTeam == null ||
+                                            selectedTournament == null) {
+                                          ShowSnackBar.showSnackbar(
+                                              context,
+                                              'You must fill the data!',
                                               '',
                                               () {},
                                               Colors.red);
@@ -326,28 +335,8 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
                                           }
                                         }
                                       },
-                                      style: TextButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xFF2697FF),
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 14.0,
-                                          horizontal: 80,
-                                        ),
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(12.0),
-                                          ),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Join',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 0.5,
-                                        ),
-                                      ),
+                                      color: Colors.blue.shade600,
+                                      title: 'Join',
                                     ),
                                   ),
                                 ]),

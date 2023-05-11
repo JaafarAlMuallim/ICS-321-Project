@@ -77,7 +77,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
     penaltyShootout = await supabase
         .from("penalty_shootout")
         .select(
-            '*, penalty_gk(*, member(*)), member(*, player(*, registered_team(*, team(*))))')
+            ', penalty_gk(, member()), member:shooter_id(, player(, registered_team(, team(*))))')
         .eq('match_no', widget.matchUuid)
         .order('penalty_time', ascending: true);
 
@@ -821,10 +821,44 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : Center(
-              child: ListView(
-                children: createCards(),
-              ),
+          : Stack(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: const NetworkImage(
+                        'https://e1.pxfuel.com/desktop-wallpaper/189/764/desktop-wallpaper-latest-iphone-x-football-aesthetic.jpg',
+                      ),
+                      colorFilter: ColorFilter.mode(
+                        const Color(0x0fffffff).withOpacity(0.2),
+                        BlendMode.dstATop,
+                      ),
+                      fit: BoxFit.cover,
+                    ),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        const Color(0XFF527aaf).withOpacity(0.8),
+                        const Color(0XFF527aaf),
+                        const Color(0XFF031a38),
+                        const Color(0XFF031a38),
+                      ],
+                      stops: const [
+                        0.1,
+                        0.4,
+                        0.7,
+                        0.9,
+                      ],
+                    ),
+                  ),
+                  child: Center(
+                    child: ListView(
+                      children: createCards(),
+                    ),
+                  ),
+                ),
+              ],
             ),
       bottomNavigationBar: const BottomNavBar(),
     );
