@@ -18,7 +18,7 @@
                 <% let haveCaptain1 = false %>
                 <% let haveCaptain2 = false %>
 
-                <% if(goalsArray){ %>
+                <% if(goalsArray.length){ %>
                     <% for(let goal of goalsArray){ %>
                         <% if(goal.member.player[0].registered_team.team_uuid == teams[0].team_uuid){%>
                             <i>
@@ -39,7 +39,37 @@
                     </i><br>
              <% } %>
                 <hr>
-                <% if(cardsArray){ %>
+                <% if(penaltiesArray.length){ %>
+                    <% for(let penalty of penaltiesArray){ %>
+                        <% if(penalty.member.player[0].registered_team.team_uuid == teams[0].team_uuid){ %>
+                            <i>
+                            <% if(penalty.score_goal == 'N'){ %>
+                                <i class="fa-regular fa-futbol" style="color:red;"></i>
+                                <% } else { %>
+                                <i class="fa-regular fa-futbol" style="color:black;"></i>
+                            <% } %>
+                            <%=penalty.member.name%><br>
+                        </i>
+                        <% } else { %>
+                            <i>
+                                <% if(penalty.score_goal == 'Y'){ %>
+                                    <i class="fa-solid fa-hand" style="transform:rotate(45deg); color:red"></i>
+                                    <%=penalty.penalty_gk[0].member.name%>
+                                    <% } else { %>
+                                        <i class="fa-solid fa-hand" style="transform:rotate(45deg); color:black"></i>
+                                        <%=penalty.penalty_gk[0].member.name%>
+                                    <% } %>
+                            </i>
+                            <br>
+                        <% } %>
+                        <% } %>
+                    <% } else {%>
+                        <i><i class="fa-regular fa-copy" style="color: black;"></i><br>
+                        No Penalties in this match
+                    </i>
+                    <% } %>
+                <hr>
+                <% if(cardsArray.length){ %>
                     <% for(let card of cardsArray){ %>
                         <% if(card.member.player[0].registered_team.team_uuid == teams[0].team_uuid){ %>
                             <i>
@@ -62,8 +92,8 @@
                         No Cards given
                     </i>
                     <% } %>
-                    
                 <hr>
+                <% if(coaches.length){ %>
                     <% for(let coach of coaches){ %>
                         <% if(coach.team_uuid == teams[0].team_uuid){ %>
                             <% haveCoach1 = true %>
@@ -73,7 +103,7 @@
                         </i>
                         <br>
                         <%} else {%>
-                            <% if(coach == coaches[coaches.length - 1] && !haveCoach1){ %>                            
+                            <% if(coach == coaches[coaches.length - 1] && !haveCoach1 ){ %>                            
                             <i>
                                 <i class="fa-solid fa-people-roof"></i>
                                 No Coach(es) in this team
@@ -82,10 +112,17 @@
                             <% } %>
                         <% } %>
                     <% } %>
+                <% } else { %>
+                    <i>
+                        <i class="fa-solid fa-people-roof"></i>
+                        No Coach(es) in this team
+                    </i>
+                <% } %>
                 <hr>
+                <% if(captains.length){ %>
                     <% for(let captain of captains){ %>
                         <% if(captain.member.player[0].registered_team.team_uuid == teams[0].team_uuid){ %>
-                            <% haveCaptain1 = true %>
+                            <% haveCaptain1 = true; %>
                             <i>
                             <i class="fa-regular fa-c"></i> &nbsp;
                             <%=captain.member.name%><br>
@@ -99,6 +136,12 @@
                              <% } %>
                         <% } %>
                     <% } %>
+                <% } else { %>
+                    <i>
+                        <i class="fa-solid fa-people-roof"></i>
+                        No Captain in this team
+                    </i>
+                <% } %>
                 <hr>
                 <table class="table table-bordered table-hover table-striped-columns">
                     <thead>
@@ -140,12 +183,12 @@
             </div>
 
             <div class="card-header fw-normal fs-4">
-                <% if(goalsArray){ %>
+                <% if(goalsArray.length){ %>
                     <% for(let goal of goalsArray){ %>
                         <% if(goal.member.player[0].registered_team.team_uuid == teams[1].team_uuid){%>
                             <i>
                                 <i class="fa-regular fa-futbol"></i>
-                                <%=goal.goal_time%>  <%=goal.member.name%>
+                                <%=goal.goal_time%>'  <%=goal.member.name%>
                             </i><br>
                         <%} else { %>
                             <i>
@@ -161,7 +204,37 @@
                         </i>
               <% } %>
                 <hr>
-                <% if(cardsArray){ %>
+                <% if(penaltiesArray.length){ %>
+                    <% for(let penalty of penaltiesArray){ %>
+                        <% if(penalty.member.player[0].registered_team.team_uuid == teams[1].team_uuid){ %>
+                            <i>
+                            <% if(penalty.score_goal == 'N'){ %>
+                                <i class="fa-regular fa-futbol" style="color:red;"></i>
+                                <% } else { %>
+                                <i class="fa-regular fa-futbol" style="color:black;"></i>
+                            <% } %>
+                            <%=penalty.member.name%><br>
+                        </i>
+                        <% } else { %>
+                            <i>
+                                <% if(penalty.score_goal == 'Y'){ %>
+                                <i class="fa-solid fa-hand" style="transform:rotate(45deg); color:red"></i>
+                                <%=penalty.penalty_gk[0].member.name%>
+                                <% } else { %>
+                                    <i class="fa-solid fa-hand" style="transform:rotate(45deg); color:black"></i>
+                                    <%=penalty.penalty_gk[0].member.name%>
+                                <% } %>
+                            </i>
+                            <br>
+                        <% } %>
+                        <% } %>
+                    <% } else {%>
+                        <i><i class="fa-regular fa-copy" style="color: black;"></i><br>
+                        No Penalties in this match
+                    </i>
+                    <% } %>
+                    <hr>
+                <% if(cardsArray.length){ %>
                     <% for(let card of cardsArray){ %>
                         <% if(card.member.player[0].registered_team.team_uuid == teams[1].team_uuid){ %>
                             <i>
@@ -184,8 +257,8 @@
                         No Cards given
                     </i>
                     <% } %>
-                    
                 <hr>
+                <% if(coaches.length){ %>
                     <% for(let coach of coaches){ %>
                         <% if(coach.team_uuid == teams[1].team_uuid){ %>
                             <% haveCoach2 = true %>
@@ -204,7 +277,14 @@
                             <% } %>
                         <% } %>
                     <% } %>
+                <% } else { %>
+                    <i>
+                        <i class="fa-solid fa-people-roof"></i>
+                        No Coach in this team
+                    </i>
+                <% } %>
                 <hr>
+                <% if(captains.length){ %>
                     <% for(let captain of captains){ %>
                         <% if(captain.member.player[0].registered_team.team_uuid == teams[1].team_uuid){ %>
                             <% haveCaptain2 = true; %>
@@ -221,6 +301,12 @@
                              <% } %>
                         <% } %>
                     <% } %>
+                <% } else { %>
+                    <i>
+                        <i class="fa-solid fa-people-roof"></i>
+                        No Captain in this team
+                    </i>
+                <% } %>
                 <hr>
                 <table class="table table-bordered table-hover table-striped-columns">
                     <thead>
