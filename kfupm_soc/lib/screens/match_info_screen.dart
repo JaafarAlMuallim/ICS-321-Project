@@ -77,7 +77,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
     penaltyShootout = await supabase
         .from("penalty_shootout")
         .select(
-            ', penalty_gk(, member()), member:shooter_id(, player(, registered_team(, team(*))))')
+            '*, member:shooter_id(*, player(*, registered_team(*, team(*)))), penalty_gk:kick_uuid(*, member(*, player(*, registered_team(*, team(*))))))')
         .eq('match_no', widget.matchUuid)
         .order('penalty_time', ascending: true);
 
