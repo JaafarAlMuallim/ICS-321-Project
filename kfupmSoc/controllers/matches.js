@@ -18,7 +18,7 @@ module.exports.index = async (req, res) => {
 
     const { data: coaches, error } = await supabase.from('team_coach').select(`
         *, 
-        member ( * )
+        member ( * ), registered_team(*, team(*))
         `).in('team_uuid', teamIds);
 
     const {data: captains, errorCaptain} = await supabase
@@ -59,8 +59,7 @@ module.exports.index = async (req, res) => {
 
         const {data: penaltyShootout, errorPenaltyShootout} = await supabase
         .from('penalty_shootout')
-        .select(`*,
-        member( *, player(*, registered_team(*, team(*))))`)
+        .select(`*, member:shooter_id(*, player(*, registered_team(*, team(*)))), penalty_gk:kick_uuid(*, member(*, player(*, registered_team(*, team(*)))))`)
         .eq('match_no', id);
 
         // create subsArray
@@ -198,7 +197,6 @@ module.exports.editAudience = async (req, res, next) => {
     const tournamentId = req.originalUrl.split('/')[2];
     // get the tournament data
     const {data: tournament, trError} = await supabase.from('tournament').select().eq('tr_id', tournamentId);
-    console.log(tournament);
     // get the match from the id
     const {data: match, matchError} = await supabase
     .from('match_played')
@@ -301,7 +299,6 @@ module.exports.updateGoals = async (req, res, next) => {
 module.exports.updateAudience = async (req, res, next) =>{
     const {id} = req.params;
     const tournamentId = req.originalUrl.split('/')[2];
-    console.log(req.body);
     const audience = req.body.audience;
     const {data: match, error} = await supabase.from('match_played').update({audience: audience}).eq('match_uuid', id);
     req.flash("success", "Successfully Updated Match Audience Number");
