@@ -72,7 +72,8 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
       setState(() {
         dataTeams = resTeam;
       });
-      List<dynamic> resTour = await supabase.from('tournament').select('*');
+      List<dynamic> resTour =
+          await supabase.from('tournament').select('*').eq('initiated', false);
       setState(() {
         dataTournaments = resTour;
       });
