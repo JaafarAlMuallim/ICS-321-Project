@@ -52,7 +52,10 @@
                             <p>
                                 <a class="btn btn-primary" href="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>">View Statstics</a>
                                 <% if( match.status == 'in-progress'){ %>
+                                    <% if(currentUser){ %>
+                                        <% if(currentUser.admin_id == tournament.admin_id){ %>
                                     <div class="dropdown my-3">
+                                        
                                         <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                           Choose MVP
                                         </button>
@@ -67,6 +70,7 @@
                                                 <% } %>
                                             <% } %>
                                         </ul>
+                                    
                                     </div>
                                     <div class="dropdown my-3">
                                         <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -83,6 +87,8 @@
                                 <form class="my-3" action="/tournaments/<%= tournament.tr_id %>/matches/<%= match.match_uuid %>/end" method="POST">
                                     <button class="btn btn-warning">End Match</button>
                                 </form>
+                                <% } %>
+                                <% } %>
                                 <% } %>
                             </p>
                             
