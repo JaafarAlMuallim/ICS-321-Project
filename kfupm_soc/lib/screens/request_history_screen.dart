@@ -62,7 +62,6 @@ class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
         teamUuids.add(captain['team_uuid']);
       }
     }
-    print(teamUuids);
     List<dynamic> resTeams = await supabase
         .from('team')
         .select('*, registered_team(*), tournament(*)')
