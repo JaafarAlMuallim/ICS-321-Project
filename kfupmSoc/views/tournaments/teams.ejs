@@ -1,29 +1,168 @@
 <% layout("layouts/boilerplate") %>
-    <h1>Team Registered in <%= tournament.tr_name %></h1>
-    <% if(teams){ %>
-        <% for(let team of teams){ %>
-            <% if(team.tr_id == id){ %>
-            <div class="card mb-3">
+    <h1>Team Registered in <%= tournament[0].tr_name %></h1>
+    <% if(!teams){ %>
+        <h2>No Teams Joined The Tournament Yet</h2>
+        <% }else { %>
+            <div class="container">
                 <div class="row">
-                    <div class="col-md-4">
-                        <img crossorigin="anonymous" src="/images/football.jpeg" alt="" class="img-fluid w-100 h-100">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                            <%= team.registered_team.team_name %>
-                            </h5>
 
-                            <p>
-                                <a href="/teams/<%=team.team_uuid%>">View <%= team.registered_team.team_name%></a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
+             
+    <% if(groupA){ %>
+        <div class="col-md-6 col-lg-3 mb-4">
+       
+        <div class="card h-100">
+            <div class="card-header">
+                <div class="card-title">Group A</div>
             </div>
-            <% } %>
-            <% } %>
-
-        <% } else {%>
-            <h2>No Tournaments initiatied yet</h2>
-            <% } %>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Team</th>
+                    <th scope="col">P</th>
+                    <th scope="col">W</th>
+                    <th scope="col">D</th>
+                    <th scope="col">L</th>
+                    <th scope="col">+/-</th>
+                    <th scope="col">Pts</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(team of groupA){ %>
+                    <tr>
+                        <td><a href="/teams/<%=team.team_uuid%>">
+                            <%= team.registered_team.team_name %>
+                        </a></td>
+                        <td><%= team.match_played %></td>
+                        <td><%= team.won %></td>
+                        <td><%= team.draw %></td>
+                        <td><%= team.lost %></td>
+                        <td><%= team.goal_for %> / <%=team.goal_against%></td>
+                        <td><%= team.points %></td>
+                    </tr>
+                        <% } %>
+            </tbody>
+            </table>
+               
+            </div>
+        </div>
+    <% } %>   
+    <% if(groupB){ %>
+        <div class="col-md-6 col-lg-3 mb-4">
+       
+        <div class="card h-100">
+            <div class="card-header">
+                <div class="card-title">Group B</div>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Team</th>
+                    <th scope="col">P</th>
+                    <th scope="col">W</th>
+                    <th scope="col">D</th>
+                    <th scope="col">L</th>
+                    <th scope="col">+/-</th>
+                    <th scope="col">Pts</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(team of groupB){ %>
+                    <tr>
+                        <td><a href="/teams/<%=team.team_uuid%>">
+                            <%= team.registered_team.team_name %>
+                        </a></td>
+                        <td><%= team.match_played %></td>
+                        <td><%= team.won %></td>
+                        <td><%= team.draw %></td>
+                        <td><%= team.lost %></td>
+                        <td><%= team.goal_for %> / <%=team.goal_against%></td>
+                        <td><%= team.points %></td>
+                    </tr>
+                        <% } %>
+            </tbody>
+            </table>
+               
+            </div>
+        </div>
+    <% } %>   
+    <% if(groupC){ %>
+        <div class="col-md-6 col-lg-3 mb-4">
+       
+        <div class="card h-100">
+            <div class="card-header">
+                <div class="card-title">Group C</div>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">Team</th>
+                    <th scope="col">P</th>
+                    <th scope="col">W</th>
+                    <th scope="col">D</th>
+                    <th scope="col">L</th>
+                    <th scope="col">+/-</th>
+                    <th scope="col">Pts</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(team of groupC){ %>
+                    <tr>
+                        <td><a href="/teams/<%=team.team_uuid%>">
+                            <%= team.registered_team.team_name %>
+                        </a></td>
+                        <td><%= team.match_played %></td>
+                        <td><%= team.won %></td>
+                        <td><%= team.draw %></td>
+                        <td><%= team.lost %></td>
+                        <td><%= team.goal_for %> / <%=team.goal_against%></td>
+                        <td><%= team.points %></td>
+                    </tr>
+                        <% } %>
+            </tbody>
+            </table>
+               
+            </div>
+        </div>
+    <% } %>   
+    <% if(groupD){ %>
+        <div class="col-md-6 col-lg-3 mb-4">
+       
+        <div class="card h-100">
+            <div class="card-header">
+                <div class="card-title">Group D</div>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Team</th>
+                    <th scope="col">P</th>
+                    <th scope="col">W</th>
+                    <th scope="col">D</th>
+                    <th scope="col">L</th>
+                    <th scope="col">+/-</th>
+                    <th scope="col">Pts</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(team of groupD){ %>
+                    <tr>
+                        <td><a href="/teams/<%=team.team_uuid%>">
+                            <%= team.registered_team.team_name %>
+                        </a></td>
+                        <td><%= team.match_played %></td>
+                        <td><%= team.won %></td>
+                        <td><%= team.draw %></td>
+                        <td><%= team.lost %></td>
+                        <td><%= team.goal_for %> / <%=team.goal_against%></td>
+                        <td><%= team.points %></td>
+                    </tr>
+                        <% } %>
+            </tbody>
+            </table>
+               
+            </div>
+        </div>
+    <% } %> 
+    </div>
+</div>  
+<% } %>

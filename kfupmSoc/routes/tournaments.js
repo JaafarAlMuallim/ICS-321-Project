@@ -24,7 +24,7 @@ router.route("/:id/groups")
         
 router.route('/:id/initiate').post(wrapAsync(tournaments.initiate))
 
-router.get("/:id/teams/", wrapAsync(tournaments.showTeams));
+router.get("/:id/teams", wrapAsync(tournaments.showTeams));
 
 router.get("/:id/edit", isLoggedIn, isAdmin, wrapAsync(tournaments.editTournament));
 module.exports = router;

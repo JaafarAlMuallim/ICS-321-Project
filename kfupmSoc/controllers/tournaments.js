@@ -192,11 +192,28 @@ module.exports.showTeams = async (req, res, next) => {
     // get tournament from id
     const { data: tournament, error } = await supabase
         .from('tournament')
-        .select();
+        .select().eq('tr_id', id);
     const { data: teams, errorCounter, status } = await supabase
         .from("team")
-        .select('*, registered_team(*)');
-    res.render('tournaments/teams', { tournament, id, teams })
+        .select('*, registered_team(*)').eq('tr_id', id).order('points', {ascending : true});
+
+    // create array for each team_group
+    const groupA = [];
+    const groupB = [];
+    const groupC = [];
+    const groupD = [];
+    teams.forEach(team => {
+        if (team.team_group === 'A') {
+            groupA.push(team);
+        } else if (team.team_group === 'B') {
+            groupB.push(team);
+        } else if (team.team_group === 'C') {
+            groupC.push(team);
+        } else if (team.team_group === 'D') {
+            groupD.push(team);
+        }
+    });
+    res.render('tournaments/teams', { tournament, id, teams, groupA, groupB, groupC, groupD })
 }
 module.exports.initiate = async(req, res, next) => {
     const {id} = req.params;
