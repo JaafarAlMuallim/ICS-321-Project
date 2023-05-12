@@ -48,8 +48,8 @@
                                 <% } else { %>
                                 <i class="fa-regular fa-futbol" style="color:black;"></i>
                             <% } %>
-                            <%=penalty.member.name%><br>
-                        </i>
+                            <%=penalty.member.name%>
+                        </i><br>
                         <% } else { %>
                             <i>
                                 <% if(penalty.score_goal == 'Y'){ %>
@@ -64,9 +64,9 @@
                         <% } %>
                         <% } %>
                     <% } else {%>
-                        <i><i class="fa-regular fa-copy" style="color: black;"></i><br>
+                        <i><i class="fa-regular fa-copy" style="color: black;"></i>
                         No Penalties in this match
-                    </i>
+                    </i><br>
                     <% } %>
                 <hr>
                 <% if(cardsArray.length){ %>
@@ -78,8 +78,8 @@
                                 <% } else { %>
                                 <i class="fa-regular fa-copy" style="color:red;"></i>
                             <% } %>
-                            <%=card.member.name%><br>
-                        </i>
+                            <%=card.member.name%>
+                        </i><br>
                         <% } else { %>
                             <i>
                                 <i class="fa-regular fa-flag" style="color:black"></i>
@@ -88,9 +88,9 @@
                         <% } %>
                         <% } %>
                     <% } else {%>
-                        <i><i class="fa-regular fa-copy" style="color: black;"></i><br>
+                        <i><i class="fa-regular fa-copy" style="color: black;"></i>
                         No Cards given
-                    </i>
+                    </i><br>
                     <% } %>
                 <hr>
                 <% if(coaches.length){ %>
@@ -125,8 +125,8 @@
                             <% haveCaptain1 = true; %>
                             <i>
                             <i class="fa-regular fa-c"></i> &nbsp;
-                            <%=captain.member.name%><br>
-                            </i>
+                            <%=captain.member.name%>
+                            </i><br>
                         <%} else { %>
                             <% if(captain == captains[captains.length - 1] && !haveCaptain1){ %>
                                 <i>
@@ -199,8 +199,8 @@
                     <%} %>
                     <%} else { %>
                         <i>
-                            <<i class="fa-regular fa-futbol"></i>
-                            No Goals Scored>
+                            <i class="fa-regular fa-futbol"></i>
+                            No Goals Scored
                         </i>
               <% } %>
                 <hr>
@@ -213,8 +213,8 @@
                                 <% } else { %>
                                 <i class="fa-regular fa-futbol" style="color:black;"></i>
                             <% } %>
-                            <%=penalty.member.name%><br>
-                        </i>
+                            <%=penalty.member.name%>
+                        </i><br>
                         <% } else { %>
                             <i>
                                 <% if(penalty.score_goal == 'Y'){ %>
@@ -229,9 +229,9 @@
                         <% } %>
                         <% } %>
                     <% } else {%>
-                        <i><i class="fa-regular fa-copy" style="color: black;"></i><br>
+                        <i><i class="fa-regular fa-copy" style="color: black;"></i>
                         No Penalties in this match
-                    </i>
+                    </i><br>
                     <% } %>
                     <hr>
                 <% if(cardsArray.length){ %>
@@ -243,8 +243,8 @@
                                 <% } else { %>
                                 <i class="fa-regular fa-copy" style="color:red;"></i>
                             <% } %>
-                            <%=card.member.name%><br>
-                        </i>
+                            <%=card.member.name%>
+                        </i><br>
                         <% } else { %>
                             <i>
                                 <i class="fa-regular fa-flag" style="color:black"></i>
@@ -253,9 +253,9 @@
                         <% } %>
                         <% } %>
                     <% } else {%>
-                        <i><i class="fa-regular fa-copy" style="color: black;"></i><br>
+                        <i><i class="fa-regular fa-copy" style="color: black;"></i>
                         No Cards given
-                    </i>
+                    </i><br>
                     <% } %>
                 <hr>
                 <% if(coaches.length){ %>
@@ -290,8 +290,8 @@
                             <% haveCaptain2 = true; %>
                             <i>
                             <i class="fa-regular fa-c"></i> &nbsp;
-                            <%=captain.member.name%><br>
-                            </i>
+                            <%=captain.member.name%>
+                            </i><br>
                         <%} else { %>
                             <% if(captain == captains[captains.length - 1] && !haveCaptain2){ %>
                                 <i>

@@ -6,15 +6,18 @@ const supabase = client.createClient(process.env.SUPABASE_URL, process.env.SUPAB
 
 module.exports.index = async (req, res) => {
     const {id} = req.params;
+    // get tournament Id from params
+
+    
 
     const { data: matches, errorMatches } = await supabase.from('match_details').select(`
     *
     `).eq('match_uuid', id);
     const teamIds = [matches[0].team_one, matches[0].team_two]; 
-
+    const tournamentId = req.originalUrl.split('/')[2];
     // get teams from teamIds
     const { data: teams, errorTeams } = await supabase.from('team').select(`
-    *, registered_team (*)`).in('team_uuid', teamIds).order('team_id', {ascending: true})
+    *, registered_team (*)`).in('team_uuid', teamIds).eq('tr_id', tournamentId).order('team_id', {ascending: true})
 
     const { data: coaches, error } = await supabase.from('team_coach').select(`
         *, 
@@ -80,6 +83,7 @@ module.exports.index = async (req, res) => {
                 penaltiesArray.push(penalty);
             }
         });
+        console.log(teams)
         res.render("matches/index", {teams, coaches, captains, subsArray, goalsArray, cardsArray, penaltiesArray});
     }
 

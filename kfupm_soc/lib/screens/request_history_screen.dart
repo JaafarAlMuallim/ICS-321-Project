@@ -41,7 +41,10 @@ class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
         .from('player')
         .select('*, member(*), registered_team(*, team(*))')
         .eq('member_uuid', playerUuid);
-
+    List<dynamic> captinsData = await supabase
+        .from('team_captain')
+        .select('*')
+        .eq('member_uuid', playerUuid);
     List<dynamic> managersData = await supabase
         .from('registered_team')
         .select('*')
@@ -54,6 +57,12 @@ class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
     for (dynamic manager in managersData) {
       teamUuids.add(manager['team_uuid']);
     }
+    for (dynamic captain in captinsData) {
+      if (!teamUuids.contains(['team_uuid'])) {
+        teamUuids.add(captain['team_uuid']);
+      }
+    }
+    print(teamUuids);
     List<dynamic> resTeams = await supabase
         .from('team')
         .select('*, registered_team(*), tournament(*)')

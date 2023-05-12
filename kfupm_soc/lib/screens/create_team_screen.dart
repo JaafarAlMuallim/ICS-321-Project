@@ -64,11 +64,8 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
   }
 
   insertData(String teamName) async {
-    await supabase.from("registered_team").insert({
-      'created_by': playerUuid,
-      'team_name': teamName,
-      'approved': "pending"
-    });
+    await supabase.from("registered_team").insert(
+        {'created_by': playerUuid, 'team_name': teamName, 'approved': "true"});
   }
 
   @override

@@ -200,9 +200,17 @@ module.exports.showTeams = async (req, res, next) => {
 }
 module.exports.initiate = async(req, res, next) => {
     const {id} = req.params;
-    const { data: tournament, error } = await supabase
+
+    // get tournament
+    const { data: tour, tourError } = await supabase
         .from('tournament')
-        .update([{initiated: true}]).eq('tr_id', id);
+        .select().eq('tr_id', id);  
+
+        const startDate = new Date(tour[0].start_date);
+        const endDate = new Date(tour[0].end_date);
+        const startMillis = startDate.getTime();
+        const endMillis = endDate.getTime();
+
 
         const {data: aGroup} = await supabase.from('team').select().eq('team_group', 'A').eq('tr_id', id);
         const {data: bGroup} = await supabase.from('team').select().eq('team_group', 'B').eq('tr_id', id);
@@ -210,21 +218,17 @@ module.exports.initiate = async(req, res, next) => {
         const {data: dGroup} = await supabase.from('team').select().eq('team_group', 'D').eq('tr_id', id);
 
         for (let i = 0; i < aGroup.length; i++) {
-            for (let j = 0; j < aGroup.length; j++) {
+            for (let j = 0; j < aGroup.length; j++) { 
+            const randomMillis = startMillis + Math.floor(Math.random() * (endMillis - startMillis));
+            const randomDate = new Date(randomMillis);
                 if(i != j){
-                    // get random referee uuid from supabase functions
                     const {data: referee, errorReferee} = await supabase.rpc('get_random_referee')
-                    // get random venue uuid
                     const {data: venue, errorVenue} = await supabase.rpc('get_random_venue')
-                    // get random asst_ref uuid
                     const {data: asst_ref, errorAsstRef} = await supabase.rpc('get_random_asst_ref')
-                    // get the count of the matchPlayed records
                     const {data: records } = await supabase.from('match_played').select('match_uuid');
                     const count = records.length;
                     const {data: matchPlayed, error} = await supabase.from('match_played').insert([{play_stage: 'G', venue_id: venue[0].venue_id, referee_id: referee[0].referee_uuid, match_id: count + 1}]).select();
-                    console.log(matchPlayed);
-                    console.log(error);
-                    await supabase.from('match_details').insert([{match_uuid: matchPlayed[0].match_uuid, play_stage: 'G', asst_ref: asst_ref[0].asst_ref_id, tr_id: id, team_one:aGroup[i].team_uuid, team_two: aGroup[j].team_uuid, match_id: matchPlayed[0].match_id}]);
+                    await supabase.from('match_details').insert([{match_uuid: matchPlayed[0].match_uuid, play_stage: 'G', asst_ref: asst_ref[0].asst_ref_id, tr_id: id, team_one:aGroup[i].team_uuid, team_two: aGroup[j].team_uuid, match_id: matchPlayed[0].match_id, play_date:randomDate}]);
                 }
             }
         }
@@ -249,6 +253,10 @@ module.exports.initiate = async(req, res, next) => {
                 }
             }
         }
+        const { data: tournament, error } = await supabase
+        .from('tournament')
+        .update([{initiated: true}]).eq('tr_id', id);
+
         req.flash("success", "Successfully Initiated Tournament and Shuffled Matches")
     res.redirect(`/tournaments/${id}`);
 }
