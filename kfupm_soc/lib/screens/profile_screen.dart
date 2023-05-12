@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:kfupm_soc/Core/fade_animation.dart';
 import 'package:kfupm_soc/constants/app_theme.dart';
 import 'package:kfupm_soc/constants/styles.dart';
+import 'package:kfupm_soc/screens/login_screen.dart';
 import 'package:kfupm_soc/screens/my_teams_screen.dart';
 import 'package:kfupm_soc/screens/welcome_screen.dart';
 import 'package:kfupm_soc/widgets/bottom_navbar.dart';
 import 'package:kfupm_soc/widgets/rounded_button.dart';
+import 'package:kfupm_soc/widgets/snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:kfupm_soc/screens/create_team_screen.dart';
 
@@ -170,8 +172,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: Roundedbutton(
                                 color: Colors.blue.shade900,
                                 onPressed: (() {
-                                  Navigator.pushNamed(
-                                      context, MyTeamsScreen.id);
+                                  if (_auth.currentUser == null) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginScreen(),
+                                      ),
+                                    );
+                                    ShowSnackBar.showSnackbar(
+                                        context,
+                                        'You need to be logged In before Joining a team',
+                                        '',
+                                        () {},
+                                        Colors.red);
+                                  } else {
+                                    Navigator.pushNamed(
+                                        context, MyTeamsScreen.id);
+                                  }
                                 }),
                                 title: 'My Teams',
                               ),
