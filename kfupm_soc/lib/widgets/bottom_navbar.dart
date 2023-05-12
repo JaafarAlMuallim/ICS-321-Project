@@ -75,7 +75,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     });
                   }),
               IconBottomBar(
-                icon: Icons.request_page,
+                icon: Icons.inventory_outlined,
                 selected: _currentIndex == 3,
                 onPressed: () {
                   setState(
