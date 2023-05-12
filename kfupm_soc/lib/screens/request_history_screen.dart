@@ -42,10 +42,17 @@ class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
         .select('*, member(*), registered_team(*, team(*))')
         .eq('member_uuid', playerUuid);
 
-    // for loop to get team uuids
+    List<dynamic> managersData = await supabase
+        .from('registered_team')
+        .select('*')
+        .eq('created_by', playerUuid);
+
     List teamUuids = [];
     for (dynamic player in playersData) {
       teamUuids.add(player['registered_team']['team_uuid']);
+    }
+    for (dynamic manager in managersData) {
+      teamUuids.add(manager['team_uuid']);
     }
     List<dynamic> resTeams = await supabase
         .from('team')

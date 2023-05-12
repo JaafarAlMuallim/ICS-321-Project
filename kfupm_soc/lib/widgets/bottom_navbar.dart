@@ -42,8 +42,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   setState(
                     () {
                       if (_currentIndex != 0) {
-                        Navigator.pushReplacementNamed(
-                            context, TournamentScreen.id);
+                        Navigator.popAndPushNamed(context, TournamentScreen.id);
                         BottomNavBar._selectedIndex = 0;
                       }
                     },
@@ -57,7 +56,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   setState(
                     () {
                       if (_currentIndex != 1) {
-                        Navigator.pushReplacementNamed(context, TeamScreen.id);
+                        Navigator.popAndPushNamed(context, TeamScreen.id);
                         BottomNavBar._selectedIndex = 1;
                       }
                     },
@@ -70,8 +69,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   onPressed: () {
                     setState(() {
                       if (_currentIndex != 2) {
-                        Navigator.pushReplacementNamed(
-                            context, StatsticsScreen.id);
+                        Navigator.popAndPushNamed(context, StatsticsScreen.id);
                         BottomNavBar._selectedIndex = 2;
                       }
                     });
@@ -83,8 +81,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   setState(
                     () {
                       if (_currentIndex != 3) {
-                        Navigator.pushReplacementNamed(
-                            context, RequestsScreen.id);
+                        Navigator.popAndPushNamed(context, RequestsScreen.id);
                         BottomNavBar._selectedIndex = 3;
                       }
                     },
@@ -99,8 +96,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     () {
                       if (_currentIndex != 4) {
                         // _auth.signOut();
-                        Navigator.pushReplacementNamed(
-                            context, ProfileScreen.id);
+                        Navigator.popAndPushNamed(context, ProfileScreen.id);
                         BottomNavBar._selectedIndex = 4;
                       }
                     },

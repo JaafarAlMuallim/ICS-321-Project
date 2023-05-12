@@ -33,6 +33,7 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
   List<dynamic> data = [];
   List<dynamic> dataTeams = [];
   List<dynamic> dataTournaments = [];
+  List<dynamic> managersData = [];
   String? selectedTeam;
   String? selectedTournament;
   bool _loading = true;
@@ -54,8 +55,15 @@ class _JoinTournamentScreenState extends State<JoinTournamentScreen> {
           .select("*")
           .eq("member_uuid", playerUuid);
       List<String> teamUuids = [];
+      List<dynamic> teamManager = await supabase
+          .from('registered_team')
+          .select('*')
+          .eq('created_by', playerUuid);
       for (dynamic team in data) {
         teamUuids.add(team['team_uuid']);
+      }
+      for (dynamic manager in teamManager) {
+        teamUuids.add(manager['team_uuid']);
       }
       List<dynamic> resTeam = await supabase
           .from('registered_team')
