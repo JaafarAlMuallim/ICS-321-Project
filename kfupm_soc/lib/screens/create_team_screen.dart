@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart' as fire;
 import 'package:flutter/material.dart';
 import 'package:kfupm_soc/screens/Login_screen.dart';
 import 'package:kfupm_soc/screens/profile_screen.dart';
-import 'package:kfupm_soc/screens/request_history_screen.dart';
-import 'package:kfupm_soc/screens/requests_screen.dart';
 import 'package:kfupm_soc/widgets/rounded_button.dart';
 import 'package:kfupm_soc/widgets/snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -73,7 +71,6 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
     });
   }
 
-// TODO Join As Coach Player??
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -84,8 +84,8 @@ class _TeamScreenState extends State<TeamScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                 child: Text(
-                  '${doc['registered_team']['team_name']}',
-                  style: Style.h3,
+                  '${doc['registered_team']['team_name']} - ${doc['tournament']['tr_name']}',
+                  style: Style.h3.copyWith(fontSize: 18),
                 ),
               ),
             ),
@@ -145,7 +145,11 @@ class _TeamScreenState extends State<TeamScreen> {
   }
 
   fetchData() async {
-    data = await supabase.from('team').select('*, registered_team(*)');
+    data = await supabase
+        .from('team')
+        .select('*, registered_team(*), tournament(*)')
+        .order('team_group', ascending: true)
+        .order('group_position');
     setState(() {
       _loading = false;
     });

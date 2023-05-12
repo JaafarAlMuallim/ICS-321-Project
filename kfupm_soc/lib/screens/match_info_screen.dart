@@ -149,7 +149,11 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
       _loading = true;
     });
     // get venues for each match
-    Widget cards = Container();
+    Widget cards = CustomCard(
+      containerContent: const Center(child: Text('Match In Progress')),
+      onPress: () => {},
+      height: 50,
+    );
     dynamic match = matchTeams[0];
     List<Widget> scoreresTeam1 = [];
     List<Widget> scoreresTeam2 = [];
