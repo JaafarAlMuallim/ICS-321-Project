@@ -101,7 +101,7 @@ class _TournamentInfoScreenState extends State<TournamentInfoScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
               child: Text(
-                'Team ${matches[increment][0]['registered_team']['team_name']} VS Team ${matches[increment][1]['registered_team']['team_name']}',
+                '${matches[increment][0]['registered_team']['team_name']} VS ${matches[increment][1]['registered_team']['team_name']}',
                 style: Style.kSubtitleStyle,
               ),
             ),
@@ -115,7 +115,7 @@ class _TournamentInfoScreenState extends State<TournamentInfoScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
               child: Text(
-                'MVP: ${match['match_played']['member']['name']}',
+                'MVP: ${match['match_played']['member'] != null ? match['match_played']['member']['name'] : 'N/A'}',
                 style: Style.kSubtitleStyle,
               ),
             ),
@@ -143,7 +143,7 @@ class _TournamentInfoScreenState extends State<TournamentInfoScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
               child: Text(
-                'Audience: ${match['match_played']['audience']} / ${venues[increment]['aud_capacity']} ',
+                'Audience: ${match['match_played']['audience'] ?? 0} / ${venues[increment]['aud_capacity']} ',
                 style: Style.kSubtitleStyle,
               ),
             ),

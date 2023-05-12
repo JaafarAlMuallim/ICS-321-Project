@@ -110,13 +110,11 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
     }
 
     for (dynamic penalty in penaltyShootout) {
-      print("penalty is: $penalty");
       if (penalty['member']['player'][0]['registered_team']['team_uuid'] ==
               teams[0]['team_uuid'] &&
           penalty['member']['player'][0]['registered_team']['team'][0]
                   ['tr_id'] ==
               teams[0]['tr_id']) {
-        print(1);
         penaltiesArr.add(penalty);
       } else if (penalty['member']['player'][0]['registered_team']
                   ['team_uuid'] ==
@@ -124,7 +122,6 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
           penalty['member']['player'][0]['registered_team']['team'][0]
                   ['tr_id'] ==
               teams[1]['tr_id']) {
-        print(2);
         penaltiesArr.add(penalty);
       }
     }
@@ -147,12 +144,12 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
     });
   }
 
-  List<Widget> createCards() {
+  Widget createCards() {
     setState(() {
       _loading = true;
     });
     // get venues for each match
-    List<Widget> cards = [];
+    Widget cards = Container();
     dynamic match = matchTeams[0];
     List<Widget> scoreresTeam1 = [];
     List<Widget> scoreresTeam2 = [];
@@ -585,7 +582,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
         );
       }
 
-      cards.add(CustomCard(
+      cards = (CustomCard(
         containerContent: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -854,7 +851,7 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
                   ),
                   child: Center(
                     child: ListView(
-                      children: createCards(),
+                      children: [createCards()],
                     ),
                   ),
                 ),

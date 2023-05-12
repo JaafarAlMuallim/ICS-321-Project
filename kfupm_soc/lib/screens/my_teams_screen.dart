@@ -42,7 +42,6 @@ class _MyTeamsScreenScreenState extends State<MyTeamsScreen> {
         .from('registered_team')
         .select('*, team(*)')
         .eq('created_by', playerUuid);
-    print("player data are: $playersData");
 
     // for loop to get team uuids
     List teamUuids = [];
